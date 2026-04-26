@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>e-Misafir — Resepsiyon</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:sans-serif;background:#f0ebe1;height:100dvh;display:flex;flex-direction:column}
+    #header{background:#1a1a2e;padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+    #header .hn{color:#fff;font-size:1rem;font-weight:600;flex:1}
+    #header .hs{color:#c9a84c;font-size:.72rem}
+    .online{display:flex;align-items:center;gap:6px;font-size:.72rem;color:#4ade80}
+    .odot{width:8px;height:8px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    #main{display:flex;flex:1;overflow:hidden}
+    /* SOL — ODA LİSTESİ */
+    #sidebar{width:260px;background:#1a1a2e;display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+    #sidebar h2{color:rgba(255,255,255,.4);font-size:.62rem;letter-spacing:2px;padding:16px 16px 6px;text-transform:uppercase}
+    .room-row{background:transparent;border:none;border-left:3px solid transparent;padding:12px 16px;cursor:pointer;text-align:left;width:100%;transition:all .15s}
+    .room-row:hover{background:rgba(255,255,255,.05)}
+    .room-row.active{background:rgba(201,168,76,.12);border-left-color:#c9a84c}
+    .rr-top{display:flex;justify-content:space-between;align-items:center}
+    .rr-name{color:#fff;font-size:.88rem;font-weight:600}
+    .rr-name.active-name{color:#c9a84c}
+    .rr-preview{color:rgba(255,255,255,.4);font-size:.72rem;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+    .unread-dot{width:9px;height:9px;background:#ef4444;border-radius:50%;flex-shrink:0}
+    /* SAĞ — CHAT */
+    #chatpanel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    #chatheader{background:#fff;padding:14px 20px;border-bottom:1px solid #e8e3db;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #chatheader .rh-title{font-size:1.1rem;font-weight:700;color:#1a1a2e}
+    #chatheader .rh-sub{font-size:.72rem;color:#9a8f80;margin-top:2px}
+    #msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#f7f4ef}
+    .msg{display:flex;gap:8px;align-items:flex-end}
+    .msg.staff{flex-direction:row-reverse}
+    .msg-ava{width:28px;height:28px;border-radius:50%;background:#f0ebe1;border:1px solid #e8e3db;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0}
+    .bubble{max-width:70%;padding:9px 13px;border-radius:16px 16px 16px 4px;background:#fff;color:#1a1a2e;font-size:.85rem;line-height:1.5;border:1px solid rgba(26,26,46,.08);box-shadow:0 1px 4px rgba(0,0,0,.05)}
+    .msg.staff .bubble{background:#1a1a2e;color:#fff;border-radius:16px 16px 4px 16px;border-color:transparent}
+    .msg-meta{font-size:.6rem;color:#9a8f80;margin-top:2px}
+    .msg.staff .msg-meta{text-align:right}
+    .tag{display:inline-block;font-size:.6rem;padding:2px 6px;border-radius:8px;margin-bottom:2px}
+    .tag.guest{background:#fef3c7;color:#92400e}
+    .tag.staff{background:#dbeafe;color:#1e40af}
+    #empty{display:flex;align-items:center;justify-content:center;flex:1;color:#9a8f80;font-size:.9rem;text-align:center;padding:40px}
+    /* INPUT */
+    #replyarea{background:#fff;border-top:1px solid #e8e3db;padding:12px 16px 16px;flex-shrink:0}
+    #replyarea .hint{font-size:.7rem;color:#9a8f80;margin-bottom:6px}
+    #replyrow{display:flex;gap:8px;align-items:flex-end}
+    #repinp{flex:1;background:#f0ebe1;border:1.5px solid rgba(26,26,46,.1);border-radius:16px;padding:9px 16px;font-size:.85rem;color:#1a1a2e;outline:none;resize:none;min-height:38px;line-height:1.4;font-family:sans-serif}
+    #repbtn{background:#1a1a2e;color:#c9a84c;border:none;border-radius:10px;padding:10px 18px;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap;align-self:flex-end}
+    /* QUICK REPLIES */
+    #quickrep{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:8px}
+    .qr-chip{background:#f0ebe1;border:1px solid #e8e3db;border-radius:12px;padding:5px 10px;font-size:.7rem;color:#1a1a2e;cursor:pointer;white-space:nowrap;font-family:sans-serif}
+    /* NOTIFICATION */
+    #notif{position:fixed;top:16px;right:16px;background:#1a1a2e;color:#c9a84c;padding:12px 20px;border-radius:10px;font-size:.82rem;font-weight:600;display:none;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+  </style>
+</head>
+<body>
+
+<div id="header">
+  <div>
+    <div class="hn">e-Misafir — Resepsiyon Paneli</div>
+    <div class="hs">Hotel: <span id="hotel-name">demo</span></div>
+  </div>
+  <div class="online"><span class="odot"></span>Çevrimiçi</div>
+</div>
+
+<div id="main">
+  <div id="sidebar">
+    <h2>Odalar</h2>
+    <div id="room-list"></div>
+  </div>
+
+  <div id="chatpanel">
+    <div id="chatheader">
+      <div>
+        <div class="rh-title" id="ch-title">Oda seçin</div>
+        <div class="rh-sub" id="ch-sub">Sol taraftan oda seçin</div>
+      </div>
+    </div>
+
+    <div id="msgs"><div id="empty">👈 Sol taraftan bir oda seçin</div></div>
+
+    <div id="replyarea">
+      <div id="quickrep">
+        <button class="qr-chip" onclick="quickReply('✓ Talebiniz alındı, en kısa sürede ilgileniyoruz.')">✓ Alındı</button>
+        <button class="qr-chip" onclick="quickReply('Oda servisiniz yaklaşık 20 dakika içinde gelecektir.')">🍽 20 dk</button>
+        <button class="qr-chip" onclick="quickReply('Temizlik ekibimiz kısa süre içinde odanıza gelecek.')">🧹 Temizlik geliyor</button>
+        <button class="qr-chip" onclick="quickReply('Check-out saatimiz 12:00\'dir.')">🔑 Check-out 12:00</button>
+        <button class="qr-chip" onclick="quickReply('WiFi şifreniz: eMisafir2025')">📶 WiFi şifresi</button>
+        <button class="qr-chip" onclick="quickReply('Taksiniz 10 dakika içinde hazır olacak.')">🚕 Taksi 10 dk</button>
+      </div>
+      <div class="hint">Misafire yanıt yaz:</div>
+      <div id="replyrow">
+        <textarea id="repinp" placeholder="Yanıtınızı yazın..." rows="1"
+          oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendReply()}"></textarea>
+        <button id="repbtn" onclick="sendReply()">Gönder ➤</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="notif"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",
+  authDomain: "emisafir-56796.firebaseapp.com",
+  databaseURL: "https://emisafir-56796-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "emisafir-56796",
+  storageBucket: "emisafir-56796.firebasestorage.app",
+  messagingSenderId: "1044463772299",
+  appId: "1:1044463772299:web:4f1496b541a433fe766a8e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const hotel = new URLSearchParams(location.search).get('hotel') || 'demo';
+document.getElementById('hotel-name').textContent = hotel;
+
+const ROOMS = ['101','102','103','104','105','201','202','203','204','205','301','302','303'];
+const roomData = {};
+let activeRoom = null;
+const listeners = {};
+
+function fmtTime(){return new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});}
+
+function showNotif(msg){
+  const n = document.getElementById('notif');
+  n.textContent = msg; n.style.display = 'block';
+  setTimeout(()=>n.style.display='none', 4000);
+}
+
+// Oda listesi oluştur
+const roomList = document.getElementById('room-list');
+ROOMS.forEach(r => {
+  roomData[r] = { msgs: [], unread: false };
+  const btn = document.createElement('button');
+  btn.className = 'room-row';
+  btn.id = 'room-' + r;
+  btn.onclick = () => selectRoom(r);
+  btn.innerHTML = `<div class="rr-top"><span class="rr-name" id="rn-${r}">Oda ${r}</span><span id="ud-${r}" style="display:none" class="unread-dot"></span></div><div class="rr-preview" id="rp-${r}">Henüz mesaj yok</div>`;
+  roomList.appendChild(btn);
+
+  // Her odayı dinle
+  const msgsRef = ref(db, `hotels/${hotel}/rooms/${r}/messages`);
+  listeners[r] = onChildAdded(msgsRef, snap => {
+    const d = snap.val();
+    if(!d) return;
+    roomData[r].msgs.push({...d, key: snap.key});
+
+    // Preview güncelle
+    const prev = document.getElementById('rp-' + r);
+    if(prev) prev.textContent = (d.from==='guest'?'👤 ':'👨‍💼 ') + d.text.slice(0,30) + (d.text.length>30?'…':'');
+
+    // Aktif oda değilse unread göster
+    if(activeRoom !== r && d.from === 'guest'){
+      roomData[r].unread = true;
+      const ud = document.getElementById('ud-' + r);
+      if(ud) ud.style.display = 'block';
+      showNotif('🔔 Oda ' + r + ': ' + d.text.slice(0,40));
+    }
+
+    // Aktif odaysa ekrana yaz
+    if(activeRoom === r) renderMsg(d);
+  });
+});
+
+function selectRoom(r){
+  activeRoom = r;
+  // Sidebar güncelle
+  document.querySelectorAll('.room-row').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.rr-name').forEach(n=>n.classList.remove('active-name'));
+  document.getElementById('room-' + r).classList.add('active');
+  document.getElementById('rn-' + r).classList.add('active-name');
+  // Unread sıfırla
+  roomData[r].unread = false;
+  const ud = document.getElementById('ud-' + r);
+  if(ud) ud.style.display = 'none';
+  // Header
+  document.getElementById('ch-title').textContent = 'Oda ' + r;
+  document.getElementById('ch-sub').textContent = 'Misafir ile gerçek zamanlı iletişim';
+  // Mesajları çiz
+  const msgs = document.getElementById('msgs');
+  msgs.innerHTML = '';
+  if(roomData[r].msgs.length === 0){
+    msgs.innerHTML = '<div id="empty" style="display:flex;align-items:center;justify-content:center;flex:1;color:#9a8f80;font-size:.9rem;padding:40px;text-align:center">Bu odadan henüz mesaj yok 💬</div>';
+  } else {
+    roomData[r].msgs.forEach(d => renderMsg(d));
+  }
+}
+
+function renderMsg(d){
+  const msgs = document.getElementById('msgs');
+  const empty = document.getElementById('empty');
+  if(empty) empty.remove();
+  const isStaff = d.from === 'reception';
+  const div = document.createElement('div');
+  div.className = 'msg' + (isStaff ? ' staff' : '');
+  const tag = isStaff ? '<span class="tag staff">Resepsiyon</span>' : '<span class="tag guest">Misafir</span>';
+  if(!isStaff){
+    div.innerHTML = `<div class="msg-ava">👤</div><div><div style="margin-bottom:2px">${tag}</div><div class="bubble">${d.text.replace(/\n/g,'<br>')}</div><div class="msg-meta">${fmtTime()}</div></div>`;
+  } else {
+    div.innerHTML = `<div><div style="margin-bottom:2px;text-align:right">${tag}</div><div class="bubble">${d.text.replace(/\n/g,'<br>')}</div><div class="msg-meta">${fmtTime()}</div></div>`;
+  }
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+window.sendReply = function(){
+  if(!activeRoom) return;
+  const inp = document.getElementById('repinp');
+  const text = inp.value.trim();
+  if(!text) return;
+  inp.value = ''; inp.style.height = '38px';
+  const msgsRef = ref(db, `hotels/${hotel}/rooms/${activeRoom}/messages`);
+  push(msgsRef, {text, from:'reception', ts: serverTimestamp()});
+}
+
+window.quickReply = function(text){
+  document.getElementById('repinp').value = text;
+  document.getElementById('repinp').focus();
+}
+</script>
+</body>
+</html>
