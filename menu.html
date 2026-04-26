@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#1a1a2e"/>
+  <title>e-Misafir — Menü</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:sans-serif;background:#faf7f2;height:100dvh;display:flex;flex-direction:column;max-width:480px;margin:0 auto}
+    #header{background:#1a1a2e;padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+    .hico{width:40px;height:40px;background:rgba(201,168,76,.15);border:1.5px solid #c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+    .hn{color:#fff;font-size:.9rem;font-weight:600}
+    .hs{color:#c9a84c;font-size:.65rem;margin-top:1px}
+    .hb{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);border-radius:20px;padding:4px 12px;font-size:.7rem;color:#c9a84c;margin-left:auto}
+    #time-banner{background:#f0ebe1;padding:8px 16px;font-size:.72rem;color:#6b5e4e;border-bottom:1px solid #e8dfd4;flex-shrink:0;display:flex;align-items:center;gap:6px}
+    #menu-body{flex:1;overflow-y:auto;padding:16px}
+    .cat-sep{font-size:.6rem;color:#9a8f80;letter-spacing:1.5px;text-transform:uppercase;margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid #e8dfd4}
+    .cat-sep:first-child{margin-top:0}
+    .menu-card{background:#fff;border-radius:10px;padding:14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+    .mc-icon{font-size:2rem;flex-shrink:0;line-height:1}
+    .mc-info{flex:1}
+    .mc-name{font-size:.9rem;font-weight:600;color:#1a1a2e}
+    .mc-desc{font-size:.72rem;color:#9a8f80;margin-top:2px;line-height:1.4}
+    .mc-meta{display:flex;align-items:center;gap:10px;margin-top:6px}
+    .mc-price{font-size:.9rem;color:#c9a84c;font-weight:700}
+    .mc-time{font-size:.65rem;color:#b0a090;background:#f7f4ef;padding:2px 8px;border-radius:10px}
+    .mc-ctrl{flex-shrink:0;display:flex;align-items:center}
+    .mc-add{width:32px;height:32px;border-radius:50%;background:#1a1a2e;border:none;color:#c9a84c;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .mc-qty{display:flex;align-items:center;gap:6px;background:#f0ebe1;border-radius:16px;padding:4px 10px}
+    .mc-qty button{background:none;border:none;font-size:1rem;cursor:pointer;color:#1a1a2e;width:18px;text-align:center}
+    .mc-qty span{font-size:.85rem;font-weight:600;min-width:16px;text-align:center}
+    #cart-bar{display:none;background:#1a1a2e;padding:12px 16px;flex-direction:row;align-items:center;justify-content:space-between;flex-shrink:0}
+    #cart-bar.show{display:flex}
+    .cb-left{}
+    .cb-count{color:rgba(255,255,255,.6);font-size:.72rem}
+    .cb-total{color:#c9a84c;font-size:1.1rem;font-weight:700}
+    #checkout-btn{background:#c9a84c;color:#1a1a2e;border:none;border-radius:8px;padding:10px 20px;font-weight:700;font-size:.85rem;cursor:pointer;font-family:sans-serif}
+
+    /* CHECKOUT MODAL */
+    #checkout-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:flex-end;justify-content:center}
+    #checkout-modal.show{display:flex}
+    #checkout-box{background:#fff;border-radius:20px 20px 0 0;padding:24px 20px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto}
+    .co-title{font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:4px}
+    .co-sub{font-size:.75rem;color:#9a8f80;margin-bottom:20px}
+    .co-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f0ebe1}
+    .co-item-name{font-size:.85rem;color:#1a1a2e}
+    .co-item-qty{font-size:.75rem;color:#9a8f80}
+    .co-item-price{font-size:.88rem;font-weight:600;color:#1a1a2e}
+    .co-total-row{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:12px;border-top:2px solid #1a1a2e}
+    .co-total-label{font-size:.85rem;font-weight:600}
+    .co-total-amount{font-size:1.3rem;font-weight:700;color:#c9a84c}
+    .co-note{background:#f7f4ef;border-radius:10px;padding:12px;margin:16px 0;font-size:.78rem;color:#6b5e4e;line-height:1.5}
+    .co-note strong{color:#1a1a2e}
+    .co-btns{display:flex;gap:10px;margin-top:4px}
+    .co-cancel{flex:1;background:transparent;border:1.5px solid #e8dfd4;border-radius:10px;padding:13px;font-size:.85rem;cursor:pointer;font-family:sans-serif;color:#9a8f80}
+    .co-confirm{flex:2;background:#1a1a2e;border:none;border-radius:10px;padding:13px;font-size:.88rem;font-weight:700;color:#c9a84c;cursor:pointer;font-family:sans-serif}
+
+    /* SUCCESS */
+    #success-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+    #success-modal.show{display:flex}
+    #success-box{background:#fff;border-radius:20px;padding:32px 24px;text-align:center;max-width:320px;width:90%}
+    .success-icon{font-size:3rem;margin-bottom:12px}
+    .success-title{font-size:1.1rem;font-weight:700;color:#1a1a2e;margin-bottom:8px}
+    .success-sub{font-size:.8rem;color:#9a8f80;line-height:1.6;margin-bottom:20px}
+    .success-btn{background:#1a1a2e;color:#c9a84c;border:none;border-radius:10px;padding:12px 28px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:sans-serif}
+
+    .empty-state{text-align:center;padding:48px 20px;color:#9a8f80}
+    .empty-icon{font-size:2.5rem;margin-bottom:8px}
+    .empty-text{font-size:.85rem;line-height:1.6}
+  </style>
+</head>
+<body>
+
+<div id="header">
+  <div class="hico">🍽</div>
+  <div>
+    <div class="hn">Oda Servisi</div>
+    <div class="hs">e-Misafir · Oda <span id="rname">101</span></div>
+  </div>
+  <div class="hb" id="rbadge">101</div>
+</div>
+
+<div id="time-banner">
+  🕐 <span id="current-time"></span> — <span id="menu-status"></span>
+</div>
+
+<div id="menu-body"></div>
+
+<div id="cart-bar">
+  <div class="cb-left">
+    <div class="cb-count" id="cart-count">0 ürün</div>
+    <div class="cb-total" id="cart-total">₺0</div>
+  </div>
+  <button id="checkout-btn" onclick="showCheckout()">Siparişi Onayla →</button>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div id="checkout-modal">
+  <div id="checkout-box">
+    <div class="co-title">Sipariş Özeti</div>
+    <div class="co-sub">Siparişinizi kontrol edin ve onaylayın</div>
+    <div id="checkout-items"></div>
+    <div class="co-total-row">
+      <div class="co-total-label">Toplam Tutar</div>
+      <div class="co-total-amount" id="checkout-total">₺0</div>
+    </div>
+    <div class="co-note">
+      <strong>📋 Ödeme:</strong> Tutar oda hesabınıza yansıtılacak ve check-out sırasında tahsil edilecektir.
+    </div>
+    <div class="co-btns">
+      <button class="co-cancel" onclick="closeCheckout()">İptal</button>
+      <button class="co-confirm" onclick="confirmOrder()">✓ Siparişi Ver</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div id="success-modal">
+  <div id="success-box">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Siparişiniz Alındı!</div>
+    <div class="success-sub">Resepsiyonumuz siparişinizi aldı. En kısa sürede odanıza servis yapılacaktır.<br/><br/>Sipariş No: <strong id="order-no"></strong></div>
+    <button class="success-btn" onclick="closeSuccess()">Tamam</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, get, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",
+  authDomain: "emisafir-56796.firebaseapp.com",
+  databaseURL: "https://emisafir-56796-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "emisafir-56796",
+  storageBucket: "emisafir-56796.firebasestorage.app",
+  messagingSenderId: "1044463772299",
+  appId: "1:1044463772299:web:4f1496b541a433fe766a8e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const params = new URLSearchParams(location.search);
+const room = params.get('room') || '101';
+const hotel = params.get('hotel') || 'demo';
+document.getElementById('rname').textContent = room;
+document.getElementById('rbadge').textContent = room;
+
+const cart = {};
+let menuItems = [];
+
+// Şu anki saati al
+function getNow() {
+  const now = new Date();
+  return { h: now.getHours(), m: now.getMinutes() };
+}
+
+function timeToMin(t) {
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function isAvailable(startTime, endTime) {
+  if (!startTime || !endTime) return true;
+  const now = getNow();
+  const cur = now.h * 60 + now.m;
+  const s = timeToMin(startTime);
+  const e = timeToMin(endTime);
+  if (s <= e) return cur >= s && cur <= e;
+  return cur >= s || cur <= e; // gece geçişi
+}
+
+// Saati göster
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('current-time').textContent = `${h}:${m}`;
+  const available = menuItems.filter(i => isAvailable(i.startTime, i.endTime));
+  document.getElementById('menu-status').textContent =
+    available.length > 0 ? `${available.length} ürün sipariş verilebilir` : 'Şu an aktif ürün yok';
+}
+
+// Menüyü yükle
+async function loadMenu() {
+  const snap = await get(ref(db, `hotels/${hotel}/menu`));
+  const body = document.getElementById('menu-body');
+
+  if (!snap.exists()) {
+    body.innerHTML = `<div class="empty-state"><div class="empty-icon">🍽</div><div class="empty-text">Menü henüz hazırlanmamış.<br/>Lütfen resepsiyonu arayın.</div></div>`;
+    return;
+  }
+
+  menuItems = Object.entries(snap.val()).map(([id, v]) => ({ id, ...v }));
+
+  // Kategorilere ayır
+  const cats = {};
+  menuItems.forEach(item => {
+    const cat = item.category || 'Diğer';
+    if (!cats[cat]) cats[cat] = [];
+    cats[cat].push(item);
+  });
+
+  body.innerHTML = '';
+
+  Object.entries(cats).forEach(([cat, items]) => {
+    const available = items.filter(i => isAvailable(i.startTime, i.endTime));
+    const unavailable = items.filter(i => !isAvailable(i.startTime, i.endTime));
+
+    if (available.length === 0 && unavailable.length === 0) return;
+
+    const sep = document.createElement('div');
+    sep.className = 'cat-sep';
+    sep.textContent = cat;
+    body.appendChild(sep);
+
+    available.forEach(item => renderItem(item, body, false));
+    unavailable.forEach(item => renderItem(item, body, true));
+  });
+
+  updateClock();
+}
+
+function renderItem(item, container, disabled) {
+  const div = document.createElement('div');
+  div.className = 'menu-card';
+  div.style.opacity = disabled ? '0.45' : '1';
+
+  const timeLabel = item.startTime && item.endTime
+    ? `${item.startTime}–${item.endTime}`
+    : '';
+
+  div.innerHTML = `
+    <div class="mc-icon">${item.emoji || '🍽'}</div>
+    <div class="mc-info">
+      <div class="mc-name">${item.name}</div>
+      <div class="mc-desc">${item.description || ''}</div>
+      <div class="mc-meta">
+        <span class="mc-price">₺${item.price}</span>
+        ${timeLabel ? `<span class="mc-time">⏰ ${timeLabel}</span>` : ''}
+        ${disabled ? '<span class="mc-time" style="color:#ef4444">Şu an müsait değil</span>' : ''}
+      </div>
+    </div>
+    <div class="mc-ctrl" id="ctrl-${item.id}">
+      ${!disabled ? `<button class="mc-add" onclick="addToCart('${item.id}','${item.name}',${item.price},'${item.emoji||'🍽'}')">+</button>` : ''}
+    </div>`;
+
+  container.appendChild(div);
+}
+
+window.addToCart = function(id, name, price, emoji) {
+  if (!cart[id]) cart[id] = { name, price, emoji, qty: 0 };
+  cart[id].qty++;
+  updateCtrl(id);
+  updateCartBar();
+}
+
+window.removeFromCart = function(id) {
+  if (!cart[id]) return;
+  cart[id].qty--;
+  if (cart[id].qty <= 0) delete cart[id];
+  updateCtrl(id);
+  updateCartBar();
+}
+
+function updateCtrl(id) {
+  const ctrl = document.getElementById('ctrl-' + id);
+  if (!ctrl) return;
+  const item = cart[id];
+  if (!item || item.qty === 0) {
+    const menuItem = menuItems.find(i => i.id === id);
+    ctrl.innerHTML = `<button class="mc-add" onclick="addToCart('${id}','${menuItem.name}',${menuItem.price},'${menuItem.emoji||'🍽'}')">+</button>`;
+  } else {
+    ctrl.innerHTML = `<div class="mc-qty">
+      <button onclick="removeFromCart('${id}')">−</button>
+      <span>${item.qty}</span>
+      <button onclick="addToCart('${id}','${item.name}',${item.price},'${item.emoji}')">+</button>
+    </div>`;
+  }
+}
+
+function updateCartBar() {
+  const items = Object.values(cart);
+  const count = items.reduce((s, i) => s + i.qty, 0);
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+  document.getElementById('cart-count').textContent = count + ' ürün';
+  document.getElementById('cart-total').textContent = '₺' + total;
+  document.getElementById('cart-bar').className = count > 0 ? 'show' : '';
+}
+
+window.showCheckout = function() {
+  const items = Object.values(cart);
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+  let html = '';
+  items.forEach(i => {
+    html += `<div class="co-item">
+      <div><div class="co-item-name">${i.emoji} ${i.name}</div><div class="co-item-qty">x${i.qty}</div></div>
+      <div class="co-item-price">₺${i.price * i.qty}</div>
+    </div>`;
+  });
+  document.getElementById('checkout-items').innerHTML = html;
+  document.getElementById('checkout-total').textContent = '₺' + total;
+  document.getElementById('checkout-modal').classList.add('show');
+}
+
+window.closeCheckout = function() {
+  document.getElementById('checkout-modal').classList.remove('show');
+}
+
+window.confirmOrder = async function() {
+  const items = Object.values(cart).map(i => ({
+    name: i.name, emoji: i.emoji, price: i.price, qty: i.qty, subtotal: i.price * i.qty
+  }));
+  const total = items.reduce((s, i) => s + i.subtotal, 0);
+  const orderNo = 'ORD-' + Date.now().toString(36).toUpperCase();
+
+  const order = {
+    orderNo,
+    room,
+    hotel,
+    items,
+    total,
+    status: 'pending', // pending → confirmed → kitchen → ready → delivered
+    ts: serverTimestamp(),
+    date: new Date().toLocaleDateString('tr-TR'),
+    time: new Date().toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'})
+  };
+
+  await push(ref(db, `hotels/${hotel}/orders`), order);
+
+  closeCheckout();
+  document.getElementById('order-no').textContent = orderNo;
+  document.getElementById('success-modal').classList.add('show');
+
+  // Sepeti temizle
+  Object.keys(cart).forEach(k => delete cart[k]);
+  document.querySelectorAll('.mc-ctrl').forEach(c => {
+    const addBtn = c.querySelector('.mc-add');
+    if (!addBtn) {
+      const id = c.id.replace('ctrl-','');
+      const item = menuItems.find(i => i.id === id);
+      if (item) c.innerHTML = `<button class="mc-add" onclick="addToCart('${id}','${item.name}',${item.price},'${item.emoji||'🍽'}')">+</button>`;
+    }
+  });
+  updateCartBar();
+}
+
+window.closeSuccess = function() {
+  document.getElementById('success-modal').classList.remove('show');
+}
+
+loadMenu();
+setInterval(updateClock, 30000);
+</script>
+</body>
+</html>
