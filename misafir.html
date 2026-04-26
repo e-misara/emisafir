@@ -65,8 +65,6 @@
     .co-btns{display:flex;gap:8px}
     .co-cancel{flex:1;background:transparent;border:1.5px solid #e8dfd4;border-radius:10px;padding:12px;font-size:.82rem;cursor:pointer;font-family:sans-serif;color:#9a8f80}
     .co-confirm{flex:2;background:#1a1a2e;border:none;border-radius:10px;padding:12px;font-size:.85rem;font-weight:700;color:#c9a84c;cursor:pointer;font-family:sans-serif}
-
-    /* SUCCESS */
     #ok-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
     #ok-modal.show{display:flex}
     #ok-box{background:#fff;border-radius:20px;padding:28px 22px;text-align:center;max-width:300px;width:90%}
@@ -202,7 +200,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, get, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, get, set, push, onChildAdded, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",
@@ -222,13 +220,38 @@ const hotel = params.get('hotel') || 'demo';
 document.getElementById('rname').textContent = room;
 document.getElementById('rbadge').textContent = room;
 
+// ── GÜNLÜK SIFIRLAMA (Sabah 11:00) ──
+async function checkDailyReset() {
+  const now = new Date();
+  // Bugünün sıfırlama zamanı: saat 11:00
+  const resetHour = 11;
+  const todayKey = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+
+  const resetRef = ref(db, `hotels/${hotel}/rooms/${room}/lastReset`);
+  const snap = await get(resetRef);
+  const lastReset = snap.exists() ? snap.val() : '';
+
+  // Eğer bugün 11:00 geçtiyse ve bugün henüz sıfırlanmadıysa
+  if (now.getHours() >= resetHour && lastReset !== todayKey) {
+    // Mesajları sil
+    await remove(ref(db, `hotels/${hotel}/rooms/${room}/messages`));
+    // Son sıfırlama tarihini kaydet
+    await set(resetRef, todayKey);
+  }
+}
+
 function fmtNow() {
   const n = new Date();
   return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
 }
 function getNowMin() { const n = new Date(); return n.getHours()*60+n.getMinutes(); }
 function toMin(t) { if(!t) return 0; const [h,m]=t.split(':').map(Number); return h*60+m; }
-function isAvail(s,e) { if(!s||!e) return true; const n=getNowMin(),sm=toMin(s),em=toMin(e); return sm<=em?n>=sm&&n<=em:n>=sm||n<=em; }
+function isAvail(s,e) {
+  if(!s||!e) return true;
+  const n=getNowMin(), sm=toMin(s), em=toMin(e);
+  if(sm<=em) return n>=sm && n<=em;
+  return n>=sm || n<=em; // gece geçişi (örn: 23:00-06:00)
+}
 
 // TAB
 window.switchTab = function(name, btn) {
@@ -239,7 +262,7 @@ window.switchTab = function(name, btn) {
   document.getElementById('cart-bar').className = (name==='menu' && Object.values(cart).reduce((s,i)=>s+i.qty,0)>0) ? 'show' : '';
 }
 
-// MENÜ
+// ── MENÜ ──
 const cart = {};
 let menuItems = [];
 
@@ -247,22 +270,30 @@ async function loadMenu() {
   document.getElementById('cur-time').textContent = fmtNow();
   const snap = await get(ref(db, `hotels/${hotel}/menu`));
   const body = document.getElementById('menu-body');
+
   if (!snap.exists()) {
-    body.innerHTML = `<div class="empty-menu"><div class="empty-icon">🍽</div><div class="empty-text">Menü henüz hazırlanmamış.<br/>Resepsiyonumuzu arayabilirsiniz.</div></div>`;
-    document.getElementById('menu-status').textContent = 'Menü hazırlanıyor';
+    body.innerHTML = `<div class="empty-menu"><div class="empty-icon">🍽</div><div class="empty-text">Menü hazırlanıyor.<br/>Resepsiyonumuzu arayabilirsiniz.</div></div>`;
+    document.getElementById('menu-status').textContent = 'Menü yükleniyor';
     return;
   }
+
   menuItems = Object.entries(snap.val()).map(([id,v])=>({id,...v}));
   const avail = menuItems.filter(i=>isAvail(i.startTime,i.endTime));
-  document.getElementById('menu-status').textContent = avail.length>0 ? `${avail.length} ürün sipariş verilebilir` : 'Şu an aktif ürün yok';
+  document.getElementById('menu-status').textContent = avail.length>0 ? `${avail.length} ürün mevcut` : 'Şu an aktif ürün yok';
+
+  // Kategoriye göre sırala
+  const catOrder = ['Kahvaltı','Izgara & Et','Deniz Ürünleri','Makarna & Börek','Salata & Meze','Dünya Mutfağı','Tatlı','İçecek','Minibar'];
   const cats = {};
   menuItems.forEach(i=>{const c=i.category||'Diğer';if(!cats[c])cats[c]=[];cats[c].push(i);});
+
   body.innerHTML = '';
-  Object.entries(cats).forEach(([cat,items])=>{
-    const av=items.filter(i=>isAvail(i.startTime,i.endTime));
-    const un=items.filter(i=>!isAvail(i.startTime,i.endTime));
-    if(!av.length&&!un.length) return;
-    const sep=document.createElement('div');sep.className='cat-sep';sep.textContent=cat;body.appendChild(sep);
+  // Önce belirlenen sırada, sonra diğerleri
+  [...catOrder, ...Object.keys(cats).filter(c=>!catOrder.includes(c))].forEach(cat => {
+    if (!cats[cat] || !cats[cat].length) return;
+    const av = cats[cat].filter(i=>isAvail(i.startTime,i.endTime));
+    const un = cats[cat].filter(i=>!isAvail(i.startTime,i.endTime));
+    if (!av.length && !un.length) return;
+    const sep = document.createElement('div');sep.className='cat-sep';sep.textContent=cat;body.appendChild(sep);
     av.forEach(item=>renderCard(item,body,false));
     un.forEach(item=>renderCard(item,body,true));
   });
@@ -271,8 +302,9 @@ async function loadMenu() {
 function renderCard(item, container, disabled) {
   const div=document.createElement('div');div.className='menu-card';div.style.opacity=disabled?'0.42':'1';
   const tl=item.startTime&&item.endTime?`${item.startTime}–${item.endTime}`:'';
-  const esc=s=>s.replace(/'/g,"\\'");
-  div.innerHTML=`<div class="mc-icon">${item.emoji||'🍽'}</div>
+  const esc=s=>(s||'').replace(/'/g,"\\'");
+  div.innerHTML=`
+    <div class="mc-icon">${item.emoji||'🍽'}</div>
     <div class="mc-info">
       <div class="mc-name">${item.name}</div>
       ${item.description?`<div class="mc-desc">${item.description}</div>`:''}
@@ -293,15 +325,14 @@ window.addCart = function(id,name,price,emoji) {
   cart[id].qty++;updateCtrl(id);updateCartBar();
 }
 window.removeCart = function(id) {
-  if(!cart[id]) return;
-  cart[id].qty--;
+  if(!cart[id]) return;cart[id].qty--;
   if(cart[id].qty<=0) delete cart[id];
   updateCtrl(id);updateCartBar();
 }
 function updateCtrl(id) {
   const ctrl=document.getElementById('ctrl-'+id);if(!ctrl) return;
-  const item=cart[id];const mi=menuItems.find(i=>i.id===id);
-  const esc=s=>s.replace(/'/g,"\\'");
+  const item=cart[id];const mi=menuItems.find(i=>i.id===id);if(!mi) return;
+  const esc=s=>(s||'').replace(/'/g,"\\'");
   if(!item||item.qty===0) {
     ctrl.innerHTML=`<button class="mc-add" onclick="addCart('${id}','${esc(mi.name)}',${mi.price},'${mi.emoji||'🍽'}')">+</button>`;
   } else {
@@ -319,7 +350,11 @@ function updateCartBar() {
 }
 window.showCheckout = function() {
   const items=Object.values(cart);const total=items.reduce((s,i)=>s+i.price*i.qty,0);
-  document.getElementById('co-items').innerHTML=items.map(i=>`<div class="co-item"><div><div class="co-item-name">${i.emoji} ${i.name}</div><div class="co-item-qty">x${i.qty}</div></div><div class="co-item-price">₺${i.price*i.qty}</div></div>`).join('');
+  document.getElementById('co-items').innerHTML=items.map(i=>`
+    <div class="co-item">
+      <div><div class="co-item-name">${i.emoji} ${i.name}</div><div class="co-item-qty">x${i.qty}</div></div>
+      <div class="co-item-price">₺${i.price*i.qty}</div>
+    </div>`).join('');
   document.getElementById('co-total-amt').textContent='₺'+total;
   document.getElementById('co-modal').classList.add('show');
 }
@@ -327,37 +362,60 @@ window.confirmOrder = async function() {
   const items=Object.values(cart).map(i=>({name:i.name,emoji:i.emoji,price:i.price,qty:i.qty,subtotal:i.price*i.qty}));
   const total=items.reduce((s,i)=>s+i.subtotal,0);
   const orderNo='ORD-'+Date.now().toString(36).toUpperCase();
-  await push(ref(db,`hotels/${hotel}/orders`),{orderNo,room,hotel,items,total,status:'pending',date:new Date().toLocaleDateString('tr-TR'),time:fmtNow(),ts:serverTimestamp()});
+  await push(ref(db,`hotels/${hotel}/orders`),{
+    orderNo,room,hotel,items,total,status:'pending',
+    date:new Date().toLocaleDateString('tr-TR'),time:fmtNow(),ts:serverTimestamp()
+  });
   document.getElementById('co-modal').classList.remove('show');
   document.getElementById('ok-no').textContent=orderNo;
   document.getElementById('ok-modal').classList.add('show');
   Object.keys(cart).forEach(k=>delete cart[k]);
   menuItems.forEach(mi=>{
     const ctrl=document.getElementById('ctrl-'+mi.id);
-    if(ctrl&&isAvail(mi.startTime,mi.endTime)) {
-      const esc=s=>s.replace(/'/g,"\\'");
+    if(ctrl&&isAvail(mi.startTime,mi.endTime)){
+      const esc=s=>(s||'').replace(/'/g,"\\'");
       ctrl.innerHTML=`<button class="mc-add" onclick="addCart('${mi.id}','${esc(mi.name)}',${mi.price},'${mi.emoji||'🍽'}')">+</button>`;
     }
   });
   updateCartBar();
 }
 
-// CHAT
+// ── CHAT ──
 const seen=new Set();
-addMsg('Merhaba! 👋 Oda '+room+'\'e hoş geldiniz.\nSize nasıl yardımcı olabilirim?','bot');
+// Bugünün mesajlarını göster (11:00 sonrası)
+async function loadTodayMessages() {
+  const snap = await get(ref(db,`hotels/${hotel}/rooms/${room}/messages`));
+  if (!snap.exists()) {
+    addMsg('Merhaba! 👋 Oda '+room+'\'e hoş geldiniz.\nSize nasıl yardımcı olabilirim?','bot');
+    return;
+  }
+  const msgs = [];
+  snap.forEach(c => msgs.push({key:c.key,...c.val()}));
+  if (msgs.length === 0) {
+    addMsg('Merhaba! 👋 Oda '+room+'\'e hoş geldiniz.\nSize nasıl yardımcı olabilirim?','bot');
+  } else {
+    msgs.forEach(m => { seen.add(m.key); addMsg(m.text, m.from==='guest'?'user':'bot'); });
+  }
+}
+
 onChildAdded(ref(db,`hotels/${hotel}/rooms/${room}/messages`),(snap)=>{
   if(seen.has(snap.key)) return;seen.add(snap.key);
   const d=snap.val();
   if(d.from==='reception'){addMsg(d.text,'bot');showToast('📩 Resepsiyondan yanıt geldi!');}
 });
+
 function addMsg(text,from) {
   const el=document.getElementById('chat-msgs');
   const div=document.createElement('div');div.className='msg'+(from==='user'?' user':'');
   const t=fmtNow();
-  if(from!=='user'){div.innerHTML=`<div class="msg-ava">R</div><div><div class="bubble">${text.replace(/\n/g,'<br>')}</div><div class="mtime">${t}</div></div>`;}
-  else{div.innerHTML=`<div><div class="bubble">${text.replace(/\n/g,'<br>')}</div><div class="mtime">${t}</div></div>`;}
+  if(from!=='user'){
+    div.innerHTML=`<div class="msg-ava">R</div><div><div class="bubble">${text.replace(/\n/g,'<br>')}</div><div class="mtime">${t}</div></div>`;
+  } else {
+    div.innerHTML=`<div><div class="bubble">${text.replace(/\n/g,'<br>')}</div><div class="mtime">${t}</div></div>`;
+  }
   el.appendChild(div);el.scrollTop=el.scrollHeight;
 }
+
 window.sendChat = async function() {
   const inp=document.getElementById('chat-inp');const text=inp.value.trim();if(!text) return;
   inp.value='';inp.style.height='38px';
@@ -371,7 +429,7 @@ window.quickSend = function(text) {
   push(ref(db,`hotels/${hotel}/rooms/${room}/messages`),{text,from:'guest',ts:serverTimestamp()});
 }
 
-// TEMİZLİK
+// ── TEMİZLİK ──
 let cleanChoice=null;
 window.selClean = function(btn,val) {
   document.querySelectorAll('.clean-opt').forEach(o=>{o.classList.remove('selected');o.querySelector('.coc').textContent='';});
@@ -393,7 +451,14 @@ function showToast(msg) {
   setTimeout(()=>t.style.display='none',3000);
 }
 
-loadMenu();
+// ── BAŞLAT ──
+async function init() {
+  await checkDailyReset();
+  await loadTodayMessages();
+  await loadMenu();
+}
+
+init();
 setInterval(()=>{document.getElementById('cur-time').textContent=fmtNow();},60000);
 </script>
 </body>
