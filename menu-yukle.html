@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Menü Yükle</title>
+  <style>
+    body{font-family:sans-serif;background:#1a1a2e;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px}
+    .btn{background:#c9a84c;color:#1a1a2e;border:none;border-radius:10px;padding:16px 32px;font-size:1rem;font-weight:700;cursor:pointer;font-family:sans-serif}
+    .log{background:#111;border-radius:10px;padding:16px;max-width:500px;width:90%;font-size:.8rem;line-height:1.8;color:#4ade80;max-height:400px;overflow-y:auto}
+    h2{color:#c9a84c;font-size:1.2rem}
+    select{background:#111;color:#fff;border:1px solid #333;border-radius:8px;padding:8px 12px;font-size:.9rem;margin-bottom:8px}
+  </style>
+</head>
+<body>
+  <h2>🍽 e-Misafir Menü Yükleyici</h2>
+  <div>
+    <label style="color:#9a8f80;font-size:.8rem;display:block;margin-bottom:4px">OTEL ID</label>
+    <select id="hotel-sel">
+      <option value="demo">demo</option>
+    </select>
+  </div>
+  <button class="btn" onclick="loadMenus()">Standart Menüleri Yükle</button>
+  <div class="log" id="log">Butona basarak demo oteline standart menüleri yükleyin...</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",
+  authDomain: "emisafir-56796.firebaseapp.com",
+  databaseURL: "https://emisafir-56796-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "emisafir-56796",
+  storageBucket: "emisafir-56796.firebasestorage.app",
+  messagingSenderId: "1044463772299",
+  appId: "1:1044463772299:web:4f1496b541a433fe766a8e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// Otel listesini çek
+const hotelsSnap = await get(ref(db,'hotels'));
+if (hotelsSnap.exists()) {
+  const sel = document.getElementById('hotel-sel');
+  sel.innerHTML = '';
+  Object.keys(hotelsSnap.val()).forEach(hid => {
+    const opt = document.createElement('option');
+    opt.value = hid;
+    opt.textContent = hotelsSnap.val()[hid].info?.name || hid;
+    sel.appendChild(opt);
+  });
+}
+
+const MENU = [
+  // KAHVALTI (07:00–11:00)
+  {emoji:'🍳',name:'Serpme Kahvaltı',description:'Peynir, zeytin, bal, kaymak, simit ve çay',price:380,category:'Kahvaltı',startTime:'07:00',endTime:'11:00'},
+  {emoji:'🥚',name:'Omlet',description:'Seçiminize göre malzemeli omlet',price:180,category:'Kahvaltı',startTime:'07:00',endTime:'11:00'},
+  {emoji:'🥘',name:'Menemen',description:'Domates, biber, yumurta',price:150,category:'Kahvaltı',startTime:'07:00',endTime:'11:00'},
+  {emoji:'🥐',name:'Kruvasan & Reçel',description:'Tereyağlı kruvasan, ev reçeli',price:120,category:'Kahvaltı',startTime:'07:00',endTime:'11:00'},
+
+  // IZGARA & ET (11:00–23:00)
+  {emoji:'🥩',name:'Dana Antrikot',description:'Özel sos, patates graten ile — 300gr',price:580,category:'Izgara & Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍖',name:'Kuzu Pirzola',description:'4 adet pirzola, roka salatası ile',price:520,category:'Izgara & Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍗',name:'Izgara Tavuk',description:'Marine edilmiş göğüs, pilav ile',price:280,category:'Izgara & Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥓',name:'Köfte Tabağı',description:'El yapımı köfte, domates sosu, pilav',price:240,category:'Izgara & Et',startTime:'11:00',endTime:'23:00'},
+
+  // DENİZ ÜRÜNLERİ (11:00–23:00)
+  {emoji:'🐟',name:'Izgara Levrek',description:'Mevsim sebzesi ve pilav ile',price:420,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦐',name:'Karides Sote',description:'Sarımsaklı tereyağı, makarna ile',price:360,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🐠',name:'Izgara Çipura',description:'Fırın patates, limon ile',price:380,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+
+  // SALATA & MEZE (her zaman)
+  {emoji:'🥗',name:'Çoban Salatası',description:'Domates, salatalık, maydanoz, zeytinyağı',price:120,category:'Salata & Meze',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🫙',name:'Humus',description:'Zeytinyağı, kırmızı biber, tahin',price:100,category:'Salata & Meze',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥙',name:'Haydari',description:'Süzme yoğurt, sarımsak, nane',price:90,category:'Salata & Meze',startTime:'00:00',endTime:'23:59'},
+
+  // DÜNYA MUTFAĞI (11:00–23:00)
+  {emoji:'🍕',name:'Pizza Margherita',description:'Domates sosu, mozzarella, fesleğen',price:280,category:'Dünya Mutfağı',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍔',name:'Gurme Burger',description:'Dana köfte, çedar, kavurma soğan, patates',price:260,category:'Dünya Mutfağı',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍝',name:'Spaghetti Bolognese',description:'Dana kıyma, domates sosu, parmesan',price:220,category:'Dünya Mutfağı',startTime:'11:00',endTime:'23:00'},
+
+  // TATLI (11:00–23:59)
+  {emoji:'🍮',name:'Künefe',description:'Antep fıstıklı, kaymak ile sıcak servis',price:160,category:'Tatlı',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍯',name:'Baklava Tabağı',description:'Fıstıklı baklava, 4 dilim',price:140,category:'Tatlı',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍨',name:'Dondurma Tabağı',description:'3 top, mevsim meyvesi ile',price:130,category:'Tatlı',startTime:'11:00',endTime:'23:59'},
+
+  // İÇECEK (her zaman)
+  {emoji:'🍵',name:'Türk Çayı',description:'Demlik çay, şeker ile servis edilir',price:40,category:'İçecek',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Türk Kahvesi',description:'Az, orta veya çok şekerli',price:60,category:'İçecek',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥤',name:'Taze Meyve Suyu',description:'Portakal, nar veya havuç seçiminize göre',price:120,category:'İçecek',startTime:'07:00',endTime:'23:00'},
+  {emoji:'🧃',name:'Su (500ml)',description:'Soğuk servis',price:30,category:'İçecek',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥛',name:'Sıcak Süt',description:'Bal veya sade',price:50,category:'İçecek',startTime:'00:00',endTime:'23:59'},
+
+  // MİNİBAR (her zaman)
+  {emoji:'🥤',name:'Kola / Fanta / Sprite',description:'330ml soğuk kutu',price:50,category:'Minibar',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🍫',name:'Çikolata',description:'100gr tablet çikolata',price:80,category:'Minibar',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🍟',name:'Cips',description:'60gr çeşit paket',price:60,category:'Minibar',startTime:'00:00',endTime:'23:59'},
+];
+
+window.loadMenus = async function() {
+  const hotelId = document.getElementById('hotel-sel').value;
+  const log = document.getElementById('log');
+  log.innerHTML = `${hotelId} oteline menü yükleniyor...<br/>`;
+
+  for (const item of MENU) {
+    await push(ref(db, `hotels/${hotelId}/menu`), {...item, active:true});
+    log.innerHTML += `✓ ${item.emoji} ${item.name} (${item.category})<br/>`;
+    log.scrollTop = log.scrollHeight;
+  }
+
+  log.innerHTML += `<br/>🎉 ${MENU.length} ürün başarıyla yüklendi!<br/>`;
+  log.innerHTML += `<a href="/misafir.html?hotel=${hotelId}&room=101" style="color:#c9a84c">→ Misafir ekranını aç</a>`;
+}
+</script>
+</body>
+</html>
