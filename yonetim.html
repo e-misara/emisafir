@@ -8,68 +8,80 @@
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:sans-serif;background:#f0ebe1;min-height:100vh}
     #header{background:#1a1a2e;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
-    .logo{color:#c9a84c;font-size:1.2rem;font-weight:700;letter-spacing:2px}
+    .logo{color:#c9a84c;font-size:1.1rem;font-weight:700;letter-spacing:2px}
     .logo span{color:#fff}
-    #main{max-width:900px;margin:0 auto;padding:24px 16px}
-    /* TABS */
-    .ptabs{display:flex;gap:8px;margin-bottom:24px}
-    .ptab{background:#fff;border:2px solid #e8e3db;border-radius:10px;padding:10px 20px;font-size:.82rem;font-weight:600;cursor:pointer;color:#9a8f80;font-family:sans-serif}
+    #main{max-width:960px;margin:0 auto;padding:24px 16px}
+    .ptabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+    .ptab{background:#fff;border:2px solid #e8e3db;border-radius:10px;padding:10px 18px;font-size:.8rem;font-weight:600;cursor:pointer;color:#9a8f80;font-family:sans-serif;transition:all .2s}
     .ptab.active{background:#1a1a2e;color:#c9a84c;border-color:#1a1a2e}
     .pscreen{display:none}
     .pscreen.active{display:block}
-    /* CARDS */
     .card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
-    .card h2{font-size:1rem;color:#1a1a2e;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #e8e3db}
-    /* FORM */
+    .card h2{font-size:.95rem;color:#1a1a2e;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #e8e3db}
     .form-row{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}
-    .form-group{display:flex;flex-direction:column;gap:4px;flex:1;min-width:150px}
-    .form-group label{font-size:.72rem;color:#9a8f80;font-weight:600;letter-spacing:.5px}
-    .form-group input,.form-group select{background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:8px;padding:9px 12px;font-size:.85rem;color:#1a1a2e;outline:none;font-family:sans-serif}
-    .form-group input:focus,.form-group select:focus{border-color:#c9a84c}
+    .form-group{display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px}
+    .form-group label{font-size:.7rem;color:#9a8f80;font-weight:600;letter-spacing:.5px}
+    .form-group input,.form-group select,.form-group textarea{background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:8px;padding:9px 12px;font-size:.83rem;color:#1a1a2e;outline:none;font-family:sans-serif}
+    .form-group textarea{resize:vertical;min-height:80px}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#c9a84c}
     .btn-primary{background:#1a1a2e;color:#c9a84c;border:none;border-radius:8px;padding:10px 20px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:sans-serif}
     .btn-outline{background:transparent;color:#1a1a2e;border:2px solid #1a1a2e;border-radius:8px;padding:8px 16px;font-weight:600;font-size:.78rem;cursor:pointer;font-family:sans-serif}
-    .btn-danger{background:transparent;color:#ef4444;border:2px solid #ef4444;border-radius:8px;padding:6px 12px;font-size:.75rem;cursor:pointer;font-family:sans-serif}
-    .btn-gold{background:#c9a84c;color:#1a1a2e;border:none;border-radius:8px;padding:8px 16px;font-weight:700;font-size:.78rem;cursor:pointer;font-family:sans-serif}
-    /* HOTEL LIST */
+    .btn-gold{background:#c9a84c;color:#1a1a2e;border:none;border-radius:8px;padding:8px 14px;font-weight:700;font-size:.75rem;cursor:pointer;font-family:sans-serif}
+    .btn-danger{background:transparent;color:#ef4444;border:1.5px solid #ef4444;border-radius:8px;padding:6px 12px;font-size:.72rem;cursor:pointer;font-family:sans-serif}
+    .btn-sm{padding:6px 12px;font-size:.72rem}
+
+    /* MENÜ KÜTÜPHANESI */
+    .lib-cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .lib-cat{background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:20px;padding:6px 14px;font-size:.75rem;cursor:pointer;font-family:sans-serif;transition:all .2s;color:#666}
+    .lib-cat.active{background:#1a1a2e;color:#c9a84c;border-color:#1a1a2e}
+    .lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;max-height:280px;overflow-y:auto;padding:4px}
+    .lib-item{background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:10px;padding:12px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:4px}
+    .lib-item:hover{border-color:#c9a84c;background:#fffdf7}
+    .lib-emoji{font-size:1.5rem}
+    .lib-name{font-size:.78rem;font-weight:600;color:#1a1a2e}
+    .lib-cat-label{font-size:.65rem;color:#9a8f80}
+
+    /* MENÜ LİSTESİ */
+    .menu-item-row{background:#f7f4ef;border-radius:8px;padding:12px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+    .mir-emoji{font-size:1.4rem;flex-shrink:0}
+    .mir-info{flex:1}
+    .mir-name{font-size:.85rem;font-weight:600;color:#1a1a2e}
+    .mir-meta{font-size:.7rem;color:#9a8f80;margin-top:2px}
+    .mir-time{font-size:.68rem;background:#1a1a2e;color:#c9a84c;padding:2px 8px;border-radius:10px}
+    .mir-actions{display:flex;gap:6px;flex-shrink:0}
+
+    /* OTEL KARTI */
     .hotel-card{background:#fff;border:1.5px solid #e8e3db;border-radius:10px;padding:16px;margin-bottom:10px}
     .hotel-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-    .hotel-name{font-size:1rem;font-weight:700;color:#1a1a2e}
-    .hotel-id{font-size:.68rem;color:#9a8f80;margin-top:2px}
-    .hotel-stats{display:flex;gap:16px;margin:8px 0}
-    .stat{font-size:.75rem;color:#9a8f80}
-    .stat strong{color:#1a1a2e;font-size:.88rem}
+    .hotel-name{font-size:.95rem;font-weight:700;color:#1a1a2e}
+    .hotel-id{font-size:.68rem;color:#9a8f80}
     .hotel-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    /* ROOMS */
-    .room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:10px}
-    .room-chip{background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:8px;padding:8px;text-align:center;cursor:pointer;position:relative}
-    .room-chip:hover{border-color:#c9a84c}
-    .room-chip .rnum{font-size:.85rem;font-weight:700;color:#1a1a2e}
-    .room-chip .rdel{position:absolute;top:-6px;right:-6px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:.65rem;cursor:pointer;display:none;align-items:center;justify-content:center}
-    .room-chip:hover .rdel{display:flex}
+
     /* QR MODAL */
     #qr-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center}
     #qr-modal.show{display:flex}
     #qr-box{background:#fff;border-radius:16px;padding:28px;max-width:340px;width:90%;text-align:center}
     #qr-box h3{font-size:1rem;color:#1a1a2e;margin-bottom:4px}
     #qr-box p{font-size:.75rem;color:#9a8f80;margin-bottom:16px}
-    #qr-img{width:200px;height:200px;border:8px solid #fff;box-shadow:0 4px 20px rgba(0,0,0,.12);margin:0 auto 16px}
-    #qr-url{font-size:.65rem;color:#9a8f80;word-break:break-all;margin-bottom:16px;background:#f7f4ef;padding:8px;border-radius:6px}
+    #qr-img{width:190px;height:190px;border:6px solid #fff;box-shadow:0 4px 16px rgba(0,0,0,.12);margin:0 auto 14px}
+    #qr-url{font-size:.62rem;color:#9a8f80;word-break:break-all;background:#f7f4ef;padding:8px;border-radius:6px;margin-bottom:14px}
     .qr-btns{display:flex;gap:8px;justify-content:center}
-    /* TOAST */
-    #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#c9a84c;padding:10px 20px;border-radius:20px;font-size:.8rem;font-weight:600;display:none;z-index:9999;white-space:nowrap}
+
+    #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#c9a84c;padding:10px 20px;border-radius:20px;font-size:.8rem;font-weight:600;display:none;z-index:9999;white-space:nowrap}
   </style>
 </head>
 <body>
 
 <div id="header">
-  <div class="logo">e-<span>Misafir</span> <span style="color:#c9a84c;font-size:.7rem;font-weight:400;letter-spacing:1px">YÖNETİM PANELİ</span></div>
-  <div style="color:rgba(255,255,255,.5);font-size:.75rem">v1.0</div>
+  <div class="logo">e-<span>Misafir</span> <span style="color:#c9a84c;font-size:.68rem;letter-spacing:1px;font-weight:400">YÖNETİM</span></div>
+  <div style="color:rgba(255,255,255,.4);font-size:.72rem">v2.0</div>
 </div>
 
 <div id="main">
   <div class="ptabs">
     <button class="ptab active" onclick="switchP('oteller',this)">🏨 Oteller</button>
-    <button class="ptab" onclick="switchP('ekle',this)">➕ Yeni Otel</button>
+    <button class="ptab" onclick="switchP('menu',this)">🍽 Menü Yönetimi</button>
+    <button class="ptab" onclick="switchP('otel-ekle',this)">➕ Yeni Otel</button>
   </div>
 
   <!-- OTELLER -->
@@ -80,8 +92,105 @@
     </div>
   </div>
 
+  <!-- MENÜ YÖNETİMİ -->
+  <div id="menu-screen" class="pscreen">
+
+    <!-- Otel seç -->
+    <div class="card">
+      <h2>Menü Düzenlenecek Otel</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>OTEL SEÇ</label>
+          <select id="menu-hotel-sel" onchange="loadHotelMenu()">
+            <option value="">-- Seçin --</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kütüphaneden ekle -->
+    <div class="card">
+      <h2>📚 Hazır Yemek Kütüphanesi</h2>
+      <div class="lib-cats" id="lib-cats"></div>
+      <div class="lib-grid" id="lib-grid"></div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid #e8e3db">
+        <div style="font-size:.75rem;color:#9a8f80;margin-bottom:8px">Seçilen ürün için saat aralığı (opsiyonel):</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <input type="time" id="lib-start" value="00:00" style="background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:8px;padding:7px 10px;font-size:.82rem;outline:none"/>
+          <span style="color:#9a8f80;font-size:.8rem">—</span>
+          <input type="time" id="lib-end" value="23:59" style="background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:8px;padding:7px 10px;font-size:.82rem;outline:none"/>
+          <input type="number" id="lib-price" placeholder="Fiyat ₺" style="background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:8px;padding:7px 10px;font-size:.82rem;outline:none;width:120px"/>
+          <button class="btn-primary btn-sm" onclick="addFromLib()">+ Menüye Ekle</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manuel ekle -->
+    <div class="card">
+      <h2>✏️ Manuel Ürün Ekle</h2>
+      <div class="form-row">
+        <div class="form-group" style="min-width:60px;max-width:80px">
+          <label>EMOJİ</label>
+          <input type="text" id="m-emoji" placeholder="🍽" maxlength="2"/>
+        </div>
+        <div class="form-group">
+          <label>ÜRÜN ADI</label>
+          <input type="text" id="m-name" placeholder="Özel Salata"/>
+        </div>
+        <div class="form-group" style="min-width:100px;max-width:120px">
+          <label>FİYAT ₺</label>
+          <input type="number" id="m-price" placeholder="250"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>KATEGORİ</label>
+          <select id="m-cat">
+            <option>Kahvaltı</option>
+            <option>Izgara & Et</option>
+            <option>Deniz Ürünleri</option>
+            <option>Makarna & Börek</option>
+            <option>Salata & Meze</option>
+            <option>Dünya Mutfağı</option>
+            <option>İçecek</option>
+            <option>Tatlı</option>
+            <option>Minibar</option>
+            <option>Özel</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>KISA AÇIKLAMA (Misafir Görür)</label>
+          <input type="text" id="m-desc" placeholder="Mevsim sebzeli, zeytinyağlı"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>MÜSAİT BAŞLANGIÇ SAATİ</label>
+          <input type="time" id="m-start" value="00:00"/>
+        </div>
+        <div class="form-group">
+          <label>MÜSAİT BİTİŞ SAATİ</label>
+          <input type="time" id="m-end" value="23:59"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>🔒 REÇETE / MUTFAK STANDARDI (Misafir Görmez)</label>
+          <textarea id="m-recipe" placeholder="• Malzeme 1: 200gr&#10;• Pişirme: 180°C fırın, 15 dk&#10;• Servis: ısıtılmış tabak&#10;• Sunum: saat 6 pozisyonunda..."></textarea>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="addManualItem()">+ Menüye Ekle</button>
+    </div>
+
+    <!-- Mevcut menü -->
+    <div class="card">
+      <h2>📋 Mevcut Menü <span id="menu-hotel-name" style="color:#9a8f80;font-weight:400;font-size:.8rem"></span></h2>
+      <div id="menu-list"><div style="color:#9a8f80;font-size:.82rem">Önce otel seçin</div></div>
+    </div>
+  </div>
+
   <!-- YENİ OTEL -->
-  <div id="ekle-screen" class="pscreen">
+  <div id="otel-ekle-screen" class="pscreen">
     <div class="card">
       <h2>Yeni Otel Ekle</h2>
       <div class="form-row">
@@ -91,7 +200,7 @@
         </div>
         <div class="form-group">
           <label>SİSTEM ID (küçük harf, boşluksuz)</label>
-          <input type="text" id="h-id" placeholder="grandhotel"/>
+          <input type="text" id="h-id" placeholder="grandhotel" oninput="this.value=this.value.toLowerCase().replace(/\s/g,'')"/>
         </div>
       </div>
       <div class="form-row">
@@ -100,19 +209,11 @@
           <input type="text" id="h-city" placeholder="İstanbul"/>
         </div>
         <div class="form-group">
-          <label>TOPLAM ODA SAYISI</label>
-          <input type="number" id="h-count" placeholder="50" min="1" max="500"/>
+          <label>ODA NUMARALARI (virgülle, boşsa otomatik 101-150)</label>
+          <input type="text" id="h-rooms" placeholder="101,102,103,201,202"/>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>ODA NUMARALARI (opsiyonel, virgülle ayırın)</label>
-          <input type="text" id="h-rooms" placeholder="101,102,103 — boş bırakırsanız otomatik oluşur"/>
-        </div>
-      </div>
-      <div style="margin-top:8px">
-        <button class="btn-primary" onclick="addHotel()">Oteli Kaydet →</button>
-      </div>
+      <button class="btn-primary" onclick="addHotel()">Oteli Kaydet →</button>
     </div>
   </div>
 </div>
@@ -120,7 +221,7 @@
 <!-- QR MODAL -->
 <div id="qr-modal">
   <div id="qr-box">
-    <h3 id="qr-title">Oda QR Kodu</h3>
+    <h3 id="qr-title">QR Kodu</h3>
     <p id="qr-sub">Misafir bu kodu okutarak sisteme bağlanır</p>
     <img id="qr-img" src="" alt="QR"/>
     <div id="qr-url"></div>
@@ -135,7 +236,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, get, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, set, get, push, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",
@@ -149,181 +250,325 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
-// BASE URL — domain aldıktan sonra burası değişecek
 const BASE = location.origin;
 
-function toast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.style.display='block';
-  setTimeout(()=>t.style.display='none',3000);
+// ── YEMEK KÜTÜPHANESİ ──
+const LIBRARY = {
+  'Kahvaltı': [
+    {emoji:'🍳',name:'Serpme Kahvaltı',desc:'Peynir, zeytin, bal, kaymak, simit',price:380,start:'07:00',end:'11:00'},
+    {emoji:'🥚',name:'Omlet',desc:'Seçiminize göre malzemeli omlet',price:180,start:'07:00',end:'12:00'},
+    {emoji:'🥘',name:'Menemen',desc:'Domates, biber, yumurta',price:150,start:'07:00',end:'12:00'},
+    {emoji:'🥐',name:'Kruvasan & Reçel',desc:'Tereyağlı kruvasan, ev reçeli',price:120,start:'07:00',end:'11:00'},
+    {emoji:'🥞',name:'Amerikan Pankek',desc:'Akçaağaç şurubu ile',price:160,start:'07:00',end:'11:00'},
+  ],
+  'Izgara & Et': [
+    {emoji:'🥩',name:'Dana Antrikot',desc:'Özel sos, patates graten ile',price:580,start:'12:00',end:'22:00'},
+    {emoji:'🍖',name:'Kuzu Pirzola',desc:'4 adet pirzola, roka salatası',price:520,start:'12:00',end:'22:00'},
+    {emoji:'🍗',name:'Izgara Tavuk',desc:'Marine edilmiş, pilav ile',price:280,start:'12:00',end:'22:00'},
+    {emoji:'🥓',name:'Köfte',desc:'El yapımı köfte, domates sosu',price:240,start:'12:00',end:'22:00'},
+  ],
+  'Deniz Ürünleri': [
+    {emoji:'🐟',name:'Izgara Levrek',desc:'Mevsim sebzesi ve pilav ile',price:420,start:'12:00',end:'22:00'},
+    {emoji:'🦐',name:'Karides Sote',desc:'Sarımsaklı tereyağı, makarna',price:360,start:'12:00',end:'22:00'},
+    {emoji:'🐠',name:'Çipura',desc:'Fırın patates, limon ile',price:380,start:'12:00',end:'22:00'},
+  ],
+  'Salata & Meze': [
+    {emoji:'🥗',name:'Çoban Salatası',desc:'Domates, salatalık, maydanoz',price:120,start:'00:00',end:'23:59'},
+    {emoji:'🫙',name:'Humus',desc:'Zeytinyağı, kırmızı biber',price:100,start:'00:00',end:'23:59'},
+    {emoji:'🥙',name:'Haydari',desc:'Yoğurt, sarımsak, nane',price:90,start:'00:00',end:'23:59'},
+  ],
+  'Dünya Mutfağı': [
+    {emoji:'🍕',name:'Pizza Margherita',desc:'Domates sosu, mozzarella',price:280,start:'12:00',end:'23:00'},
+    {emoji:'🍔',name:'Gurme Burger',desc:'Dana, çedar, kavurma soğan',price:260,start:'12:00',end:'23:00'},
+    {emoji:'🍝',name:'Spaghetti Bolognese',desc:'Dana kıyma, domates sosu',price:220,start:'12:00',end:'22:00'},
+  ],
+  'İçecek': [
+    {emoji:'🍵',name:'Türk Çayı',desc:'Demlik çay, şeker ile',price:40,start:'00:00',end:'23:59'},
+    {emoji:'☕',name:'Türk Kahvesi',desc:'Seçiminize göre pişirilir',price:60,start:'00:00',end:'23:59'},
+    {emoji:'🥤',name:'Taze Meyve Suyu',desc:'Portakal, nar veya havuç',price:120,start:'07:00',end:'23:00'},
+    {emoji:'🧃',name:'Su (500ml)',desc:'Soğuk servis',price:30,start:'00:00',end:'23:59'},
+    {emoji:'🥛',name:'Süt',desc:'Sıcak veya soğuk',price:50,start:'00:00',end:'23:59'},
+  ],
+  'Tatlı': [
+    {emoji:'🍮',name:'Künefe',desc:'Antep fıstıklı, kaymak ile',price:160,start:'12:00',end:'23:00'},
+    {emoji:'🍯',name:'Baklava',desc:'Fıstıklı, 4 dilim',price:140,start:'12:00',end:'23:00'},
+    {emoji:'🍨',name:'Dondurma Tabağı',desc:'3 top, mevsim meyvesi',price:130,start:'12:00',end:'22:00'},
+    {emoji:'🎂',name:'Cheesecake',desc:'Orman meyveli sos ile',price:150,start:'12:00',end:'23:00'},
+  ],
+  'Minibar': [
+    {emoji:'🧴',name:'Su (330ml)',desc:'Soğuk',price:20,start:'00:00',end:'23:59'},
+    {emoji:'🥤',name:'Kola/Fanta/Sprite',desc:'330ml kutu',price:50,start:'00:00',end:'23:59'},
+    {emoji:'🍫',name:'Çikolata',desc:'100gr tablet',price:80,start:'00:00',end:'23:59'},
+    {emoji:'🍟',name:'Cips',desc:'60gr paket',price:60,start:'00:00',end:'23:59'},
+  ],
+};
+
+let selectedLibItem = null;
+
+// Kütüphaneyi yükle
+function initLibrary() {
+  const catEl = document.getElementById('lib-cats');
+  catEl.innerHTML = '';
+  Object.keys(LIBRARY).forEach((cat, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'lib-cat' + (i === 0 ? ' active' : '');
+    btn.textContent = cat;
+    btn.onclick = () => {
+      document.querySelectorAll('.lib-cat').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderLibGrid(cat);
+    };
+    catEl.appendChild(btn);
+  });
+  renderLibGrid(Object.keys(LIBRARY)[0]);
 }
 
-// ── OTEL EKLE ──
-window.addHotel = async function(){
-  const name = document.getElementById('h-name').value.trim();
-  const id = document.getElementById('h-id').value.trim().toLowerCase().replace(/\s/g,'');
-  const city = document.getElementById('h-city').value.trim();
-  const count = parseInt(document.getElementById('h-count').value)||10;
-  const customRooms = document.getElementById('h-rooms').value.trim();
-
-  if(!name||!id){alert('Otel adı ve ID zorunlu!');return;}
-
-  // Oda listesi oluştur
-  let rooms = [];
-  if(customRooms){
-    rooms = customRooms.split(',').map(r=>r.trim()).filter(Boolean);
-  } else {
-    for(let i=1;i<=count;i++) rooms.push(String(100+i));
-  }
-
-  const hotelData = {
-    name, id, city,
-    rooms: Object.fromEntries(rooms.map(r=>[r,{active:true}])),
-    createdAt: Date.now()
-  };
-
-  await set(ref(db,`hotels/${id}/info`), hotelData);
-  toast('✓ '+name+' eklendi!');
-
-  // Formu temizle
-  ['h-name','h-id','h-city','h-count','h-rooms'].forEach(i=>document.getElementById(i).value='');
-
-  // Oteller tabına geç
-  switchP('oteller', document.querySelector('.ptab'));
-  loadHotels();
-}
-
-// ── OTELLERİ YÜKle ──
-async function loadHotels(){
-  const snap = await get(ref(db,'hotels'));
-  const list = document.getElementById('hotel-list');
-  if(!snap.exists()){
-    list.innerHTML='<div style="color:#9a8f80;font-size:.85rem;padding:20px 0">Henüz otel eklenmedi. "Yeni Otel" sekmesinden ekleyebilirsiniz.</div>';
-    return;
-  }
-  const hotels = snap.val();
-  list.innerHTML='';
-  Object.entries(hotels).forEach(([hid, hdata])=>{
-    if(!hdata.info) return;
-    const info = hdata.info;
-    const rooms = Object.keys(info.rooms||{});
+function renderLibGrid(cat) {
+  const grid = document.getElementById('lib-grid');
+  grid.innerHTML = '';
+  selectedLibItem = null;
+  LIBRARY[cat].forEach(item => {
     const div = document.createElement('div');
-    div.className='hotel-card';
-    div.innerHTML=`
+    div.className = 'lib-item';
+    div.onclick = () => {
+      document.querySelectorAll('.lib-item').forEach(d => d.style.borderColor = '#e8e3db');
+      div.style.borderColor = '#c9a84c';
+      selectedLibItem = {...item};
+      document.getElementById('lib-price').value = item.price;
+      document.getElementById('lib-start').value = item.start || '00:00';
+      document.getElementById('lib-end').value = item.end || '23:59';
+    };
+    div.innerHTML = `<div class="lib-emoji">${item.emoji}</div>
+      <div class="lib-name">${item.name}</div>
+      <div class="lib-cat-label">${item.desc}</div>`;
+    grid.appendChild(div);
+  });
+}
+
+window.addFromLib = async function() {
+  const hotelId = document.getElementById('menu-hotel-sel').value;
+  if (!hotelId) { toast('Önce otel seçin'); return; }
+  if (!selectedLibItem) { toast('Kütüphaneden bir ürün seçin'); return; }
+  const price = parseInt(document.getElementById('lib-price').value) || selectedLibItem.price;
+  const start = document.getElementById('lib-start').value;
+  const end = document.getElementById('lib-end').value;
+
+  await push(ref(db, `hotels/${hotelId}/menu`), {
+    ...selectedLibItem,
+    price,
+    startTime: start,
+    endTime: end,
+    recipe: '',
+    active: true
+  });
+  toast('✓ ' + selectedLibItem.name + ' menüye eklendi!');
+  loadHotelMenu();
+}
+
+window.addManualItem = async function() {
+  const hotelId = document.getElementById('menu-hotel-sel').value;
+  if (!hotelId) { toast('Önce otel seçin'); return; }
+  const name = document.getElementById('m-name').value.trim();
+  const price = parseInt(document.getElementById('m-price').value);
+  if (!name || !price) { toast('Ad ve fiyat zorunlu'); return; }
+
+  await push(ref(db, `hotels/${hotelId}/menu`), {
+    emoji: document.getElementById('m-emoji').value || '🍽',
+    name,
+    price,
+    category: document.getElementById('m-cat').value,
+    description: document.getElementById('m-desc').value,
+    startTime: document.getElementById('m-start').value || '00:00',
+    endTime: document.getElementById('m-end').value || '23:59',
+    recipe: document.getElementById('m-recipe').value,
+    active: true
+  });
+  toast('✓ ' + name + ' menüye eklendi!');
+  ['m-emoji','m-name','m-price','m-desc','m-recipe'].forEach(id => document.getElementById(id).value = '');
+  loadHotelMenu();
+}
+
+window.loadHotelMenu = async function() {
+  const hotelId = document.getElementById('menu-hotel-sel').value;
+  if (!hotelId) return;
+  document.getElementById('menu-hotel-name').textContent = '— ' + hotelId;
+  const snap = await get(ref(db, `hotels/${hotelId}/menu`));
+  const el = document.getElementById('menu-list');
+  if (!snap.exists()) { el.innerHTML = '<div style="color:#9a8f80;font-size:.82rem">Henüz ürün eklenmedi</div>'; return; }
+
+  const items = Object.entries(snap.val()).map(([id,v]) => ({id,...v}));
+  el.innerHTML = '';
+
+  // Kategoriye göre grupla
+  const cats = {};
+  items.forEach(i => { const c = i.category||'Diğer'; if(!cats[c]) cats[c]=[]; cats[c].push(i); });
+
+  Object.entries(cats).forEach(([cat, catItems]) => {
+    const sep = document.createElement('div');
+    sep.style.cssText = 'font-size:.65rem;color:#9a8f80;letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid #e8e3db';
+    sep.textContent = cat;
+    el.appendChild(sep);
+
+    catItems.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'menu-item-row';
+      div.innerHTML = `
+        <div class="mir-emoji">${item.emoji||'🍽'}</div>
+        <div class="mir-info">
+          <div class="mir-name">${item.name} — ₺${item.price}</div>
+          <div class="mir-meta">
+            ${item.description || ''}
+            ${item.startTime&&item.endTime ? `<span class="mir-time" style="margin-left:6px">⏰ ${item.startTime}–${item.endTime}</span>` : ''}
+            ${item.recipe ? `<span style="margin-left:6px;font-size:.65rem;color:#c9a84c">📋 Reçete var</span>` : ''}
+          </div>
+        </div>
+        <div class="mir-actions">
+          ${item.recipe ? `<button class="btn-outline btn-sm" onclick="viewRecipe('${encodeURIComponent(item.recipe)}')">Reçete</button>` : ''}
+          <button class="btn-danger btn-sm" onclick="deleteMenuItem('${hotelId}','${item.id}')">Sil</button>
+        </div>`;
+      el.appendChild(div);
+    });
+  });
+}
+
+window.viewRecipe = function(encoded) {
+  alert('📋 Reçete:\n\n' + decodeURIComponent(encoded));
+}
+
+window.deleteMenuItem = async function(hotelId, itemId) {
+  if (!confirm('Bu ürün silinsin mi?')) return;
+  await remove(ref(db, `hotels/${hotelId}/menu/${itemId}`));
+  toast('Ürün silindi');
+  loadHotelMenu();
+}
+
+// ── OTEL İŞLEMLERİ ──
+async function loadHotels() {
+  const snap = await get(ref(db, 'hotels'));
+  const list = document.getElementById('hotel-list');
+  const sel = document.getElementById('menu-hotel-sel');
+  sel.innerHTML = '<option value="">-- Seçin --</option>';
+
+  if (!snap.exists()) { list.innerHTML = '<div style="color:#9a8f80;font-size:.85rem">Henüz otel eklenmedi.</div>'; return; }
+
+  const hotels = snap.val();
+  list.innerHTML = '';
+
+  Object.entries(hotels).forEach(([hid, hdata]) => {
+    if (!hdata.info) return;
+    const info = hdata.info;
+    const rooms = Object.keys(info.rooms || {});
+
+    // Selector'a ekle
+    const opt = document.createElement('option');
+    opt.value = hid; opt.textContent = info.name;
+    sel.appendChild(opt);
+
+    // Otel kartı
+    const div = document.createElement('div');
+    div.className = 'hotel-card';
+    div.innerHTML = `
       <div class="hotel-top">
         <div>
           <div class="hotel-name">${info.name}</div>
-          <div class="hotel-id">ID: ${hid} · ${info.city||''}</div>
+          <div class="hotel-id">ID: ${hid} · ${info.city||''} · ${rooms.length} oda</div>
         </div>
-        <button class="btn-danger" onclick="deleteHotel('${hid}','${info.name}')">Sil</button>
-      </div>
-      <div class="hotel-stats">
-        <div class="stat"><strong>${rooms.length}</strong> Oda</div>
-        <div class="stat">ID: <strong>${hid}</strong></div>
+        <button class="btn-danger btn-sm" onclick="deleteHotel('${hid}','${info.name}')">Sil</button>
       </div>
       <div class="hotel-actions">
-        <button class="btn-gold" onclick="showAllQR('${hid}','${info.name}')">📱 Tüm QR'ları Gör</button>
-        <button class="btn-outline" onclick="toggleRooms('${hid}')">🚪 Odaları Yönet</button>
-        <a href="/resepsiyon.html?hotel=${hid}" target="_blank"><button class="btn-primary">🖥 Resepsiyon Paneli</button></a>
-      </div>
-      <div id="rooms-${hid}" style="display:none;margin-top:12px;border-top:1px solid #e8e3db;padding-top:12px">
-        <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center">
-          <input type="text" id="newroom-${hid}" placeholder="Yeni oda no (örn: 305)" style="background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:8px;padding:7px 12px;font-size:.82rem;outline:none;width:160px"/>
-          <button class="btn-primary" onclick="addRoom('${hid}')">+ Ekle</button>
-        </div>
-        <div class="room-grid" id="roomgrid-${hid}">
-          ${rooms.map(r=>`<div class="room-chip" onclick="showQR('${hid}','${r}','${info.name}')">
-            <button class="rdel" onclick="event.stopPropagation();deleteRoom('${hid}','${r}')">×</button>
-            <div class="rnum">${r}</div>
-            <div style="font-size:.6rem;color:#9a8f80;margin-top:2px">QR</div>
-          </div>`).join('')}
-        </div>
-      </div>
-    `;
+        <button class="btn-gold" onclick="showAllQR('${hid}','${info.name}')">📱 Tüm QR'lar</button>
+        <button class="btn-outline btn-sm" onclick="switchP('menu',document.querySelectorAll('.ptab')[1]);document.getElementById('menu-hotel-sel').value='${hid}';loadHotelMenu()">🍽 Menüyü Düzenle</button>
+        <a href="/resepsiyon.html?hotel=${hid}" target="_blank"><button class="btn-outline btn-sm">🖥 Resepsiyon</button></a>
+        <a href="/mutfak.html?hotel=${hid}" target="_blank"><button class="btn-outline btn-sm">👨‍🍳 Mutfak</button></a>
+      </div>`;
     list.appendChild(div);
   });
 }
 
-window.toggleRooms = function(hid){
-  const el = document.getElementById('rooms-'+hid);
-  el.style.display = el.style.display==='none'?'block':'none';
-}
+window.addHotel = async function() {
+  const name = document.getElementById('h-name').value.trim();
+  const id = document.getElementById('h-id').value.trim();
+  const city = document.getElementById('h-city').value.trim();
+  const customRooms = document.getElementById('h-rooms').value.trim();
+  if (!name || !id) { toast('Ad ve ID zorunlu!'); return; }
 
-window.addRoom = async function(hid){
-  const inp = document.getElementById('newroom-'+hid);
-  const room = inp.value.trim();
-  if(!room) return;
-  await set(ref(db,`hotels/${hid}/info/rooms/${room}`),{active:true});
-  inp.value='';
-  toast('✓ Oda '+room+' eklendi!');
+  let rooms = [];
+  if (customRooms) rooms = customRooms.split(',').map(r => r.trim()).filter(Boolean);
+  else for (let i = 101; i <= 150; i++) rooms.push(String(i));
+
+  await set(ref(db, `hotels/${id}/info`), {
+    name, id, city,
+    rooms: Object.fromEntries(rooms.map(r => [r, {active: true}])),
+    createdAt: Date.now()
+  });
+  toast('✓ ' + name + ' eklendi!');
+  ['h-name','h-id','h-city','h-rooms'].forEach(i => document.getElementById(i).value = '');
+  switchP('oteller', document.querySelector('.ptab'));
   loadHotels();
 }
 
-window.deleteRoom = async function(hid, room){
-  if(!confirm('Oda '+room+' silinsin mi?')) return;
-  await remove(ref(db,`hotels/${hid}/info/rooms/${room}`));
-  toast('Oda '+room+' silindi.');
+window.deleteHotel = async function(hid, name) {
+  if (!confirm(name + ' silinsin mi?')) return;
+  await remove(ref(db, `hotels/${hid}`));
+  toast(name + ' silindi');
   loadHotels();
 }
 
-window.deleteHotel = async function(hid, name){
-  if(!confirm(name+' oteli silinsin mi? Tüm mesajlar da silinir!')) return;
-  await remove(ref(db,`hotels/${hid}`));
-  toast(name+' silindi.');
-  loadHotels();
-}
-
-// ── QR GÖSTER ──
-window.showQR = function(hid, room, hotelName){
-  const url = `${BASE}/index.html?hotel=${hid}&room=${room}`;
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}&color=1a1a2e&bgcolor=f8f4ef&margin=10`;
+window.showQR = function(hid, room, hotelName) {
+  const url = `${BASE}/menu.html?hotel=${hid}&room=${room}`;
   document.getElementById('qr-title').textContent = hotelName + ' — Oda ' + room;
-  document.getElementById('qr-sub').textContent = 'Misafir bu kodu okutarak sisteme bağlanır';
-  document.getElementById('qr-img').src = qrUrl;
+  document.getElementById('qr-sub').textContent = 'Misafir bu kodu okutarak menüye ulaşır';
+  document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}&color=1a1a2e&bgcolor=f8f4ef&margin=10`;
   document.getElementById('qr-url').textContent = url;
   document.getElementById('qr-modal').classList.add('show');
 }
 
-window.showAllQR = function(hid, hotelName){
-  // Yeni sekmede tüm QR'ları göster
-  const w = window.open('','_blank');
-  get(ref(db,`hotels/${hid}/info/rooms`)).then(snap=>{
-    if(!snap.exists()) return;
+window.showAllQR = function(hid, hotelName) {
+  get(ref(db, `hotels/${hid}/info/rooms`)).then(snap => {
+    if (!snap.exists()) return;
     const rooms = Object.keys(snap.val());
-    let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${hotelName} — QR Kodları</title>
-    <style>body{font-family:sans-serif;padding:20px;background:#f7f4ef}h1{color:#1a1a2e;margin-bottom:20px;font-size:1.2rem}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-    .qr-card{background:#fff;border-radius:12px;padding:16px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-    .qr-card h3{font-size:.9rem;color:#1a1a2e;margin-bottom:8px}
-    .qr-card img{width:160px;height:160px}
-    .qr-card p{font-size:.6rem;color:#9a8f80;margin-top:6px;word-break:break-all}
-    @media print{.grid{grid-template-columns:repeat(3,1fr)}}</style>
-    </head><body><h1>${hotelName} — Tüm Oda QR Kodları</h1><div class="grid">`;
-    rooms.forEach(r=>{
-      const url=`${BASE}/index.html?hotel=${hid}&room=${r}`;
-      const qr=`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(url)}&color=1a1a2e&bgcolor=ffffff&margin=8`;
-      html+=`<div class="qr-card"><h3>Oda ${r}</h3><img src="${qr}"/><p>${url}</p></div>`;
+    const w = window.open('', '_blank');
+    let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${hotelName} QR</title>
+    <style>body{font-family:sans-serif;padding:20px;background:#f7f4ef}h1{color:#1a1a2e;margin-bottom:20px;font-size:1.1rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+    .qr-card{background:#fff;border-radius:10px;padding:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    h3{font-size:.85rem;color:#1a1a2e;margin-bottom:8px}img{width:150px;height:150px}
+    p{font-size:.55rem;color:#9a8f80;margin-top:6px;word-break:break-all}
+    @media print{.grid{grid-template-columns:repeat(3,1fr)}.btn{display:none}}</style>
+    </head><body>
+    <h1>${hotelName} — Oda QR Kodları</h1>
+    <button class="btn" onclick="window.print()" style="background:#1a1a2e;color:#c9a84c;border:none;padding:10px 20px;border-radius:8px;font-size:.85rem;cursor:pointer;margin-bottom:20px">🖨 Hepsini Yazdır</button>
+    <div class="grid">`;
+    rooms.forEach(r => {
+      const url = `${BASE}/menu.html?hotel=${hid}&room=${r}`;
+      const qr = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}&color=1a1a2e&bgcolor=ffffff&margin=8`;
+      html += `<div class="qr-card"><h3>Oda ${r}</h3><img src="${qr}"/><p>${url}</p></div>`;
     });
-    html+=`</div><br><button onclick="window.print()" style="background:#1a1a2e;color:#c9a84c;border:none;padding:12px 24px;border-radius:8px;font-size:.9rem;cursor:pointer;font-weight:700">🖨 Hepsini Yazdır</button></body></html>`;
+    html += '</div></body></html>';
     w.document.write(html);
     w.document.close();
   });
 }
 
-window.closeQR = function(){
+window.closeQR = function() {
   document.getElementById('qr-modal').classList.remove('show');
 }
 
-// TABS
-window.switchP = function(name, btn){
-  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.pscreen').forEach(s=>s.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(name+'-screen').classList.add('active');
-  if(name==='oteller') loadHotels();
+window.switchP = function(name, btn) {
+  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.pscreen').forEach(s => s.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.getElementById(name + '-screen').classList.add('active');
+  if (name === 'oteller') loadHotels();
 }
 
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 3000);
+}
+
+initLibrary();
 loadHotels();
 </script>
 </body>
