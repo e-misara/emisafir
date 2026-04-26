@@ -7,202 +7,198 @@
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:sans-serif;background:#f5f5f5;height:100dvh;display:flex;flex-direction:column}
-    #topbar{background:#1a1a2e;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-    .tb-logo{color:#c9a84c;font-size:.9rem;font-weight:700;letter-spacing:2px}
-    .tb-hotel{color:rgba(255,255,255,.5);font-size:.7rem;margin-top:1px}
-    .tb-clock{color:#fff;font-size:.95rem;font-weight:600;font-variant-numeric:tabular-nums}
-    .tb-online{display:flex;align-items:center;gap:5px;font-size:.68rem;color:#4ade80}
+
+    /* HEADER */
+    #header{background:#1a1a2e;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    .h-left .h-title{color:#c9a84c;font-size:.95rem;font-weight:700;letter-spacing:1px}
+    .h-left .h-hotel{color:rgba(255,255,255,.45);font-size:.68rem;margin-top:1px}
+    .h-right{display:flex;align-items:center;gap:12px}
+    .h-clock{color:#fff;font-size:.9rem;font-weight:600;font-variant-numeric:tabular-nums}
+    .h-online{display:flex;align-items:center;gap:5px;font-size:.68rem;color:#4ade80}
     .odot{width:7px;height:7px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-    #notif-bar{background:#c9a84c;color:#1a1a2e;padding:10px 20px;font-size:.82rem;font-weight:600;display:none;align-items:center;gap:8px;cursor:pointer;flex-shrink:0}
-    #notif-bar.show{display:flex}
+    /* BİLDİRİM */
+    #notif{background:#c9a84c;color:#1a1a2e;padding:9px 20px;font-size:.8rem;font-weight:600;display:none;align-items:center;gap:8px;cursor:pointer;flex-shrink:0}
+    #notif.show{display:flex}
 
-    #main-tabs{display:flex;background:#fff;border-bottom:1px solid #e5e5e5;flex-shrink:0}
-    .mtab{flex:1;padding:12px 4px;border:none;background:none;font-size:.72rem;font-family:sans-serif;color:#9a8f80;cursor:pointer;border-bottom:2px solid transparent;display:flex;flex-direction:column;align-items:center;gap:2px}
-    .mtab-icon{font-size:1rem}
-    .mtab.active{color:#1a1a2e;border-bottom-color:#c9a84c;font-weight:600}
-    .mbadge{background:#ef4444;color:#fff;border-radius:50%;width:16px;height:16px;font-size:.55rem;display:inline-flex;align-items:center;justify-content:center;margin-left:3px}
+    /* ANA BÖLÜM */
+    #main{display:flex;flex:1;overflow:hidden}
 
-    .mscreen{display:none;flex:1;overflow-y:auto}
-    .mscreen.active{display:flex;flex-direction:column}
+    /* SOL — ODA LİSTESİ */
+    #sidebar{width:200px;background:#1a1a2e;display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+    .sb-head{padding:14px 14px 6px;font-size:.6rem;color:rgba(255,255,255,.35);letter-spacing:2px;text-transform:uppercase}
+    .room-btn{background:transparent;border:none;border-left:3px solid transparent;padding:11px 14px;cursor:pointer;text-align:left;width:100%;transition:all .15s}
+    .room-btn:hover{background:rgba(255,255,255,.05)}
+    .room-btn.active{background:rgba(201,168,76,.1);border-left-color:#c9a84c}
+    .rb-top{display:flex;justify-content:space-between;align-items:center}
+    .rb-name{color:#fff;font-size:.82rem;font-weight:600}
+    .rb-name.act{color:#c9a84c}
+    .rb-preview{color:rgba(255,255,255,.35);font-size:.68rem;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+    .unread{width:8px;height:8px;background:#ef4444;border-radius:50%;flex-shrink:0}
+
+    /* SAĞ — İÇERİK */
+    #content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+    /* SEKMELER */
+    #ctabs{display:flex;background:#fff;border-bottom:1px solid #e5e5e5;flex-shrink:0}
+    .ctab{flex:1;padding:12px 4px;border:none;background:none;font-size:.72rem;font-family:sans-serif;color:#9a8f80;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+    .ctab.active{color:#1a1a2e;border-bottom-color:#c9a84c;font-weight:600}
+    .cbadge{background:#ef4444;color:#fff;border-radius:50%;width:16px;height:16px;font-size:.55rem;display:inline-flex;align-items:center;justify-content:center;margin-left:3px;vertical-align:middle}
+
+    .cscreen{display:none;flex:1;flex-direction:column;overflow:hidden}
+    .cscreen.active{display:flex}
 
     /* SİPARİŞ PANELİ */
-    #orders-screen{padding:12px}
-    .section-title{font-size:.65rem;color:#9a8f80;letter-spacing:1.5px;text-transform:uppercase;margin:16px 0 8px}
-    .section-title:first-child{margin-top:0}
+    #orders-panel{overflow-y:auto;padding:12px;flex:1}
+    .sec-title{font-size:.62rem;color:#9a8f80;letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 8px}
+    .sec-title:first-child{margin-top:0}
 
-    .order-card{background:#fff;border-radius:10px;padding:14px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:3px solid #e5e5e5}
-    .order-card.new{border-left-color:#f59e0b}
+    .order-card{background:#fff;border-radius:10px;padding:14px;margin-bottom:8px;border-left:3px solid #e5e5e5;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+    .order-card.pending{border-left-color:#f59e0b}
     .order-card.confirmed{border-left-color:#3b82f6}
     .order-card.preparing{border-left-color:#8b5cf6}
     .order-card.ready{border-left-color:#10b981;animation:glow 1.5s ease-in-out infinite}
-    @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.2)}50%{box-shadow:0 0 0 6px rgba(16,185,129,.1)}}
-    .order-card.delivered{opacity:.5}
+    @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.15)}50%{box-shadow:0 0 0 6px rgba(16,185,129,.08)}}
+    .order-card.delivered{opacity:.45}
 
-    .oc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
-    .oc-room{font-size:.95rem;font-weight:700;color:#1a1a2e}
+    .oc-head{display:flex;justify-content:space-between;margin-bottom:8px}
+    .oc-room{font-size:.9rem;font-weight:700;color:#1a1a2e}
     .oc-time{font-size:.68rem;color:#9a8f80}
-    .oc-no{font-size:.62rem;color:#bbb;margin-top:2px}
-
-    .oc-items{margin-bottom:10px}
-    .oc-item{display:flex;gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:.82rem}
+    .oc-no{font-size:.6rem;color:#bbb}
+    .oc-items{margin-bottom:8px}
+    .oc-item{display:flex;gap:6px;font-size:.8rem;padding:4px 0;border-bottom:1px solid #f5f5f5}
     .oc-item:last-child{border:none}
-    .oc-qty{color:#c9a84c;font-weight:700;min-width:20px}
-
-    .oc-total{font-size:.82rem;color:#666;margin-bottom:10px}
-    .oc-total strong{color:#1a1a2e;font-size:.9rem}
-
-    .oc-status{display:inline-flex;align-items:center;gap:4px;font-size:.62rem;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:100px;margin-bottom:10px}
-    .s-new{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
+    .oc-qty{color:#c9a84c;font-weight:700;min-width:22px}
+    .oc-total{font-size:.8rem;color:#666;margin-bottom:10px}
+    .oc-total strong{color:#1a1a2e}
+    .oc-status{display:inline-block;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:100px;margin-bottom:10px}
+    .s-pending{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
     .s-confirmed{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
     .s-preparing{background:#ede9fe;color:#5b21b6;border:1px solid #ddd6fe}
     .s-ready{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
     .s-delivered{background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db}
-
     .oc-actions{display:flex;gap:6px;flex-wrap:wrap}
     .oc-btn{border:none;border-radius:8px;padding:8px 14px;font-size:.75rem;font-weight:600;cursor:pointer;font-family:sans-serif}
     .btn-confirm{background:#1a1a2e;color:#c9a84c}
     .btn-deliver{background:#10b981;color:#fff}
     .btn-cancel{background:#fee2e2;color:#ef4444}
+    .empty-orders{text-align:center;padding:40px;color:#9a8f80;font-size:.82rem}
 
-    /* CHAT */
-    #chat-screen{padding:0;display:flex;flex-direction:column}
-    #room-list-wrap{width:100%;background:#fff;border-bottom:1px solid #e5e5e5;overflow-x:auto;display:flex;padding:8px 12px;gap:8px;flex-shrink:0}
-    .room-pill{background:#f5f5f5;border:1.5px solid #e5e5e5;border-radius:20px;padding:6px 14px;font-size:.75rem;cursor:pointer;white-space:nowrap;transition:all .15s;color:#666}
-    .room-pill.active{background:#1a1a2e;color:#c9a84c;border-color:#1a1a2e}
-    .room-pill .unread{display:inline-block;width:7px;height:7px;background:#ef4444;border-radius:50%;margin-left:4px;vertical-align:middle}
-
+    /* CHAT PANELİ */
+    #chat-panel{display:flex;flex-direction:column;flex:1;overflow:hidden}
     #chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#f7f4ef}
     .msg{display:flex;gap:8px;align-items:flex-end}
     .msg.staff{flex-direction:row-reverse}
-    .msg-ava{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0}
-    .ava-guest{background:#f0ebe1;border:1px solid #e8dfd4}
-    .ava-staff{background:#1a1a2e;color:#c9a84c}
-    .bubble{max-width:75%;padding:8px 12px;font-size:.82rem;line-height:1.5;border-radius:14px 14px 14px 4px;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .msg-ava{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;background:#f0ebe1;border:1px solid #e8dfd4}
+    .msg-ava.staff{background:#1a1a2e;color:#c9a84c}
+    .bubble{max-width:75%;padding:8px 12px;font-size:.8rem;line-height:1.5;border-radius:14px 14px 14px 4px;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 3px rgba(0,0,0,.04)}
     .msg.staff .bubble{background:#1a1a2e;color:#fff;border-radius:14px 14px 4px 14px;border-color:transparent}
     .msg-time{font-size:.58rem;color:#9a8f80;margin-top:2px}
     .msg.staff .msg-time{text-align:right}
-
-    #quick-replies{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:8px 12px;background:#fff;border-top:1px solid #e5e5e5;flex-shrink:0}
-    .qr-chip{background:#f5f5f5;border:1px solid #e5e5e5;border-radius:14px;padding:5px 10px;font-size:.7rem;cursor:pointer;white-space:nowrap;font-family:sans-serif;color:#333}
-    .qr-chip:hover{background:#1a1a2e;color:#c9a84c;border-color:#1a1a2e}
-
+    .msg-tag{font-size:.6rem;padding:1px 6px;border-radius:8px;margin-bottom:2px;display:inline-block}
+    .tag-guest{background:#fef3c7;color:#92400e}
+    .tag-staff{background:#dbeafe;color:#1e40af}
+    #quick-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:8px 12px;background:#fff;border-top:1px solid #e5e5e5;flex-shrink:0}
+    #quick-chips::-webkit-scrollbar{display:none}
+    .qchip{background:#f5f5f5;border:1px solid #e5e5e5;border-radius:14px;padding:5px 10px;font-size:.7rem;cursor:pointer;white-space:nowrap;font-family:sans-serif;color:#333;transition:all .15s}
+    .qchip:hover{background:#1a1a2e;color:#c9a84c;border-color:#1a1a2e}
     #chat-input-area{background:#fff;border-top:1px solid #e5e5e5;padding:10px 12px 14px;display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
     #chat-inp{flex:1;background:#f5f5f5;border:1.5px solid #e5e5e5;border-radius:18px;padding:8px 14px;font-size:.82rem;color:#333;outline:none;resize:none;min-height:36px;line-height:1.4;font-family:sans-serif}
     #chat-send{width:36px;height:36px;border-radius:50%;background:#1a1a2e;border:none;color:#c9a84c;font-size:.85rem;cursor:pointer;flex-shrink:0}
+    .no-room{text-align:center;padding:40px;color:#9a8f80;font-size:.82rem}
 
-    /* MUTFAK İLETİŞİM */
-    #kitchen-screen{padding:12px;display:flex;flex-direction:column;height:100%}
-    #k-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-bottom:8px}
-    #k-input-row{display:flex;gap:8px;align-items:flex-end;padding-top:10px;border-top:1px solid #e5e5e5;margin-top:auto}
+    /* MUTFAK */
+    #kitchen-panel{display:flex;flex-direction:column;flex:1;overflow:hidden}
+    #k-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#f7f4ef}
+    #k-input{background:#fff;border-top:1px solid #e5e5e5;padding:10px 12px 14px;display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
     #k-inp{flex:1;background:#f5f5f5;border:1.5px solid #e5e5e5;border-radius:18px;padding:8px 14px;font-size:.82rem;color:#333;outline:none;resize:none;min-height:36px;font-family:sans-serif}
     #k-send{width:36px;height:36px;border-radius:50%;background:#8b5cf6;border:none;color:#fff;font-size:.85rem;cursor:pointer}
-
-    /* MUHASEBE */
-    #report-screen{padding:12px}
-    .report-card{background:#fff;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-    .rc-title{font-size:.72rem;color:#9a8f80;letter-spacing:1px;margin-bottom:4px}
-    .rc-value{font-size:1.4rem;font-weight:700;color:#1a1a2e}
-    .rc-sub{font-size:.72rem;color:#bbb;margin-top:2px}
-    .report-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-    .report-table{background:#fff;border-radius:10px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-    .rt-head{display:flex;justify-content:space-between;font-size:.65rem;color:#9a8f80;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
-    .rt-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f5f5;font-size:.82rem}
-    .rt-row:last-child{border:none}
-    .rt-room{font-weight:600;color:#1a1a2e}
-    .rt-status{font-size:.65rem;padding:2px 7px;border-radius:10px}
-    .rt-amount{font-weight:600;color:#c9a84c}
   </style>
 </head>
 <body>
 
-<div id="topbar">
-  <div>
-    <div class="tb-logo">e-MİSAFİR</div>
-    <div class="tb-hotel" id="tb-hotel">Resepsiyon Paneli</div>
+<div id="header">
+  <div class="h-left">
+    <div class="h-title">e-MİSAFİR</div>
+    <div class="h-hotel" id="h-hotel">Resepsiyon Paneli</div>
   </div>
-  <div style="text-align:right">
-    <div class="tb-clock" id="tb-clock">--:--</div>
-    <div class="tb-online"><span class="odot"></span>Çevrimiçi</div>
-  </div>
-</div>
-
-<div id="notif-bar" onclick="this.classList.remove('show')">
-  🔔 <span id="notif-text">Yeni bildirim</span>
-</div>
-
-<div id="main-tabs">
-  <button class="mtab active" onclick="switchTab('orders',this)"><span class="mtab-icon">🍽</span>Siparişler<span class="mbadge" id="badge-orders">0</span></button>
-  <button class="mtab" onclick="switchTab('chat',this)"><span class="mtab-icon">💬</span>Chat</button>
-  <button class="mtab" onclick="switchTab('kitchen',this)"><span class="mtab-icon">👨‍🍳</span>Mutfak</button>
-  <button class="mtab" onclick="switchTab('report',this)"><span class="mtab-icon">📊</span>Rapor</button>
-</div>
-
-<!-- SİPARİŞLER -->
-<div id="orders-screen" class="mscreen active">
-  <div class="section-title">Bekleyen Siparişler</div>
-  <div id="pending-orders"></div>
-  <div class="section-title">Aktif Siparişler</div>
-  <div id="active-orders"></div>
-  <div class="section-title">Tamamlananlar (Bugün)</div>
-  <div id="done-orders"></div>
-</div>
-
-<!-- CHAT -->
-<div id="chat-screen" class="mscreen">
-  <div id="room-list-wrap"></div>
-  <div id="chat-msgs"></div>
-  <div id="quick-replies">
-    <button class="qr-chip" onclick="setInp('✓ Talebiniz alındı, en kısa sürede ilgileniyoruz.')">✓ Alındı</button>
-    <button class="qr-chip" onclick="setInp('Siparişiniz yaklaşık 20 dakika içinde odanıza gelecektir.')">🍽 20 dk</button>
-    <button class="qr-chip" onclick="setInp('Temizlik ekibimiz kısa süre içinde odanıza gelecek.')">🧹 Temizlik</button>
-    <button class="qr-chip" onclick="setInp('Check-out saatimiz 12:00\'dir.')">🔑 12:00</button>
-    <button class="qr-chip" onclick="setInp('WiFi: eMisafir2025')">📶 WiFi</button>
-    <button class="qr-chip" onclick="setInp('Taksiniz 10 dakika içinde hazır olacak.')">🚕 Taksi</button>
-  </div>
-  <div id="chat-input-area">
-    <textarea id="chat-inp" placeholder="Misafire yanıt yaz..." rows="1"
-      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"
-      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
-    <button id="chat-send" onclick="sendChat()">➤</button>
+  <div class="h-right">
+    <div class="h-clock" id="h-clock">--:--</div>
+    <div class="h-online"><span class="odot"></span>Çevrimiçi</div>
   </div>
 </div>
 
-<!-- MUTFAK -->
-<div id="kitchen-screen" class="mscreen">
-  <div id="k-msgs"></div>
-  <div id="k-input-row">
-    <textarea id="k-inp" placeholder="Mutfağa mesaj yaz..." rows="1"
-      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"
-      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendKitchen()}"></textarea>
-    <button id="k-send" onclick="sendKitchen()">➤</button>
-  </div>
+<div id="notif" onclick="this.classList.remove('show')">
+  🔔 <span id="notif-text">Bildirim</span> — kapat
 </div>
 
-<!-- RAPOR -->
-<div id="report-screen" class="mscreen">
-  <div class="report-grid">
-    <div class="report-card">
-      <div class="rc-title">BUGÜN CİRO</div>
-      <div class="rc-value" id="today-revenue">₺0</div>
-      <div class="rc-sub" id="today-count">0 sipariş</div>
+<div id="main">
+  <!-- SOL: ODA LİSTESİ -->
+  <div id="sidebar">
+    <div class="sb-head">Odalar</div>
+    <div id="room-list"></div>
+  </div>
+
+  <!-- SAĞ: İÇERİK -->
+  <div id="content">
+    <div id="ctabs">
+      <button class="ctab active" onclick="switchCTab('orders',this)">🍽 Siparişler<span class="cbadge" id="badge-orders" style="display:none">0</span></button>
+      <button class="ctab" onclick="switchCTab('chat',this)">💬 Chat</button>
+      <button class="ctab" onclick="switchCTab('kitchen',this)">👨‍🍳 Mutfak</button>
     </div>
-    <div class="report-card">
-      <div class="rc-title">ORTALAMA SİPARİŞ</div>
-      <div class="rc-value" id="avg-order">₺0</div>
-      <div class="rc-sub">Kişi başı</div>
+
+    <!-- SİPARİŞLER -->
+    <div id="orders-screen" class="cscreen active">
+      <div id="orders-panel">
+        <div class="sec-title">Bekleyen</div>
+        <div id="pending-list"></div>
+        <div class="sec-title">Aktif</div>
+        <div id="active-list"></div>
+        <div class="sec-title">Tamamlanan (Bugün)</div>
+        <div id="done-list"></div>
+      </div>
     </div>
-  </div>
-  <div class="report-table">
-    <div class="rt-head"><span>ODA</span><span>TUTAR</span><span>DURUM</span></div>
-    <div id="report-rows"></div>
+
+    <!-- CHAT -->
+    <div id="chat-screen" class="cscreen">
+      <div id="chat-panel">
+        <div id="chat-msgs"><div class="no-room">← Sol taraftan oda seçin</div></div>
+        <div id="quick-chips">
+          <button class="qchip" onclick="setMsg('✓ Talebiniz alındı, en kısa sürede ilgileniyoruz.')">✓ Alındı</button>
+          <button class="qchip" onclick="setMsg('Siparişiniz yaklaşık 20 dakika içinde gelecektir.')">🍽 20 dk</button>
+          <button class="qchip" onclick="setMsg('Temizlik ekibimiz kısa süre içinde gelecek.')">🧹 Temizlik</button>
+          <button class="qchip" onclick="setMsg('Check-out saatimiz 12:00\'dir.')">🔑 12:00</button>
+          <button class="qchip" onclick="setMsg('WiFi şifreniz: eMisafir2025')">📶 WiFi</button>
+          <button class="qchip" onclick="setMsg('Taksiniz 10 dakika içinde hazır.')">🚕 Taksi</button>
+        </div>
+        <div id="chat-input-area">
+          <textarea id="chat-inp" placeholder="Misafire yanıt yaz..." rows="1"
+            oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
+          <button id="chat-send" onclick="sendChat()">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MUTFAK -->
+    <div id="kitchen-screen" class="cscreen">
+      <div id="kitchen-panel">
+        <div id="k-msgs"></div>
+        <div id="k-input">
+          <textarea id="k-inp" placeholder="Mutfağa mesaj yaz..." rows="1"
+            oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendKitchen()}"></textarea>
+          <button id="k-send" onclick="sendKitchen()">➤</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, update, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, get, push, update, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",
@@ -219,259 +215,199 @@ const db = getDatabase(app);
 const hotel = new URLSearchParams(location.search).get('hotel') || 'demo';
 
 // Saat
-setInterval(() => {
-  const n = new Date();
-  document.getElementById('tb-clock').textContent =
-    String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
-}, 1000);
+setInterval(()=>{
+  const n=new Date();
+  document.getElementById('h-clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+},1000);
 
-function fmtTime() {
-  return new Date().toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
+function fmtTime(){return new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});}
+
+function showNotif(text){
+  document.getElementById('notif-text').textContent=text;
+  document.getElementById('notif').classList.add('show');
+  setTimeout(()=>document.getElementById('notif').classList.remove('show'),5000);
+  if(Notification.permission==='granted') new Notification('e-Misafir',{body:text});
 }
 
-function showNotif(text) {
-  document.getElementById('notif-text').textContent = text;
-  document.getElementById('notif-bar').classList.add('show');
-  setTimeout(() => document.getElementById('notif-bar').classList.remove('show'), 5000);
-  if (Notification.permission === 'granted') new Notification('e-Misafir', { body: text });
-}
-
-// TAB
-window.switchTab = function(name, btn) {
-  document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.mscreen').forEach(s => s.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(name + '-screen').classList.add('active');
-}
-
-// ── SİPARİŞLER ──
-const STATUS_MAP = {
-  pending: {label:'Onay Bekliyor', cls:'s-new'},
-  confirmed: {label:'Onaylandı', cls:'s-confirmed'},
-  preparing: {label:'Hazırlanıyor', cls:'s-preparing'},
-  ready: {label:'Hazır!', cls:'s-ready'},
-  delivered: {label:'Teslim Edildi', cls:'s-delivered'}
-};
-
-let prevOrders = {};
-
-onValue(ref(db, `hotels/${hotel}/orders`), (snap) => {
-  const allOrders = [];
-  if (snap.exists()) {
-    snap.forEach(c => allOrders.push({id: c.key, ...c.val()}));
-  }
-  allOrders.sort((a,b) => (b.ts||0) - (a.ts||0));
-
-  const pending = allOrders.filter(o => o.status === 'pending');
-  const active = allOrders.filter(o => ['confirmed','preparing','ready'].includes(o.status));
-  const done = allOrders.filter(o => o.status === 'delivered');
-
-  document.getElementById('badge-orders').textContent = pending.length + active.length;
-
-  renderOrderList('pending-orders', pending);
-  renderOrderList('active-orders', active);
-  renderOrderList('done-orders', done);
-
-  // Bildirim
-  allOrders.forEach(o => {
-    if (!prevOrders[o.id]) {
-      if (o.status === 'pending') showNotif(`🍽 Yeni sipariş — Oda ${o.room} — ₺${o.total}`);
-      if (o.status === 'ready') showNotif(`✅ Sipariş hazır — Oda ${o.room}`);
-    }
-  });
-  prevOrders = Object.fromEntries(allOrders.map(o => [o.id, o.status]));
-
-  // Rapor güncelle
-  updateReport(allOrders);
+// Otel adı
+get(ref(db,`hotels/${hotel}/info`)).then(s=>{
+  if(s.exists()) document.getElementById('h-hotel').textContent=s.val().name||hotel;
 });
 
-function renderOrderList(containerId, orders) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  if (orders.length === 0) { el.innerHTML = ''; return; }
-  el.innerHTML = '';
-  orders.forEach(order => {
-    const div = document.createElement('div');
-    div.className = `order-card ${order.status === 'pending' ? 'new' : order.status}`;
-    const sm = STATUS_MAP[order.status] || {label: order.status, cls: ''};
+// ── TAB ──
+window.switchCTab = function(name,btn){
+  document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.cscreen').forEach(s=>s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(name+'-screen').classList.add('active');
+}
 
-    let actions = '';
-    if (order.status === 'pending') {
-      actions = `<button class="oc-btn btn-confirm" onclick="confirmOrder('${order.id}')">✓ Onayla & Mutfağa İlet</button>
-                 <button class="oc-btn btn-cancel" onclick="cancelOrder('${order.id}')">İptal</button>`;
-    } else if (order.status === 'ready') {
-      actions = `<button class="oc-btn btn-deliver" onclick="deliverOrder('${order.id}')">🚀 Teslim Edildi</button>`;
+// ── ODA LİSTESİ ──
+const ROOMS=['101','102','103','104','105','201','202','203','204','205','301','302','303','304','305'];
+let activeRoom=null;
+const roomMsgs={};
+const seenMsgs=new Set();
+
+const roomList=document.getElementById('room-list');
+ROOMS.forEach(r=>{
+  roomMsgs[r]=[];
+  const btn=document.createElement('button');
+  btn.className='room-btn';btn.id='rbtn-'+r;
+  btn.onclick=()=>selectRoom(r);
+  btn.innerHTML=`<div class="rb-top"><span class="rb-name" id="rn-${r}">Oda ${r}</span><span id="ud-${r}" style="display:none" class="unread"></span></div><div class="rb-preview" id="rp-${r}">Boş</div>`;
+  roomList.appendChild(btn);
+
+  onValue(ref(db,`hotels/${hotel}/rooms/${r}/messages`),(snap)=>{
+    roomMsgs[r]=[];
+    if(snap.exists()) snap.forEach(c=>roomMsgs[r].push({key:c.key,...c.val()}));
+    const last=roomMsgs[r][roomMsgs[r].length-1];
+    const prev=document.getElementById('rp-'+r);
+    if(prev&&last) prev.textContent=(last.from==='guest'?'👤 ':'👨‍💼 ')+last.text.slice(0,24)+(last.text.length>24?'…':'');
+    if(activeRoom===r) renderChat();
+    else if(last&&last.from==='guest'&&!seenMsgs.has(last.key)){
+      const ud=document.getElementById('ud-'+r);if(ud)ud.style.display='block';
+      showNotif(`💬 Oda ${r}: ${last.text.slice(0,40)}`);
     }
+    if(last) seenMsgs.add(last.key);
+  });
+});
 
-    div.innerHTML = `
+function selectRoom(r){
+  activeRoom=r;
+  document.querySelectorAll('.room-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.rb-name').forEach(n=>n.classList.remove('act'));
+  document.getElementById('rbtn-'+r).classList.add('active');
+  document.getElementById('rn-'+r).classList.add('act');
+  const ud=document.getElementById('ud-'+r);if(ud)ud.style.display='none';
+  renderChat();
+}
+
+function renderChat(){
+  const el=document.getElementById('chat-msgs');
+  el.innerHTML='';
+  if(!activeRoom){el.innerHTML='<div class="no-room">← Oda seçin</div>';return;}
+  if(!roomMsgs[activeRoom].length){el.innerHTML='<div class="no-room">Bu odadan mesaj yok</div>';return;}
+  roomMsgs[activeRoom].forEach(m=>{
+    const isStaff=m.from==='reception';
+    const div=document.createElement('div');div.className='msg'+(isStaff?' staff':'');
+    const tag=isStaff?'<span class="msg-tag tag-staff">Resepsiyon</span>':'<span class="msg-tag tag-guest">Misafir</span>';
+    if(!isStaff){
+      div.innerHTML=`<div class="msg-ava">👤</div><div><div>${tag}</div><div class="bubble">${m.text.replace(/\n/g,'<br>')}</div><div class="msg-time">${fmtTime()}</div></div>`;
+    } else {
+      div.innerHTML=`<div><div style="text-align:right">${tag}</div><div class="bubble">${m.text.replace(/\n/g,'<br>')}</div><div class="msg-time">${fmtTime()}</div></div>`;
+    }
+    el.appendChild(div);
+  });
+  el.scrollTop=el.scrollHeight;
+}
+
+window.sendChat=async function(){
+  if(!activeRoom) return;
+  const inp=document.getElementById('chat-inp');const text=inp.value.trim();if(!text) return;
+  inp.value='';inp.style.height='36px';
+  await push(ref(db,`hotels/${hotel}/rooms/${activeRoom}/messages`),{text,from:'reception',ts:serverTimestamp()});
+}
+
+window.setMsg=function(text){document.getElementById('chat-inp').value=text;document.getElementById('chat-inp').focus();}
+
+// ── SİPARİŞLER ──
+const STATUS={
+  pending:{label:'Bekliyor',cls:'s-pending'},
+  confirmed:{label:'Onaylandı',cls:'s-confirmed'},
+  preparing:{label:'Hazırlanıyor',cls:'s-preparing'},
+  ready:{label:'✅ Hazır!',cls:'s-ready'},
+  delivered:{label:'Teslim Edildi',cls:'s-delivered'}
+};
+
+let prevOrders={};
+
+onValue(ref(db,`hotels/${hotel}/orders`),(snap)=>{
+  const all=[];
+  if(snap.exists()) snap.forEach(c=>all.push({id:c.key,...c.val()}));
+  all.sort((a,b)=>(b.ts||0)-(a.ts||0));
+
+  const pending=all.filter(o=>o.status==='pending');
+  const active=all.filter(o=>['confirmed','preparing','ready'].includes(o.status));
+  const done=all.filter(o=>o.status==='delivered');
+
+  const totalNew=pending.length+active.length;
+  const badge=document.getElementById('badge-orders');
+  badge.textContent=totalNew;
+  badge.style.display=totalNew>0?'inline-flex':'none';
+
+  renderOrders('pending-list',pending);
+  renderOrders('active-list',active);
+  renderOrders('done-list',done);
+
+  all.forEach(o=>{
+    if(!prevOrders[o.id]){
+      if(o.status==='pending') showNotif(`🍽 Yeni sipariş — Oda ${o.room} — ₺${o.total}`);
+      if(o.status==='ready') showNotif(`✅ Sipariş hazır — Oda ${o.room}`);
+    }
+  });
+  prevOrders=Object.fromEntries(all.map(o=>[o.id,o.status]));
+});
+
+function renderOrders(id,orders){
+  const el=document.getElementById(id);if(!el) return;
+  if(!orders.length){el.innerHTML='<div style="color:#bbb;font-size:.78rem;padding:4px 0">—</div>';return;}
+  el.innerHTML='';
+  orders.forEach(o=>{
+    const sm=STATUS[o.status]||{label:o.status,cls:''};
+    const div=document.createElement('div');div.className=`order-card ${o.status}`;
+    let actions='';
+    if(o.status==='pending') actions=`<button class="oc-btn btn-confirm" onclick="confirmOrder('${o.id}')">✓ Onayla & Mutfağa İlet</button><button class="oc-btn btn-cancel" onclick="cancelOrder('${o.id}')">İptal</button>`;
+    if(o.status==='ready') actions=`<button class="oc-btn btn-deliver" onclick="deliverOrder('${o.id}')">🚀 Teslim Edildi</button>`;
+    div.innerHTML=`
       <div class="oc-head">
-        <div><div class="oc-room">Oda ${order.room}</div><div class="oc-no">${order.orderNo}</div></div>
-        <div class="oc-time">${order.time || ''}</div>
+        <div><div class="oc-room">Oda ${o.room}</div><div class="oc-no">${o.orderNo}</div></div>
+        <div class="oc-time">${o.time||''}</div>
       </div>
-      <div class="oc-items">
-        ${(order.items||[]).map(i=>`<div class="oc-item"><span>${i.emoji} ${i.name}</span><span class="oc-qty">x${i.qty} — ₺${i.subtotal}</span></div>`).join('')}
-      </div>
-      <div class="oc-total">Toplam: <strong>₺${order.total}</strong></div>
+      <div class="oc-items">${(o.items||[]).map(i=>`<div class="oc-item"><span class="oc-qty">x${i.qty}</span>${i.emoji} ${i.name} — ₺${i.subtotal}</div>`).join('')}</div>
+      <div class="oc-total">Toplam: <strong>₺${o.total}</strong></div>
       <span class="oc-status ${sm.cls}">${sm.label}</span>
       <div class="oc-actions">${actions}</div>`;
     el.appendChild(div);
   });
 }
 
-window.confirmOrder = async function(id) {
-  await update(ref(db, `hotels/${hotel}/orders/${id}`), { status: 'confirmed' });
-  await push(ref(db, `hotels/${hotel}/kitchen-messages`), {
-    text: `🍽 Yeni sipariş mutfağa iletildi.`, from: 'reception', ts: serverTimestamp()
-  });
+window.confirmOrder=async function(id){
+  await update(ref(db,`hotels/${hotel}/orders/${id}`),{status:'confirmed'});
+  await push(ref(db,`hotels/${hotel}/kitchen-messages`),{text:'🍽 Yeni sipariş mutfağa iletildi.',from:'reception',ts:serverTimestamp()});
 }
-
-window.cancelOrder = async function(id) {
-  if (!confirm('Siparişi iptal et?')) return;
-  await update(ref(db, `hotels/${hotel}/orders/${id}`), { status: 'cancelled' });
+window.cancelOrder=async function(id){
+  if(!confirm('Siparişi iptal et?')) return;
+  await update(ref(db,`hotels/${hotel}/orders/${id}`),{status:'cancelled'});
 }
-
-window.deliverOrder = async function(id) {
-  await update(ref(db, `hotels/${hotel}/orders/${id}`), { status: 'delivered', deliveredAt: fmtTime() });
-}
-
-// ── CHAT ──
-const ROOMS = ['101','102','103','201','202','301','302'];
-let activeRoom = ROOMS[0];
-const roomMsgs = {};
-const seenChat = new Set();
-
-const roomWrap = document.getElementById('room-list-wrap');
-ROOMS.forEach(r => {
-  roomMsgs[r] = [];
-  const pill = document.createElement('button');
-  pill.className = 'room-pill' + (r === activeRoom ? ' active' : '');
-  pill.id = 'pill-' + r;
-  pill.innerHTML = r;
-  pill.onclick = () => {
-    activeRoom = r;
-    document.querySelectorAll('.room-pill').forEach(p => p.classList.remove('active'));
-    pill.classList.add('active');
-    const up = pill.querySelector('.unread');
-    if (up) up.remove();
-    renderChatMsgs();
-  };
-  roomWrap.appendChild(pill);
-
-  onValue(ref(db, `hotels/${hotel}/rooms/${r}/messages`), (snap) => {
-    roomMsgs[r] = [];
-    if (snap.exists()) snap.forEach(c => roomMsgs[r].push({key: c.key, ...c.val()}));
-    if (r === activeRoom) renderChatMsgs();
-    else {
-      const last = roomMsgs[r][roomMsgs[r].length - 1];
-      if (last && last.from === 'guest' && !seenChat.has(last.key)) {
-        const p = document.getElementById('pill-' + r);
-        if (p && !p.querySelector('.unread')) {
-          const dot = document.createElement('span');
-          dot.className = 'unread';
-          p.appendChild(dot);
-        }
-        showNotif(`💬 Oda ${r}: ${last.text.slice(0,40)}`);
-      }
-    }
-    if (last) seenChat.add(last.key);
-  });
-});
-
-function renderChatMsgs() {
-  const el = document.getElementById('chat-msgs');
-  el.innerHTML = '';
-  roomMsgs[activeRoom].forEach(m => {
-    const isStaff = m.from === 'reception';
-    const div = document.createElement('div');
-    div.className = `msg ${isStaff ? 'staff' : ''}`;
-    div.innerHTML = `
-      <div class="msg-ava ${isStaff ? 'ava-staff' : 'ava-guest'}">${isStaff ? 'R' : '👤'}</div>
-      <div>
-        <div class="bubble">${m.text.replace(/\n/g,'<br>')}</div>
-        <div class="msg-time">${fmtTime()}</div>
-      </div>`;
-    el.appendChild(div);
-  });
-  el.scrollTop = el.scrollHeight;
-}
-
-window.sendChat = async function() {
-  const inp = document.getElementById('chat-inp');
-  const text = inp.value.trim();
-  if (!text || !activeRoom) return;
-  inp.value = ''; inp.style.height = '36px';
-  await push(ref(db, `hotels/${hotel}/rooms/${activeRoom}/messages`), {
-    text, from: 'reception', ts: serverTimestamp()
-  });
-}
-
-window.setInp = function(text) {
-  document.getElementById('chat-inp').value = text;
-  document.getElementById('chat-inp').focus();
+window.deliverOrder=async function(id){
+  await update(ref(db,`hotels/${hotel}/orders/${id}`),{status:'delivered',deliveredAt:fmtTime()});
 }
 
 // ── MUTFAK MESAJLAŞMA ──
-const seenKitchen = new Set();
-onValue(ref(db, `hotels/${hotel}/kitchen-messages`), (snap) => {
-  const el = document.getElementById('k-msgs');
-  if (!snap.exists()) return;
-  snap.forEach(c => {
-    if (seenKitchen.has(c.key)) return;
-    seenKitchen.add(c.key);
-    const d = c.val();
-    const isReception = d.from === 'reception';
-    const div = document.createElement('div');
-    div.className = `msg ${isReception ? 'staff' : ''}`;
-    div.innerHTML = `
-      <div class="msg-ava ${isReception ? 'ava-staff' : ''}" style="${!isReception?'background:#8b5cf6;color:#fff':''}">
-        ${isReception ? 'R' : '👨‍🍳'}
-      </div>
-      <div>
-        <div class="bubble">${d.text}</div>
-        <div class="msg-time">${fmtTime()}</div>
-      </div>`;
-    el.appendChild(div);
-    el.scrollTop = el.scrollHeight;
-    if (!isReception) showNotif(`👨‍🍳 Mutfak: ${d.text.slice(0,40)}`);
+const seenK=new Set();
+onValue(ref(db,`hotels/${hotel}/kitchen-messages`),(snap)=>{
+  const el=document.getElementById('k-msgs');
+  if(!snap.exists()) return;
+  snap.forEach(c=>{
+    if(seenK.has(c.key)) return;seenK.add(c.key);
+    const d=c.val();const isR=d.from==='reception';
+    const div=document.createElement('div');div.className='msg'+(isR?' staff':'');
+    const ava=`<div class="msg-ava${isR?' staff':''}">${isR?'R':'👨‍🍳'}</div>`;
+    div.innerHTML=isR
+      ?`<div><div class="bubble">${d.text}</div><div class="msg-time">${fmtTime()}</div></div>`
+      :`${ava}<div><div class="bubble">${d.text}</div><div class="msg-time">${fmtTime()}</div></div>`;
+    el.appendChild(div);el.scrollTop=el.scrollHeight;
+    if(!isR) showNotif(`👨‍🍳 Mutfak: ${d.text.slice(0,40)}`);
   });
 });
 
-window.sendKitchen = async function() {
-  const inp = document.getElementById('k-inp');
-  const text = inp.value.trim();
-  if (!text) return;
-  inp.value = ''; inp.style.height = '36px';
-  await push(ref(db, `hotels/${hotel}/kitchen-messages`), {
-    text, from: 'reception', ts: serverTimestamp()
-  });
+window.sendKitchen=async function(){
+  const inp=document.getElementById('k-inp');const text=inp.value.trim();if(!text) return;
+  inp.value='';inp.style.height='36px';
+  await push(ref(db,`hotels/${hotel}/kitchen-messages`),{text,from:'reception',ts:serverTimestamp()});
 }
 
-// ── RAPOR ──
-function updateReport(orders) {
-  const today = new Date().toLocaleDateString('tr-TR');
-  const todayOrders = orders.filter(o => o.date === today && o.status !== 'cancelled');
-  const revenue = todayOrders.reduce((s,o) => s + (o.total||0), 0);
-  const avg = todayOrders.length ? Math.round(revenue / todayOrders.length) : 0;
-
-  document.getElementById('today-revenue').textContent = '₺' + revenue;
-  document.getElementById('today-count').textContent = todayOrders.length + ' sipariş';
-  document.getElementById('avg-order').textContent = '₺' + avg;
-
-  const rows = document.getElementById('report-rows');
-  rows.innerHTML = '';
-  todayOrders.slice(0, 20).forEach(o => {
-    const sm = STATUS_MAP[o.status] || {label: o.status, cls: ''};
-    const row = document.createElement('div');
-    row.className = 'rt-row';
-    row.innerHTML = `
-      <span class="rt-room">Oda ${o.room}</span>
-      <span class="rt-amount">₺${o.total}</span>
-      <span class="rt-status ${sm.cls}" style="font-size:.6rem;padding:2px 6px;border-radius:8px">${sm.label}</span>`;
-    rows.appendChild(row);
-  });
-}
-
-if (Notification.permission === 'default') Notification.requestPermission();
+if(Notification.permission==='default') Notification.requestPermission();
 </script>
 </body>
 </html>
