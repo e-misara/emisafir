@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menü Yükle</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:sans-serif;background:#1a1a2e;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px;padding:20px}
+    h2{color:#c9a84c;font-size:1.1rem;letter-spacing:2px}
+    select,input{background:#111;color:#fff;border:1px solid #333;border-radius:8px;padding:8px 12px;font-size:.9rem;width:280px}
+    .btn{background:#c9a84c;color:#1a1a2e;border:none;border-radius:10px;padding:14px 28px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:sans-serif;width:280px}
+    .btn-danger{background:#ef4444;color:#fff;margin-top:4px}
+    .log{background:#0a0a0a;border-radius:10px;padding:16px;width:100%;max-width:560px;font-size:.75rem;line-height:1.8;color:#4ade80;max-height:360px;overflow-y:auto;border:1px solid #222}
+    .label{font-size:.72rem;color:#9a8f80;align-self:flex-start;width:280px}
+    .progress{width:280px;height:6px;background:#222;border-radius:3px;overflow:hidden}
+    .progress-bar{height:100%;background:#c9a84c;border-radius:3px;width:0%;transition:width .2s}
+  </style>
+</head>
+<body>
+  <h2>🍽 e-Misafir Menü Yükleyici</h2>
+  <div class="label">Otel Seçin</div>
+  <select id="hotel-sel"><option value="">Yükleniyor...</option></select>
+  <div class="progress"><div class="progress-bar" id="prog"></div></div>
+  <button class="btn" onclick="loadMenus()">Tam Menüyü Yükle (200+ Ürün)</button>
+  <button class="btn btn-danger" onclick="clearMenu()">Mevcut Menüyü Temizle</button>
+  <div class="log" id="log">Otel seçip butona basın...</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, get, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",
+  authDomain: "emisafir-56796.firebaseapp.com",
+  databaseURL: "https://emisafir-56796-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "emisafir-56796",
+  storageBucket: "emisafir-56796.firebasestorage.app",
+  messagingSenderId: "1044463772299",
+  appId: "1:1044463772299:web:4f1496b541a433fe766a8e"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// Otelleri yükle
+const hotelsSnap = await get(ref(db,'hotels'));
+const sel = document.getElementById('hotel-sel');
+if(hotelsSnap.exists()){
+  sel.innerHTML = '';
+  Object.entries(hotelsSnap.val()).forEach(([hid,hd])=>{
+    const opt=document.createElement('option');
+    opt.value=hid; opt.textContent=(hd.info?.name||hid)+' ('+hid+')';
+    sel.appendChild(opt);
+  });
+} else {
+  sel.innerHTML='<option value="demo">demo</option>';
+}
+
+// TAM MENÜ — Sizin listenizdeki tüm ürünler
+const FULL_MENU = [
+  // ══ KAHVALTI (07:00-11:30) ══
+  // Yumurta Çeşitleri
+  {emoji:'🍳',name:'Sahanda yumurta tereyağında',description:'Tereyağında pişirilmiş sahanda yumurta',price:120,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍳',name:'Sahanda yumurta zeytinyağında',description:'Zeytinyağında pişirilmiş sahanda yumurta',price:110,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌶️',name:'Sucuklu yumurta',description:'Sucuk ile pişirilmiş yumurta',price:140,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥩',name:'Pastırmalı yumurta',description:'Pastırma ile pişirilmiş yumurta',price:150,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍳',name:'Kavurmalı yumurta',description:'Kavurma ile hazırlanmış yumurta',price:160,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥘',name:'Klasik menemen',description:'Domates ve biber ile hazırlanmış',price:130,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Kaşar peynirli menemen',description:'Kaşar peyniri ile hazırlanmış menemen',price:140,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌶️',name:'Sucuklu menemen',description:'Sucuklu menemen',price:145,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧅',name:'Soğanlı menemen',description:'Soğanlı menemen',price:125,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍄',name:'Mantarlı menemen',description:'Mantarlı menemen',price:140,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥘',name:'Karışık menemen',description:'Sucuk, kaşar ve sebze ile',price:155,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍳',name:'Sade omlet',description:'Sade omlet',price:110,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Kaşar peynirli omlet',description:'Kaşar peynirli omlet',price:130,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Beyaz peynirli omlet',description:'Beyaz peynirli omlet',price:130,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥦',name:'Sebzeli omlet',description:'Kabak, biber, havuç ile',price:135,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍄',name:'Mantarlı omlet',description:'Mantarlı omlet',price:135,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌶️',name:'Sucuklu omlet',description:'Sucuklu omlet',price:140,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍳',name:'Karışık omlet',description:'Karışık omlet',price:145,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥗',name:'Diyet omlet',description:'Yumurta beyazı ile hazırlanmış',price:120,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍳',name:'Poşe yumurta',description:'Poşe yumurta',price:120,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🐟',name:'Somon füme poşe yumurta',description:'Somon füme ile servis edilen',price:180,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥑',name:'Avokadolu poşe yumurta',description:'Avokado ile servis edilen',price:170,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥚',name:'Haşlanmış yumurta az pişmiş',description:'Az pişmiş haşlanmış yumurta',price:80,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥚',name:'Haşlanmış yumurta orta pişmiş',description:'Orta pişmiş haşlanmış yumurta',price:80,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥚',name:'Haşlanmış yumurta çok pişmiş',description:'Çok pişmiş haşlanmış yumurta',price:80,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  // Peynir Çeşitleri
+  {emoji:'🧀',name:'Tam yağlı beyaz peynir',description:'Tam yağlı beyaz peynir',price:60,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Az yağlı beyaz peynir',description:'Az yağlı beyaz peynir',price:60,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Eski kaşar peyniri',description:'Eski kaşar peyniri',price:70,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Taze kaşar peyniri',description:'Taze kaşar peyniri',price:65,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Erzincan tulum peyniri',description:'Erzincan tulum peyniri',price:75,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'İzmir tulum peyniri',description:'İzmir tulum peyniri',price:75,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Dil peyniri',description:'Dil peyniri',price:65,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Çeçil peyniri',description:'Çeçil peyniri',price:70,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Lor peyniri',description:'Lor peyniri',price:60,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Labne peyniri',description:'Labne peyniri',price:65,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Hellim peyniri ızgara',description:'Hellim peyniri ızgara edilmiş',price:80,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Cheddar peyniri',description:'Cheddar peyniri',price:70,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Gouda peyniri',description:'Gouda peyniri',price:75,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Mozzarella peyniri',description:'Mozzarella peyniri',price:75,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  // Şarküteri
+  {emoji:'🍗',name:'Hindi füme',description:'Hindi füme',price:70,category:'Şarküteri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥩',name:'Dana füme',description:'Dana füme',price:80,category:'Şarküteri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥩',name:'Dana jambon',description:'Dana jambon',price:75,category:'Şarküteri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌭',name:'Salam',description:'Salam',price:65,category:'Şarküteri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌭',name:'Sosis',description:'Sosis',price:65,category:'Şarküteri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌭',name:'Macar salamı',description:'Macar salamı',price:80,category:'Şarküteri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥩',name:'Füme et dilimleri',description:'Füme et dilimleri',price:80,category:'Şarküteri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥩',name:'Roast beef ince dilim',description:'Roast beef ince dilimlenmiş',price:90,category:'Şarküteri',startTime:'07:00',endTime:'11:30'},
+  // Ekmek ve Hamur
+  {emoji:'🍞',name:'Beyaz ekmek',description:'Beyaz ekmek dilimleri',price:30,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍞',name:'Tam buğday ekmek',description:'Tam buğday ekmek dilimleri',price:35,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍞',name:'Çavdar ekmeği',description:'Çavdar ekmeği dilimleri',price:35,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍞',name:'Siyez ekmeği',description:'Siyez unundan yapılmış ekmek',price:40,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍞',name:'Glutensiz ekmek',description:'Glutensiz ekmek',price:45,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍞',name:'Ekşi mayalı ekmek',description:'Ekşi mayalı ekmek',price:40,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥯',name:'Bagel ekmek',description:'Bagel ekmek',price:45,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥨',name:'Simit susamlı',description:'Simit susamlı',price:35,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Açma sade',description:'Sade açma',price:30,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Açma peynirli',description:'Peynirli açma',price:40,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Açma zeytinli',description:'Zeytinli açma',price:40,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Poğaça peynirli',description:'Peynirli poğaça',price:40,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Poğaça patatesli',description:'Patatesli poğaça',price:40,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Poğaça zeytinli',description:'Zeytinli poğaça',price:40,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Kruvasan sade',description:'Sade kruvasan',price:50,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Kruvasan çikolatalı',description:'Çikolatalı kruvasan',price:60,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Kruvasan bademli',description:'Bademli kruvasan',price:65,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Danimarka çöreği meyveli',description:'Meyveli Danimarka çöreği',price:65,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  // Tatlı Kahvaltılıklar
+  {emoji:'🍯',name:'Süzme bal',description:'Süzme bal',price:50,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍯',name:'Petek bal',description:'Petek bal',price:70,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥛',name:'Kaymak',description:'Taze kaymak',price:60,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍓',name:'Çilek reçeli',description:'Ev yapımı çilek reçeli',price:45,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍒',name:'Vişne reçeli',description:'Vişne reçeli',price:45,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍑',name:'Kayısı reçeli',description:'Kayısı reçeli',price:45,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🫐',name:'İncir reçeli',description:'İncir reçeli',price:50,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍊',name:'Portakal reçeli',description:'Portakal reçeli',price:45,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌿',name:'Tahin',description:'Tahin',price:40,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍇',name:'Pekmez',description:'Üzüm pekmezi',price:40,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌿',name:'Tahin pekmez karışımı',description:'Tahin ve pekmez karışımı',price:50,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌰',name:'Fındık kreması',description:'Fındık kreması',price:55,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥜',name:'Fıstık ezmesi',description:'Fıstık ezmesi',price:55,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  // Sıcak Kahvaltılıklar
+  {emoji:'🥞',name:'Pancake çikolata soslu',description:'Çikolata sosuyla pancake',price:130,category:'Sıcak Kahvaltılıklar',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥞',name:'Pancake bal tereyağlı',description:'Bal ve tereyağı ile servis edilen',price:120,category:'Sıcak Kahvaltılıklar',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥞',name:'Pancake meyveli',description:'Meyve dilimleri ile servis edilen',price:125,category:'Sıcak Kahvaltılıklar',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧇',name:'Waffle çikolata meyveli',description:'Çikolata ve meyve ile hazırlanmış',price:140,category:'Sıcak Kahvaltılıklar',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍞',name:'French toast',description:'Tarçın ve şeker ile hazırlanmış',price:120,category:'Sıcak Kahvaltılıklar',startTime:'07:00',endTime:'11:30'},
+  // Sağlıklı Kahvaltı
+  {emoji:'🍓',name:'Yoğurt taze meyve ile',description:'Taze meyve ile servis edilen yoğurt',price:100,category:'Sağlıklı Seçenekler',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥣',name:'Granola yoğurt meyveli',description:'Yoğurt ve meyve ile hazırlanmış granola',price:120,category:'Sağlıklı Seçenekler',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥣',name:'Yulaf ezmesi sütlü',description:'Süt ile hazırlanmış yulaf ezmesi',price:100,category:'Sağlıklı Seçenekler',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌱',name:'Chia tohumu pudingi',description:'Chia tohumu pudingi',price:130,category:'Sağlıklı Seçenekler',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥤',name:'Smoothie kasesi',description:'Muz ve çilek ile hazırlanmış smoothie kasesi',price:140,category:'Sağlıklı Seçenekler',startTime:'07:00',endTime:'11:30'},
+
+  // ══ BAŞLANGIÇLAR (11:00-23:00) ══
+  // Türk Mezeleri
+  {emoji:'🫘',name:'Mercimek köftesi',description:'Mercimek köftesi',price:120,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌿',name:'Kısır',description:'İnce bulgur ile hazırlanmış kısır',price:110,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍃',name:'Zeytinyağlı yaprak sarma',description:'Zeytinyağlı yaprak sarma',price:130,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌸',name:'Zeytinyağlı enginar',description:'Zeytinyağlı enginar',price:140,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🫘',name:'Zeytinyağlı fasulye',description:'Zeytinyağlı fasulye',price:120,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥛',name:'Haydari',description:'Yoğurt ve sarımsak ile hazırlanmış',price:100,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥒',name:'Cacık',description:'Yoğurt, salatalık ve nane ile',price:90,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌶️',name:'Atom',description:'Yoğurt ve acı biber ile hazırlanmış',price:100,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌶️',name:'Acılı ezme',description:'Domates, biber ve baharat ile',price:100,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🫘',name:'Humus klasik',description:'Nohut, tahin ve limon ile',price:110,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🫀',name:'Humus pancarlı',description:'Pancar ile hazırlanmış humus',price:120,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥑',name:'Humus avokadolu',description:'Avokado ile hazırlanmış humus',price:125,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍆',name:'Babagannuş',description:'Köz patlıcan ile hazırlanmış',price:120,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍆',name:'Patlıcan salatası',description:'Közlenmiş sebzeler ile',price:115,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🫑',name:'Şakşuka',description:'Kızartılmış sebzeler ile',price:120,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  // Uluslararası Başlangıçlar
+  {emoji:'🍅',name:'Bruschetta domatesli',description:'Domates ve fesleğen ile',price:120,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🧀',name:'Bruschetta mozzarella',description:'Mozzarella peyniri ile',price:135,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦐',name:'Karides tempura',description:'Kızartılmış karides tempura',price:180,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦑',name:'Kalamar tava',description:'Kalamar tava',price:160,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🧀',name:'Mozzarella çubukları',description:'Kızartılmış mozzarella çubukları',price:140,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🧅',name:'Soğan halkası',description:'Kızartılmış soğan halkası',price:120,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍗',name:'Tavuk nugget',description:'Çıtır kaplamalı tavuk nugget',price:150,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌽',name:'Nachos peynirli',description:'Mısır cipsi, peynir sos ile',price:140,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌮',name:'Quesadilla tavuklu',description:'Tavuk ile hazırlanmış quesadilla',price:160,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌮',name:'Quesadilla etli',description:'Et ile hazırlanmış quesadilla',price:175,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  // Salatalar
+  {emoji:'🥗',name:'Sezar salata tavuklu',description:'Tavuk ile hazırlanmış sezar salata',price:160,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥗',name:'Sezar salata karidesli',description:'Karides ile hazırlanmış sezar salata',price:180,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🫒',name:'Akdeniz salatası',description:'Zeytin ve peynir ile hazırlanmış',price:150,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🐟',name:'Ton balıklı salata',description:'Ton balıklı salata',price:155,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥗',name:'Tavuklu salata',description:'Tavuklu salata',price:150,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥑',name:'Avokadolu salata',description:'Avokadolu salata',price:160,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌾',name:'Kinoalı salata',description:'Kinoalı salata',price:165,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍅',name:'Çoban salata',description:'Domates, salatalık, biber ile',price:120,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌰',name:'Gavurdağı salatası',description:'Ceviz ile hazırlanmış',price:135,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥗',name:'Roka parmesan salatası',description:'Roka ve parmesan salatası',price:145,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+
+  // ══ ÇORBALAR (11:00-23:00) ══
+  {emoji:'🍲',name:'Mercimek çorbası',description:'Mercimek çorbası',price:100,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍲',name:'Ezogelin çorbası',description:'Ezogelin çorbası',price:100,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍲',name:'Yayla çorbası',description:'Yayla çorbası',price:105,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍲',name:'Tarhana çorbası',description:'Tarhana çorbası',price:100,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍲',name:'Düğün çorbası',description:'Düğün çorbası',price:120,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍲',name:'Tavuk suyu çorba',description:'Tavuk suyu çorba',price:105,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍅',name:'Domates çorbası',description:'Domates çorbası',price:100,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍄',name:'Kremalı mantar çorbası',description:'Kremalı mantar çorbası',price:120,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥦',name:'Brokoli çorbası',description:'Brokoli çorbası',price:110,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥬',name:'Sebze çorbası',description:'Sebze çorbası',price:100,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🐟',name:'Balık çorbası',description:'Balık çorbası',price:140,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦐',name:'Deniz mahsulleri çorbası',description:'Deniz mahsulleri çorbası',price:160,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍜',name:'Noodle çorbası',description:'Asya usulü noodle çorbası',price:130,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🫙',name:'Miso çorbası',description:'Miso çorbası',price:120,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+
+  // ══ ANA YEMEKLER (11:00-23:00) ══
+  // Kırmızı Et
+  {emoji:'🥩',name:'Izgara dana bonfile',description:'Patates püresi ile servis edilen',price:580,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥩',name:'Izgara dana antrikot',description:'Sebze ile servis edilen',price:560,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥩',name:'Izgara T kemikli biftek',description:'T kemikli biftek',price:620,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍖',name:'Kuzu pirzola ızgara',description:'Kuzu pirzola ızgara',price:520,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍖',name:'Kuzu tandır',description:'Fırında pişirilmiş kuzu tandır',price:540,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌶️',name:'Adana kebap',description:'Acılı hazırlanmış Adana kebap',price:280,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌿',name:'Urfa kebap',description:'Acısız hazırlanmış Urfa kebap',price:270,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥩',name:'Beyti kebap',description:'Yoğurt ve sos ile servis edilen',price:290,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥙',name:'İskender kebap',description:'Tereyağı ve yoğurt ile servis edilen',price:310,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌯',name:'Et döner',description:'Et döner',price:220,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥩',name:'Saç kavurma',description:'Dana eti ile hazırlanmış',price:300,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥘',name:'Etli güveç',description:'Fırında pişirilmiş etli güveç',price:280,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  // Tavuk
+  {emoji:'🍗',name:'Izgara tavuk göğsü',description:'Izgara tavuk göğsü',price:240,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍢',name:'Tavuk şiş',description:'Tavuk şiş',price:250,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍗',name:'Tavuk kanat acılı',description:'Acılı sos ile hazırlanmış',price:220,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍗',name:'Tavuk kanat barbekü',description:'Barbekü sos ile hazırlanmış',price:220,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍗',name:'Tavuk schnitzel',description:'Çıtır kaplama ile hazırlanmış',price:260,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍗',name:'Tavuk sote',description:'Tavuk sote',price:230,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍛',name:'Köri soslu tavuk',description:'Köri soslu tavuk',price:250,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌮',name:'Tavuk fajita',description:'Sebze ile hazırlanmış tavuk fajita',price:260,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍗',name:'Fırın tavuk',description:'Fırın tavuk',price:240,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  // Deniz Ürünleri
+  {emoji:'🐟',name:'Izgara levrek fileto',description:'Izgara levrek fileto',price:380,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🐠',name:'Izgara çipura',description:'Izgara çipura',price:360,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🐟',name:'Izgara somon',description:'Izgara somon',price:400,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🐟',name:'Teriyaki soslu somon',description:'Teriyaki soslu somon',price:420,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦐',name:'Karides güveç',description:'Karides güveç',price:360,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦐',name:'Karides ızgara',description:'Karides ızgara',price:340,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦐',name:'Karides tempura',description:'Karides tempura',price:350,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦑',name:'Kalamar tava',description:'Kalamar tava',price:300,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦪',name:'Midye tava',description:'Midye tava',price:280,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🐟',name:'Balık ve patates kızartması',description:'Balık ve patates kızartması',price:280,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  // Vejetaryen
+  {emoji:'🥘',name:'Sebze güveç',description:'Sebze güveç',price:200,category:'Vejetaryen & Vegan',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍚',name:'Mantarlı risotto',description:'Mantarlı risotto',price:220,category:'Vejetaryen & Vegan',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍜',name:'Sebzeli noodle',description:'Sebzeli noodle',price:210,category:'Vejetaryen & Vegan',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍔',name:'Vegan burger',description:'Sebze köftesi ile hazırlanmış',price:220,category:'Vejetaryen & Vegan',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🧆',name:'Falafel kızartılmış',description:'Kızartılmış falafel',price:190,category:'Vejetaryen & Vegan',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥦',name:'Izgara sebze tabağı',description:'Izgara sebze tabağı',price:180,category:'Vejetaryen & Vegan',startTime:'11:00',endTime:'23:00'},
+
+  // ══ BURGER (11:00-23:00) ══
+  {emoji:'🍔',name:'Klasik hamburger',description:'Dana köfte ile hazırlanmış',price:240,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍔',name:'Cheeseburger',description:'Cheddar peyniri ile hazırlanmış',price:260,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍔',name:'Çift katlı hamburger',description:'Çift katlı hamburger',price:290,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍔',name:'Barbekü soslu hamburger',description:'Barbekü soslu hamburger',price:265,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌶️',name:'Acılı soslu hamburger',description:'Acılı soslu hamburger',price:260,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍄',name:'Mantarlı hamburger',description:'Mantarlı hamburger',price:265,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥑',name:'Avokadolu hamburger',description:'Avokadolu hamburger',price:275,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥓',name:'Pastırmalı hamburger',description:'Pastırmalı hamburger',price:280,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍔',name:'Tavuk burger ızgara',description:'Izgara tavuk ile hazırlanmış',price:230,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍔',name:'Çıtır tavuk burger',description:'Çıtır tavuk burger',price:235,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🐟',name:'Balık burger',description:'Balık burger',price:240,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+
+  // ══ PİZZA (11:00-23:00) ══
+  {emoji:'🍕',name:'Pizza Margherita',description:'Domates sos, mozzarella, fesleğen',price:260,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Pizza Pepperoni',description:'Sucuk benzeri et ürünü ile',price:280,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Karışık pizza',description:'Et ve sebze ile hazırlanmış',price:290,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Dört peynirli pizza',description:'Dört peynirli pizza',price:285,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Ton balıklı pizza',description:'Ton balıklı pizza',price:270,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Tavuklu pizza',description:'Tavuklu pizza',price:265,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Barbekü soslu tavuk pizza',description:'Barbekü soslu tavuk pizza',price:275,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Sebzeli pizza',description:'Sebzeli pizza',price:250,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Sucuklu pizza',description:'Sucuklu pizza',price:270,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Pastırmalı pizza',description:'Pastırmalı pizza',price:280,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Akdeniz usulü pizza',description:'Akdeniz usulü pizza',price:270,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Deniz mahsulleri pizza',description:'Deniz mahsulleri pizza',price:300,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+
+  // ══ MAKARNA (11:00-23:00) ══
+  {emoji:'🍝',name:'Spaghetti bolognese',description:'Kıymalı sos ile hazırlanmış',price:220,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍝',name:'Penne alfredo',description:'Krema ve peynir ile hazırlanmış',price:210,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍝',name:'Fettuccine alfredo',description:'Fettuccine alfredo',price:215,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍝',name:'Napolitana',description:'Domates sos ile hazırlanmış',price:195,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌶️',name:'Arabiata',description:'Acılı domates sos ile hazırlanmış',price:200,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌿',name:'Pesto makarna',description:'Fesleğen sos ile hazırlanmış',price:210,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🐟',name:'Ton balıklı makarna',description:'Ton balıklı makarna',price:220,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍗',name:'Tavuklu makarna',description:'Tavuklu makarna',price:225,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦐',name:'Deniz mahsulleri makarna',description:'Deniz mahsulleri makarna',price:260,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍝',name:'Lazanya',description:'Kat kat makarna ve kıyma ile',price:230,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥟',name:'Ravioli',description:'İç dolgulu makarna',price:240,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥔',name:'Gnocchi',description:'Patates bazlı makarna',price:220,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+
+  // ══ ATIŞTIRMALIKLAR (10:00-23:59) ══
+  {emoji:'🥪',name:'Club sandwich',description:'Tavuk, bacon ve sebze ile',price:200,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🌯',name:'Tavuk wrap',description:'Tavuk wrap',price:180,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🌯',name:'Et wrap',description:'Et wrap',price:195,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🥪',name:'Kaşarlı tost',description:'Kaşarlı tost',price:100,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🥪',name:'Sucuklu tost',description:'Sucuklu tost',price:110,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🥪',name:'Karışık tost',description:'Karışık tost',price:120,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🫓',name:'Gözleme peynirli',description:'Peynirli gözleme',price:120,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🫓',name:'Gözleme patatesli',description:'Patatesli gözleme',price:115,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🫓',name:'Gözleme kıymalı',description:'Kıymalı gözleme',price:130,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🍟',name:'Patates kızartması',description:'Patates kızartması',price:90,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🍗',name:'Tavuk nugget',description:'Tavuk nugget',price:140,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🌭',name:'Sosis tabağı',description:'Sosis tabağı',price:120,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+
+  // ══ TATLILAR (11:00-23:59) ══
+  {emoji:'🎂',name:'Çikolatalı sufle',description:'Sıcak servis edilen çikolatalı sufle',price:160,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍰',name:'Cheesecake çilek soslu',description:'Çilek soslu cheesecake',price:150,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍰',name:'Cheesecake frambuaz soslu',description:'Frambuaz soslu cheesecake',price:155,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍰',name:'Cheesecake çikolata soslu',description:'Çikolata soslu cheesecake',price:155,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'☕',name:'Tiramisu',description:'Kahve aromalı tiramisu',price:145,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍮',name:'Magnolia',description:'Sütlü tatlı',price:120,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍮',name:'Kazandibi',description:'Kazandibi',price:120,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍮',name:'Sütlaç fırınlanmış',description:'Fırınlanmış sütlaç',price:120,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍮',name:'Künefe sıcak',description:'Sıcak servis edilen künefe',price:160,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍯',name:'Baklava fıstıklı',description:'Fıstıklı baklava',price:140,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🎂',name:'Profiterol çikolatalı',description:'Çikolata soslu profiterol',price:145,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍨',name:'Dondurma vanilyalı',description:'Vanilya aromalı dondurma',price:100,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍫',name:'Dondurma çikolatalı',description:'Çikolata aromalı dondurma',price:100,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍓',name:'Dondurma çilekli',description:'Çilek aromalı dondurma',price:100,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+
+  // ══ İÇECEKLER (00:00-23:59) ══
+  // Gazlı
+  {emoji:'🥤',name:'Coca Cola',description:'Coca Cola 330ml',price:60,category:'Gazlı İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥤',name:'Coca Cola şekersiz',description:'Coca Cola Zero 330ml',price:60,category:'Gazlı İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥤',name:'Fanta portakal',description:'Portakal aromalı gazlı içecek',price:60,category:'Gazlı İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥤',name:'Sprite',description:'Limon aromalı gazlı içecek',price:60,category:'Gazlı İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥤',name:'Uludağ gazoz',description:'Uludağ gazoz',price:55,category:'Gazlı İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🫧',name:'Limonlu soda',description:'Limon aromalı soda',price:50,category:'Gazlı İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🫧',name:'Elmalı soda',description:'Elma aromalı soda',price:50,category:'Gazlı İçecekler',startTime:'00:00',endTime:'23:59'},
+  // Meyve Suları
+  {emoji:'🍊',name:'Portakal suyu',description:'Portakal suyu',price:90,category:'Meyve Suları',startTime:'07:00',endTime:'23:00'},
+  {emoji:'🍎',name:'Elma suyu',description:'Elma suyu',price:85,category:'Meyve Suları',startTime:'07:00',endTime:'23:00'},
+  {emoji:'🍑',name:'Şeftali suyu',description:'Şeftali suyu',price:85,category:'Meyve Suları',startTime:'07:00',endTime:'23:00'},
+  {emoji:'🍒',name:'Vişne suyu',description:'Vişne suyu',price:90,category:'Meyve Suları',startTime:'07:00',endTime:'23:00'},
+  {emoji:'🍍',name:'Ananas suyu',description:'Ananas suyu',price:90,category:'Meyve Suları',startTime:'07:00',endTime:'23:00'},
+  {emoji:'🍎',name:'Nar suyu',description:'Nar suyu',price:100,category:'Meyve Suları',startTime:'07:00',endTime:'23:00'},
+  {emoji:'🥤',name:'Karışık meyve suyu',description:'Karışık meyve suyu',price:95,category:'Meyve Suları',startTime:'07:00',endTime:'23:00'},
+  // Kahve
+  {emoji:'☕',name:'Espresso',description:'Espresso',price:60,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Double espresso',description:'Çift shot espresso',price:80,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Americano',description:'Americano',price:70,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Latte',description:'Latte',price:80,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Cappuccino',description:'Cappuccino',price:80,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Mocha',description:'Mocha',price:90,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Filtre kahve',description:'Filtre kahve',price:65,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Türk kahvesi sade',description:'Sade Türk kahvesi',price:55,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Türk kahvesi orta şekerli',description:'Orta şekerli Türk kahvesi',price:55,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Türk kahvesi şekerli',description:'Şekerli Türk kahvesi',price:55,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  // Çay
+  {emoji:'🍵',name:'Siyah çay',description:'Demlik siyah çay',price:40,category:'Çay',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🍵',name:'Yeşil çay',description:'Yeşil çay',price:50,category:'Çay',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🍵',name:'Beyaz çay',description:'Beyaz çay',price:55,category:'Çay',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🌸',name:'Ihlamur',description:'Ihlamur çayı',price:50,category:'Çay',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🌿',name:'Adaçayı',description:'Adaçayı',price:50,category:'Çay',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🍋',name:'Nane limon',description:'Nane limon çayı',price:55,category:'Çay',startTime:'00:00',endTime:'23:59'},
+  // Diğer İçecekler
+  {emoji:'🥛',name:'Ayran',description:'Soğuk ayran',price:45,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥛',name:'Süt',description:'Soğuk veya sıcak süt',price:50,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥤',name:'Çikolatalı milkshake',description:'Çikolatalı milkshake',price:120,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥤',name:'Vanilyalı milkshake',description:'Vanilyalı milkshake',price:120,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥤',name:'Çilekli milkshake',description:'Çilekli milkshake',price:120,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🍌',name:'Muzlu milkshake',description:'Muzlu milkshake',price:120,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🍓',name:'Smoothie çilek muz',description:'Çilek ve muz ile hazırlanmış',price:130,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥭',name:'Smoothie mango',description:'Mango ile hazırlanmış smoothie',price:135,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🍋',name:'Limonata',description:'Limonata',price:80,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🌿',name:'Naneli limonata',description:'Naneli limonata',price:85,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+];
+
+window.loadMenus = async function() {
+  const hotelId = document.getElementById('hotel-sel').value;
+  if (!hotelId) { alert('Otel seçin'); return; }
+  const log = document.getElementById('log');
+  log.innerHTML = `<span style="color:#f59e0b">⏳ ${FULL_MENU.length} ürün yükleniyor...</span><br/>`;
+
+  for (let i = 0; i < FULL_MENU.length; i++) {
+    const item = FULL_MENU[i];
+    await push(ref(db, `hotels/${hotelId}/menu`), {...item, active: true});
+    document.getElementById('prog').style.width = ((i+1)/FULL_MENU.length*100)+'%';
+    if (i % 10 === 0) {
+      log.innerHTML += `✓ ${item.category}: ${item.name}<br/>`;
+      log.scrollTop = log.scrollHeight;
+    }
+  }
+  log.innerHTML += `<br/><span style="color:#c9a84c">🎉 ${FULL_MENU.length} ürün başarıyla yüklendi!</span><br/>`;
+  log.innerHTML += `<a href="/misafir.html?hotel=${hotelId}&room=101" style="color:#c9a84c">→ Misafir ekranını test et</a>`;
+}
+
+window.clearMenu = async function() {
+  const hotelId = document.getElementById('hotel-sel').value;
+  if (!hotelId) { alert('Otel seçin'); return; }
+  if (!confirm(`${hotelId} otelinin tüm menüsü silinsin mi?`)) return;
+  await remove(ref(db, `hotels/${hotelId}/menu`));
+  document.getElementById('log').innerHTML = '✓ Menü temizlendi';
+}
+</script>
+</body>
+</html>
