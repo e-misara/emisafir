@@ -108,7 +108,8 @@
     #clean-btn:disabled{opacity:.35;cursor:not-allowed}
     #clean-btn.sent{background:#22c55e;color:#fff}
 
-    #toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#c9a84c;padding:10px 20px;border-radius:20px;font-size:.78rem;font-weight:600;display:none;z-index:9999;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+    /* BİLDİRİM TOAST */
+    #toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#c9a84c;padding:10px 20px;border-radius:20px;font-size:.78rem;font-weight:600;display:none;z-index:9999;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.2);cursor:pointer}
   </style>
 </head>
 <body>
@@ -196,11 +197,12 @@
   <button id="clean-btn" disabled onclick="sendClean()">Talebi Gönder</button>
 </div>
 
-<div id="toast"></div>
+<!-- BİLDİRİM TOAST — tıklayınca chat sekmesine geçer -->
+<div id="toast" onclick="switchTab('chat',document.querySelectorAll('.tab')[1])"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, get, set, push, onChildAdded, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, get, set, push, onChildAdded, remove, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",
@@ -220,86 +222,71 @@ const hotel = params.get('hotel') || 'demo';
 document.getElementById('rname').textContent = room;
 document.getElementById('rbadge').textContent = room;
 
-// ── GÜNLÜK SIFIRLAMA (Sabah 11:00) ──
-async function checkDailyReset() {
-  const now = new Date();
-  // Bugünün sıfırlama zamanı: saat 11:00
-  const resetHour = 11;
-  const todayKey = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+function fmtNow(){
+  const n=new Date();
+  return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+}
+function getNowMin(){const n=new Date();return n.getHours()*60+n.getMinutes();}
+function toMin(t){if(!t)return 0;const[h,m]=t.split(':').map(Number);return h*60+m;}
+function isAvail(s,e){
+  if(!s||!e)return true;
+  const n=getNowMin(),sm=toMin(s),em=toMin(e);
+  if(sm<=em)return n>=sm&&n<=em;
+  return n>=sm||n<=em;
+}
 
-  const resetRef = ref(db, `hotels/${hotel}/rooms/${room}/lastReset`);
-  const snap = await get(resetRef);
-  const lastReset = snap.exists() ? snap.val() : '';
-
-  // Eğer bugün 11:00 geçtiyse ve bugün henüz sıfırlanmadıysa
-  if (now.getHours() >= resetHour && lastReset !== todayKey) {
-    // Mesajları sil
-    await remove(ref(db, `hotels/${hotel}/rooms/${room}/messages`));
-    // Son sıfırlama tarihini kaydet
-    await set(resetRef, todayKey);
+// ── GÜNLÜK SIFIRLAMA 11:00 ──
+async function checkReset(){
+  const now=new Date();
+  const todayKey=`${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+  const resetRef=ref(db,`hotels/${hotel}/rooms/${room}/lastReset`);
+  const snap=await get(resetRef);
+  if(now.getHours()>=11&&(!snap.exists()||snap.val()!==todayKey)){
+    await remove(ref(db,`hotels/${hotel}/rooms/${room}/messages`));
+    await set(resetRef,todayKey);
   }
 }
 
-function fmtNow() {
-  const n = new Date();
-  return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
-}
-function getNowMin() { const n = new Date(); return n.getHours()*60+n.getMinutes(); }
-function toMin(t) { if(!t) return 0; const [h,m]=t.split(':').map(Number); return h*60+m; }
-function isAvail(s,e) {
-  if(!s||!e) return true;
-  const n=getNowMin(), sm=toMin(s), em=toMin(e);
-  if(sm<=em) return n>=sm && n<=em;
-  return n>=sm || n<=em; // gece geçişi (örn: 23:00-06:00)
-}
-
 // TAB
-window.switchTab = function(name, btn) {
+window.switchTab=function(name,btn){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById(name+'-screen').classList.add('active');
-  document.getElementById('cart-bar').className = (name==='menu' && Object.values(cart).reduce((s,i)=>s+i.qty,0)>0) ? 'show' : '';
+  document.getElementById('cart-bar').className=(name==='menu'&&Object.values(cart).reduce((s,i)=>s+i.qty,0)>0)?'show':'';
 }
 
 // ── MENÜ ──
-const cart = {};
-let menuItems = [];
+const cart={};let menuItems=[];
 
-async function loadMenu() {
-  document.getElementById('cur-time').textContent = fmtNow();
-  const snap = await get(ref(db, `hotels/${hotel}/menu`));
-  const body = document.getElementById('menu-body');
-
-  if (!snap.exists()) {
-    body.innerHTML = `<div class="empty-menu"><div class="empty-icon">🍽</div><div class="empty-text">Menü hazırlanıyor.<br/>Resepsiyonumuzu arayabilirsiniz.</div></div>`;
-    document.getElementById('menu-status').textContent = 'Menü yükleniyor';
+async function loadMenu(){
+  document.getElementById('cur-time').textContent=fmtNow();
+  const snap=await get(ref(db,`hotels/${hotel}/menu`));
+  const body=document.getElementById('menu-body');
+  if(!snap.exists()){
+    body.innerHTML=`<div class="empty-menu"><div class="empty-icon">🍽</div><div class="empty-text">Menü hazırlanıyor.<br/>Resepsiyonumuzu arayabilirsiniz.</div></div>`;
+    document.getElementById('menu-status').textContent='Menü hazırlanıyor';
     return;
   }
-
-  menuItems = Object.entries(snap.val()).map(([id,v])=>({id,...v}));
-  const avail = menuItems.filter(i=>isAvail(i.startTime,i.endTime));
-  document.getElementById('menu-status').textContent = avail.length>0 ? `${avail.length} ürün mevcut` : 'Şu an aktif ürün yok';
-
-  // Kategoriye göre sırala
-  const catOrder = ['Kahvaltı','Izgara & Et','Deniz Ürünleri','Makarna & Börek','Salata & Meze','Dünya Mutfağı','Tatlı','İçecek','Minibar'];
-  const cats = {};
+  menuItems=Object.entries(snap.val()).map(([id,v])=>({id,...v}));
+  const avail=menuItems.filter(i=>isAvail(i.startTime,i.endTime));
+  document.getElementById('menu-status').textContent=avail.length>0?`${avail.length} ürün mevcut`:'Şu an aktif ürün yok';
+  const catOrder=['Kahvaltı','Izgara & Et','Deniz Ürünleri','Makarna & Börek','Salata & Meze','Dünya Mutfağı','Tatlı','İçecek','Minibar'];
+  const cats={};
   menuItems.forEach(i=>{const c=i.category||'Diğer';if(!cats[c])cats[c]=[];cats[c].push(i);});
-
-  body.innerHTML = '';
-  // Önce belirlenen sırada, sonra diğerleri
-  [...catOrder, ...Object.keys(cats).filter(c=>!catOrder.includes(c))].forEach(cat => {
-    if (!cats[cat] || !cats[cat].length) return;
-    const av = cats[cat].filter(i=>isAvail(i.startTime,i.endTime));
-    const un = cats[cat].filter(i=>!isAvail(i.startTime,i.endTime));
-    if (!av.length && !un.length) return;
-    const sep = document.createElement('div');sep.className='cat-sep';sep.textContent=cat;body.appendChild(sep);
+  body.innerHTML='';
+  [...catOrder,...Object.keys(cats).filter(c=>!catOrder.includes(c))].forEach(cat=>{
+    if(!cats[cat]||!cats[cat].length)return;
+    const av=cats[cat].filter(i=>isAvail(i.startTime,i.endTime));
+    const un=cats[cat].filter(i=>!isAvail(i.startTime,i.endTime));
+    if(!av.length&&!un.length)return;
+    const sep=document.createElement('div');sep.className='cat-sep';sep.textContent=cat;body.appendChild(sep);
     av.forEach(item=>renderCard(item,body,false));
     un.forEach(item=>renderCard(item,body,true));
   });
 }
 
-function renderCard(item, container, disabled) {
+function renderCard(item,container,disabled){
   const div=document.createElement('div');div.className='menu-card';div.style.opacity=disabled?'0.42':'1';
   const tl=item.startTime&&item.endTime?`${item.startTime}–${item.endTime}`:'';
   const esc=s=>(s||'').replace(/'/g,"\\'");
@@ -320,26 +307,26 @@ function renderCard(item, container, disabled) {
   container.appendChild(div);
 }
 
-window.addCart = function(id,name,price,emoji) {
-  if(!cart[id]) cart[id]={name,price,emoji,qty:0};
+window.addCart=function(id,name,price,emoji){
+  if(!cart[id])cart[id]={name,price,emoji,qty:0};
   cart[id].qty++;updateCtrl(id);updateCartBar();
 }
-window.removeCart = function(id) {
-  if(!cart[id]) return;cart[id].qty--;
-  if(cart[id].qty<=0) delete cart[id];
+window.removeCart=function(id){
+  if(!cart[id])return;cart[id].qty--;
+  if(cart[id].qty<=0)delete cart[id];
   updateCtrl(id);updateCartBar();
 }
-function updateCtrl(id) {
-  const ctrl=document.getElementById('ctrl-'+id);if(!ctrl) return;
-  const item=cart[id];const mi=menuItems.find(i=>i.id===id);if(!mi) return;
+function updateCtrl(id){
+  const ctrl=document.getElementById('ctrl-'+id);if(!ctrl)return;
+  const item=cart[id];const mi=menuItems.find(i=>i.id===id);if(!mi)return;
   const esc=s=>(s||'').replace(/'/g,"\\'");
-  if(!item||item.qty===0) {
+  if(!item||item.qty===0){
     ctrl.innerHTML=`<button class="mc-add" onclick="addCart('${id}','${esc(mi.name)}',${mi.price},'${mi.emoji||'🍽'}')">+</button>`;
   } else {
     ctrl.innerHTML=`<div class="mc-qty"><button onclick="removeCart('${id}')">−</button><span>${item.qty}</span><button onclick="addCart('${id}','${esc(item.name)}',${item.price},'${item.emoji}')">+</button></div>`;
   }
 }
-function updateCartBar() {
+function updateCartBar(){
   const items=Object.values(cart);
   const count=items.reduce((s,i)=>s+i.qty,0);
   const total=items.reduce((s,i)=>s+i.price*i.qty,0);
@@ -348,7 +335,7 @@ function updateCartBar() {
   const isMenu=document.getElementById('menu-screen').classList.contains('active');
   document.getElementById('cart-bar').className=count>0&&isMenu?'show':'';
 }
-window.showCheckout = function() {
+window.showCheckout=function(){
   const items=Object.values(cart);const total=items.reduce((s,i)=>s+i.price*i.qty,0);
   document.getElementById('co-items').innerHTML=items.map(i=>`
     <div class="co-item">
@@ -358,13 +345,13 @@ window.showCheckout = function() {
   document.getElementById('co-total-amt').textContent='₺'+total;
   document.getElementById('co-modal').classList.add('show');
 }
-window.confirmOrder = async function() {
+window.confirmOrder=async function(){
   const items=Object.values(cart).map(i=>({name:i.name,emoji:i.emoji,price:i.price,qty:i.qty,subtotal:i.price*i.qty}));
   const total=items.reduce((s,i)=>s+i.subtotal,0);
   const orderNo='ORD-'+Date.now().toString(36).toUpperCase();
   await push(ref(db,`hotels/${hotel}/orders`),{
     orderNo,room,hotel,items,total,status:'pending',
-    date:new Date().toLocaleDateString('tr-TR'),time:fmtNow(),ts:serverTimestamp()
+    date:new Date().toLocaleDateString('tr-TR'),time:fmtNow(),ts:Date.now()
   });
   document.getElementById('co-modal').classList.remove('show');
   document.getElementById('ok-no').textContent=orderNo;
@@ -382,29 +369,40 @@ window.confirmOrder = async function() {
 
 // ── CHAT ──
 const seen=new Set();
-// Bugünün mesajlarını göster (11:00 sonrası)
-async function loadTodayMessages() {
-  const snap = await get(ref(db,`hotels/${hotel}/rooms/${room}/messages`));
-  if (!snap.exists()) {
-    addMsg('Merhaba! 👋 Oda '+room+'\'e hoş geldiniz.\nSize nasıl yardımcı olabilirim?','bot');
-    return;
-  }
-  const msgs = [];
-  snap.forEach(c => msgs.push({key:c.key,...c.val()}));
-  if (msgs.length === 0) {
-    addMsg('Merhaba! 👋 Oda '+room+'\'e hoş geldiniz.\nSize nasıl yardımcı olabilirim?','bot');
+let chatInitialized=false;
+
+async function loadChat(){
+  // Mevcut mesajları yükle
+  const snap=await get(ref(db,`hotels/${hotel}/rooms/${room}/messages`));
+  const el=document.getElementById('chat-msgs');
+  el.innerHTML='';
+
+  if(!snap.exists()||snap.size===0){
+    addMsgUI('Merhaba! 👋 Oda '+room+'\'e hoş geldiniz.\nSize nasıl yardımcı olabilirim?','bot');
   } else {
-    msgs.forEach(m => { seen.add(m.key); addMsg(m.text, m.from==='guest'?'user':'bot'); });
+    snap.forEach(c=>{
+      seen.add(c.key);
+      const d=c.val();
+      addMsgUI(d.text, d.from==='guest'?'user':'bot');
+    });
   }
+
+  // Yeni mesajları dinle
+  onChildAdded(ref(db,`hotels/${hotel}/rooms/${room}/messages`),(snap)=>{
+    if(seen.has(snap.key))return;
+    seen.add(snap.key);
+    const d=snap.val();
+    if(d.from==='reception'){
+      addMsgUI(d.text,'bot');
+      // Bildirim — chat sekmesi aktif değilse göster
+      if(!document.getElementById('chat-screen').classList.contains('active')){
+        showToast('📩 Resepsiyondan yanıt geldi! Görüntülemek için tıklayın.');
+      }
+    }
+  });
 }
 
-onChildAdded(ref(db,`hotels/${hotel}/rooms/${room}/messages`),(snap)=>{
-  if(seen.has(snap.key)) return;seen.add(snap.key);
-  const d=snap.val();
-  if(d.from==='reception'){addMsg(d.text,'bot');showToast('📩 Resepsiyondan yanıt geldi!');}
-});
-
-function addMsg(text,from) {
+function addMsgUI(text,from){
   const el=document.getElementById('chat-msgs');
   const div=document.createElement('div');div.className='msg'+(from==='user'?' user':'');
   const t=fmtNow();
@@ -416,28 +414,28 @@ function addMsg(text,from) {
   el.appendChild(div);el.scrollTop=el.scrollHeight;
 }
 
-window.sendChat = async function() {
-  const inp=document.getElementById('chat-inp');const text=inp.value.trim();if(!text) return;
+window.sendChat=async function(){
+  const inp=document.getElementById('chat-inp');const text=inp.value.trim();if(!text)return;
   inp.value='';inp.style.height='38px';
   document.getElementById('quick-row').style.display='none';
-  addMsg(text,'user');
+  addMsgUI(text,'user');
   await push(ref(db,`hotels/${hotel}/rooms/${room}/messages`),{text,from:'guest',ts:serverTimestamp()});
 }
-window.quickSend = function(text) {
+window.quickSend=function(text){
   document.getElementById('quick-row').style.display='none';
-  addMsg(text,'user');
+  addMsgUI(text,'user');
   push(ref(db,`hotels/${hotel}/rooms/${room}/messages`),{text,from:'guest',ts:serverTimestamp()});
 }
 
 // ── TEMİZLİK ──
 let cleanChoice=null;
-window.selClean = function(btn,val) {
+window.selClean=function(btn,val){
   document.querySelectorAll('.clean-opt').forEach(o=>{o.classList.remove('selected');o.querySelector('.coc').textContent='';});
   btn.classList.add('selected');btn.querySelector('.coc').textContent='✓';
   cleanChoice=val;document.getElementById('clean-btn').disabled=false;
 }
-window.sendClean = async function() {
-  if(!cleanChoice) return;
+window.sendClean=async function(){
+  if(!cleanChoice)return;
   await push(ref(db,`hotels/${hotel}/rooms/${room}/messages`),{text:'🧹 Temizlik talebi: '+cleanChoice,from:'guest',ts:serverTimestamp()});
   const btn=document.getElementById('clean-btn');
   btn.textContent='✓ Talebiniz İletildi!';btn.classList.add('sent');
@@ -446,15 +444,17 @@ window.sendClean = async function() {
   setTimeout(()=>{btn.textContent='Talebi Gönder';btn.classList.remove('sent');btn.disabled=true;},3000);
 }
 
-function showToast(msg) {
-  const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';
-  setTimeout(()=>t.style.display='none',3000);
+// ── TOAST BİLDİRİM ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  setTimeout(()=>t.style.display='none',5000);
 }
 
 // ── BAŞLAT ──
-async function init() {
-  await checkDailyReset();
-  await loadTodayMessages();
+async function init(){
+  await checkReset();
+  await loadChat();
   await loadMenu();
 }
 
