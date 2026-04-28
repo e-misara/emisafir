@@ -1,580 +1,456 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="theme-color" content="#1a1a2e"/>
-  <title>e-Misafir</title>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{height:100%;overflow:hidden}
-    body{
-      font-family:sans-serif;background:#faf7f2;
-      height:100%;display:flex;flex-direction:column;
-      max-width:480px;margin:0 auto;overflow:hidden;
-    }
-    /* iOS Safari klavye fix - position:fixed kullan */
-    #app{
-      position:fixed;top:0;left:0;right:0;bottom:0;
-      max-width:480px;margin:0 auto;
-      display:flex;flex-direction:column;
-      background:#faf7f2;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#1a1a2e"/>
+<title>e-Misafir</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#faf7f2}
+body{font-family:sans-serif;display:flex;flex-direction:column;max-width:480px;margin:0 auto}
+#hdr{background:#1a1a2e;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.hico{width:36px;height:36px;background:rgba(201,168,76,.15);border:1.5px solid #c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.hn{color:#fff;font-size:.86rem;font-weight:600}.hs{color:#c9a84c;font-size:.58rem;margin-top:1px}
+.hb{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.35);border-radius:20px;padding:3px 10px;font-size:.62rem;color:#c9a84c;margin-left:auto}
+#tabs{display:flex;background:#fff;border-bottom:1px solid #e8e3db;flex-shrink:0}
+.tab{flex:1;padding:9px 4px 7px;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.58rem;color:#9a8f80;cursor:pointer;border-bottom:2px solid transparent;font-family:sans-serif;position:relative}
+.ti{font-size:.9rem}.tab.on{color:#1a1a2e;border-bottom-color:#c9a84c;font-weight:600}
+.tdot{position:absolute;top:6px;right:calc(50% - 14px);width:7px;height:7px;background:#ef4444;border-radius:50%;display:none}
+.tdot.show{display:block}
+.scr{display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0}
+.scr.on{display:flex}
 
-    #header{background:#1a1a2e;padding:12px 18px;display:flex;align-items:center;gap:10px;flex-shrink:0}
-    .hico{width:38px;height:38px;background:rgba(201,168,76,.15);border:1.5px solid #c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-    .hn{color:#fff;font-size:.88rem;font-weight:600}
-    .hs{color:#c9a84c;font-size:.6rem;margin-top:1px}
-    .hb{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);border-radius:20px;padding:4px 10px;font-size:.65rem;color:#c9a84c;margin-left:auto}
+/* MENÜ */
+#cbar{display:flex;overflow-x:auto;scrollbar-width:none;gap:5px;padding:7px 11px;background:#fff;border-bottom:1px solid #e8e3db;flex-shrink:0}
+#cbar::-webkit-scrollbar{display:none}
+.cb{background:#f5f5f5;border:1.5px solid #e8e3db;border-radius:20px;padding:4px 11px;font-size:.66rem;white-space:nowrap;cursor:pointer;font-family:sans-serif;color:#666;flex-shrink:0}
+.cb.on{background:#1a1a2e;color:#c9a84c;border-color:#1a1a2e}
+#tbar{background:#f0ebe1;padding:5px 11px;font-size:.63rem;color:#6b5e4e;display:flex;align-items:center;gap:4px;flex-shrink:0}
+#mlist{flex:1;overflow-y:auto;padding:9px 11px;-webkit-overflow-scrolling:touch}
+.csep{font-size:.57rem;color:#9a8f80;letter-spacing:1.5px;text-transform:uppercase;margin:12px 0 5px;padding-bottom:4px;border-bottom:1px solid #e8dfd4}
+.csep:first-child{margin-top:0}
+.mc{background:#fff;border-radius:9px;padding:10px;margin-bottom:6px;display:flex;align-items:flex-start;gap:9px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.me{font-size:1.5rem;flex-shrink:0;line-height:1;margin-top:1px}
+.mi{flex:1;min-width:0}
+.mn{font-size:.82rem;font-weight:600;color:#1a1a2e}
+.md{font-size:.65rem;color:#9a8f80;margin-top:1px;line-height:1.3}
+.mp{font-size:.83rem;color:#c9a84c;font-weight:700;margin-top:3px;display:block}
+.mct{flex-shrink:0}
+.madd{width:30px;height:30px;border-radius:50%;background:#1a1a2e;border:none;color:#c9a84c;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mqt{display:flex;align-items:center;gap:3px;background:#f0ebe1;border-radius:14px;padding:3px 7px}
+.mqt button{background:none;border:none;font-size:1rem;cursor:pointer;color:#1a1a2e;width:22px;text-align:center;min-height:28px;line-height:1;padding:0}
+.mqt span{font-size:.8rem;font-weight:600;min-width:12px;text-align:center}
+#cart{display:none;background:#1a1a2e;padding:9px 14px;flex-direction:row;align-items:center;justify-content:space-between;flex-shrink:0}
+#cart.on{display:flex}
+.cc{color:rgba(255,255,255,.55);font-size:.65rem}.ct{color:#c9a84c;font-size:.93rem;font-weight:700}
+#cbtn{background:#c9a84c;color:#1a1a2e;border:none;border-radius:7px;padding:8px 13px;font-weight:700;font-size:.76rem;cursor:pointer;font-family:sans-serif}
 
-    #tabs{display:flex;background:#fff;border-bottom:1px solid #e8e3db;flex-shrink:0}
-    .tab{flex:1;padding:10px 4px 8px;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.6rem;color:#9a8f80;cursor:pointer;border-bottom:2px solid transparent;font-family:sans-serif;position:relative}
-    .tab-icon{font-size:.95rem}
-    .tab.active{color:#1a1a2e;border-bottom-color:#c9a84c;font-weight:600}
-    .tab-dot{position:absolute;top:7px;right:calc(50% - 14px);width:7px;height:7px;background:#ef4444;border-radius:50%;display:none}
-    .tab-dot.show{display:block}
+/* CHECKOUT */
+#com{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;align-items:flex-end;justify-content:center}
+#com.on{display:flex}
+#cob{background:#fff;border-radius:18px 18px 0 0;padding:18px 15px 28px;width:100%;max-width:480px;max-height:78vh;overflow-y:auto}
+.cot{font-size:.9rem;font-weight:700;color:#1a1a2e;margin-bottom:2px}
+.cos{font-size:.67rem;color:#9a8f80;margin-bottom:11px}
+.cor{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0ebe1;font-size:.78rem}
+.con{color:#1a1a2e}.coq{font-size:.65rem;color:#9a8f80}.cop{font-weight:600;color:#1a1a2e}
+.cotl{display:flex;justify-content:space-between;align-items:center;margin-top:11px;padding-top:9px;border-top:2px solid #1a1a2e}
+.cotll{font-size:.78rem;font-weight:600}.cota{font-size:1.15rem;font-weight:700;color:#c9a84c}
+.conote{background:#f7f4ef;border-radius:8px;padding:9px;margin:11px 0;font-size:.7rem;color:#6b5e4e;line-height:1.5}
+.cobt{display:flex;gap:7px}
+.cocan{flex:1;background:transparent;border:1.5px solid #e8dfd4;border-radius:9px;padding:11px;font-size:.78rem;cursor:pointer;font-family:sans-serif;color:#9a8f80}
+.cocon{flex:2;background:#1a1a2e;border:none;border-radius:9px;padding:11px;font-size:.8rem;font-weight:700;color:#c9a84c;cursor:pointer;font-family:sans-serif}
+#okm{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center}
+#okm.on{display:flex}
+#okb{background:#fff;border-radius:16px;padding:24px 18px;text-align:center;max-width:280px;width:90%}
+.oki{font-size:2.3rem;margin-bottom:7px}.okt{font-size:.92rem;font-weight:700;color:#1a1a2e;margin-bottom:5px}
+.oks{font-size:.72rem;color:#9a8f80;line-height:1.5;margin-bottom:13px}
+.okb{background:#1a1a2e;color:#c9a84c;border:none;border-radius:9px;padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:sans-serif}
 
-    .screen{display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0}
-    .screen.active{display:flex}
+/* CHAT */
+#chat-scr{overflow:hidden}
+#rbanner{display:none;background:#1a1a2e;color:#c9a84c;padding:7px 13px;font-size:.72rem;font-weight:600;align-items:center;gap:5px;cursor:pointer;flex-shrink:0}
+#rbanner.on{display:flex}
+#cstat{background:#f0fdf4;border-bottom:1px solid #bbf7d0;padding:5px 13px;font-size:.65rem;color:#15803d;display:flex;align-items:center;gap:4px;flex-shrink:0}
+.sdot{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+#cmsgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:6px;background:#f7f4ef;-webkit-overflow-scrolling:touch}
+.msg{display:flex;gap:6px;align-items:flex-end}
+.msg.u{flex-direction:row-reverse}
+.mava{width:24px;height:24px;border-radius:50%;background:#1a1a2e;border:1.5px solid #c9a84c;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#c9a84c;flex-shrink:0}
+.bbl{max-width:78%;padding:7px 10px;border-radius:13px 13px 13px 3px;background:#fff;color:#1a1a2e;font-size:.78rem;line-height:1.4;border:1px solid rgba(26,26,46,.07)}
+.msg.u .bbl{background:#1a1a2e;color:#fff;border-radius:13px 13px 3px 13px;border-color:transparent}
+.mt{font-size:.55rem;color:#9a8f80;margin-top:1px}
+.msg.u .mt{text-align:right}
+#qrow{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:6px 11px;background:#fff;border-top:1px solid #e8e3db;flex-shrink:0}
+#qrow::-webkit-scrollbar{display:none}
+.chip{background:#f0ebe1;border:1px solid #e8dfd4;border-radius:14px;padding:5px 10px;font-size:.65rem;color:#1a1a2e;cursor:pointer;white-space:nowrap;font-family:sans-serif;min-height:30px;display:flex;align-items:center;flex-shrink:0}
+#cinp-wrap{background:#fff;border-top:1px solid #e8e3db;padding:7px 11px;display:flex;gap:6px;align-items:flex-end;flex-shrink:0;padding-bottom:max(7px,env(safe-area-inset-bottom))}
+#cinp{flex:1;background:#f0ebe1;border:1.5px solid rgba(26,26,46,.1);border-radius:17px;padding:7px 11px;font-size:16px;color:#1a1a2e;outline:none;resize:none;min-height:36px;max-height:80px;line-height:1.4;font-family:sans-serif;-webkit-appearance:none}
+#csnd{width:36px;height:36px;border-radius:50%;background:#1a1a2e;border:none;color:#c9a84c;font-size:.85rem;cursor:pointer;flex-shrink:0;min-width:36px}
 
-    /* ══ MENÜ ══ */
-    #cat-tabs{display:flex;overflow-x:auto;scrollbar-width:none;gap:6px;padding:8px 12px;background:#fff;border-bottom:1px solid #e8e3db;flex-shrink:0}
-    #cat-tabs::-webkit-scrollbar{display:none}
-    .cat-btn{background:#f5f5f5;border:1.5px solid #e8e3db;border-radius:20px;padding:5px 12px;font-size:.68rem;white-space:nowrap;cursor:pointer;font-family:sans-serif;color:#666;flex-shrink:0;transition:all .2s}
-    .cat-btn.active{background:#1a1a2e;color:#c9a84c;border-color:#1a1a2e}
-    #time-bar{background:#f0ebe1;padding:5px 12px;font-size:.65rem;color:#6b5e4e;display:flex;align-items:center;gap:5px;flex-shrink:0}
-    #menu-list{flex:1;overflow-y:auto;padding:10px 12px;-webkit-overflow-scrolling:touch}
-    .cat-sep{font-size:.58rem;color:#9a8f80;letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid #e8dfd4}
-    .cat-sep:first-child{margin-top:0}
-    .menu-card{background:#fff;border-radius:10px;padding:11px;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-    .mc-emoji{font-size:1.6rem;flex-shrink:0;line-height:1;margin-top:1px}
-    .mc-info{flex:1;min-width:0}
-    .mc-name{font-size:.84rem;font-weight:600;color:#1a1a2e}
-    .mc-desc{font-size:.67rem;color:#9a8f80;margin-top:1px;line-height:1.4}
-    .mc-price{font-size:.85rem;color:#c9a84c;font-weight:700;margin-top:4px;display:block}
-    .mc-ctrl{flex-shrink:0;display:flex;align-items:center}
-    .mc-add{width:32px;height:32px;border-radius:50%;background:#1a1a2e;border:none;color:#c9a84c;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
-    .mc-qty{display:flex;align-items:center;gap:4px;background:#f0ebe1;border-radius:16px;padding:3px 8px}
-    .mc-qty button{background:none;border:none;font-size:1.1rem;cursor:pointer;color:#1a1a2e;width:24px;text-align:center;min-height:30px;line-height:1;padding:0;-webkit-tap-highlight-color:transparent}
-    .mc-qty span{font-size:.82rem;font-weight:600;min-width:14px;text-align:center}
-
-    #cart-bar{display:none;background:#1a1a2e;padding:10px 16px;flex-direction:row;align-items:center;justify-content:space-between;flex-shrink:0}
-    #cart-bar.show{display:flex}
-    .cb-count{color:rgba(255,255,255,.6);font-size:.67rem}
-    .cb-total{color:#c9a84c;font-size:.95rem;font-weight:700}
-    #checkout-btn{background:#c9a84c;color:#1a1a2e;border:none;border-radius:8px;padding:9px 14px;font-weight:700;font-size:.78rem;cursor:pointer;font-family:sans-serif}
-
-    #co-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:flex-end;justify-content:center}
-    #co-modal.show{display:flex}
-    #co-box{background:#fff;border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto}
-    .co-title{font-size:.92rem;font-weight:700;color:#1a1a2e;margin-bottom:2px}
-    .co-sub{font-size:.68rem;color:#9a8f80;margin-bottom:12px}
-    .co-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0ebe1;font-size:.8rem}
-    .co-row-name{color:#1a1a2e}.co-row-qty{font-size:.68rem;color:#9a8f80}.co-row-price{font-weight:600;color:#1a1a2e}
-    .co-total{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:10px;border-top:2px solid #1a1a2e}
-    .co-total-label{font-size:.8rem;font-weight:600}.co-total-amt{font-size:1.2rem;font-weight:700;color:#c9a84c}
-    .co-note{background:#f7f4ef;border-radius:8px;padding:10px;margin:12px 0;font-size:.72rem;color:#6b5e4e;line-height:1.5}
-    .co-btns{display:flex;gap:8px}
-    .co-cancel{flex:1;background:transparent;border:1.5px solid #e8dfd4;border-radius:10px;padding:12px;font-size:.8rem;cursor:pointer;font-family:sans-serif;color:#9a8f80}
-    .co-confirm{flex:2;background:#1a1a2e;border:none;border-radius:10px;padding:12px;font-size:.83rem;font-weight:700;color:#c9a84c;cursor:pointer;font-family:sans-serif}
-    #ok-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
-    #ok-modal.show{display:flex}
-    #ok-box{background:#fff;border-radius:18px;padding:26px 20px;text-align:center;max-width:290px;width:90%}
-    .ok-icon{font-size:2.5rem;margin-bottom:8px}
-    .ok-title{font-size:.95rem;font-weight:700;color:#1a1a2e;margin-bottom:6px}
-    .ok-sub{font-size:.74rem;color:#9a8f80;line-height:1.6;margin-bottom:14px}
-    .ok-btn{background:#1a1a2e;color:#c9a84c;border:none;border-radius:10px;padding:10px 22px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:sans-serif}
-
-    /* ══ CHAT ══ */
-    #chat-screen{overflow:hidden}
-    #reply-banner{display:none;background:#1a1a2e;color:#c9a84c;padding:8px 14px;font-size:.74rem;font-weight:600;align-items:center;gap:6px;cursor:pointer;flex-shrink:0}
-    #reply-banner.show{display:flex}
-    #chat-status{background:#f0fdf4;border-bottom:1px solid #bbf7d0;padding:6px 14px;font-size:.67rem;color:#15803d;display:flex;align-items:center;gap:5px;flex-shrink:0}
-    .sdot{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-    #chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:7px;background:#f7f4ef;-webkit-overflow-scrolling:touch}
-    .msg{display:flex;gap:7px;align-items:flex-end}
-    .msg.user{flex-direction:row-reverse}
-    .msg-ava{width:26px;height:26px;border-radius:50%;background:#1a1a2e;border:1.5px solid #c9a84c;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:#c9a84c;flex-shrink:0}
-    .bubble{max-width:78%;padding:8px 11px;border-radius:14px 14px 14px 4px;background:#fff;color:#1a1a2e;font-size:.8rem;line-height:1.5;border:1px solid rgba(26,26,46,.07)}
-    .msg.user .bubble{background:#1a1a2e;color:#fff;border-radius:14px 14px 4px 14px;border-color:transparent}
-    .mtime{font-size:.57rem;color:#9a8f80;margin-top:1px}
-    .msg.user .mtime{text-align:right}
-    #quick-row{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;padding:7px 12px;background:#fff;border-top:1px solid #e8e3db;flex-shrink:0}
-    #quick-row::-webkit-scrollbar{display:none}
-    .chip{background:#f0ebe1;border:1px solid #e8dfd4;border-radius:16px;padding:6px 11px;font-size:.68rem;color:#1a1a2e;cursor:pointer;white-space:nowrap;font-family:sans-serif;min-height:32px;display:flex;align-items:center;flex-shrink:0;-webkit-tap-highlight-color:transparent}
-
-    /* KRİTİK: iOS Safari klavye fix */
-    #chat-bottom{display:flex;flex-direction:column;flex-shrink:0;background:#fff}
-    #chat-input{border-top:1px solid #e8e3db;padding:8px 12px;display:flex;gap:7px;align-items:flex-end}
-    #chat-inp{
-      flex:1;background:#f0ebe1;border:1.5px solid rgba(26,26,46,.1);
-      border-radius:18px;padding:8px 12px;font-size:16px;/* 16px iOS zoom önler */
-      color:#1a1a2e;outline:none;resize:none;
-      min-height:38px;max-height:90px;line-height:1.4;
-      font-family:sans-serif;-webkit-appearance:none;
-    }
-    #chat-send{
-      width:40px;height:40px;border-radius:50%;background:#1a1a2e;
-      border:none;color:#c9a84c;font-size:.88rem;cursor:pointer;
-      flex-shrink:0;min-width:40px;-webkit-tap-highlight-color:transparent;
-    }
-
-    /* ══ TEMİZLİK ══ */
-    #clean-screen{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px}
-    .clean-note{background:#f7f4ef;border-radius:8px;padding:10px;margin-bottom:12px;font-size:.72rem;color:#6b5e4e;line-height:1.5}
-    .clean-opt{
-      width:100%;background:#fff;border:2px solid #e8e3db;border-radius:10px;
-      padding:13px;margin-bottom:7px;display:flex;align-items:center;gap:11px;
-      cursor:pointer;text-align:left;font-family:sans-serif;min-height:58px;
-      -webkit-tap-highlight-color:transparent;transition:all .15s;
-    }
-    .clean-opt.selected{border-color:#c9a84c;background:#fffdf7}
-    .coi{font-size:1.4rem;flex-shrink:0}
-    .con{font-size:.83rem;font-weight:600;color:#1a1a2e}
-    .cod{font-size:.68rem;color:#9a8f80;margin-top:1px}
-    .coc{margin-left:auto;color:#c9a84c;font-weight:700;font-size:1rem;min-width:18px}
-    #clean-btn{width:100%;background:#1a1a2e;color:#c9a84c;border:none;border-radius:10px;padding:14px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:sans-serif;margin-top:4px;min-height:48px;transition:background .3s;-webkit-tap-highlight-color:transparent}
-    #clean-btn:disabled{opacity:.35;cursor:not-allowed}
-    #clean-btn.sent{background:#22c55e;color:#fff}
-
-    #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#c9a84c;padding:9px 18px;border-radius:18px;font-size:.74rem;font-weight:600;display:none;z-index:9999;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.25)}
-  </style>
+/* TEMİZLİK */
+#cln-scr{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px}
+.clnote{background:#f7f4ef;border-radius:8px;padding:9px;margin-bottom:11px;font-size:.7rem;color:#6b5e4e;line-height:1.5}
+.clopt{width:100%;background:#fff;border:2px solid #e8e3db;border-radius:9px;padding:12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;cursor:pointer;text-align:left;font-family:sans-serif;min-height:54px}
+.clopt.on{border-color:#c9a84c;background:#fffdf7}
+.clo{font-size:1.3rem;flex-shrink:0}.cln{font-size:.8rem;font-weight:600;color:#1a1a2e}.cld{font-size:.65rem;color:#9a8f80;margin-top:1px}
+.clc{margin-left:auto;color:#c9a84c;font-weight:700;font-size:.95rem;min-width:16px}
+#clbtn{width:100%;background:#1a1a2e;color:#c9a84c;border:none;border-radius:9px;padding:13px;font-size:.83rem;font-weight:700;cursor:pointer;font-family:sans-serif;margin-top:3px;min-height:46px;transition:background .3s}
+#clbtn:disabled{opacity:.35;cursor:not-allowed}
+#clbtn.sent{background:#22c55e;color:#fff}
+#tst{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#c9a84c;padding:8px 16px;border-radius:16px;font-size:.72rem;font-weight:600;display:none;z-index:200;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+</style>
 </head>
 <body>
-<div id="app">
-
-<div id="header">
+<div id="hdr">
   <div class="hico">🛎</div>
-  <div><div class="hn">Oda Servisi</div><div class="hs">e-Misafir · Oda <span id="rname">101</span></div></div>
-  <div class="hb" id="rbadge">101</div>
+  <div><div class="hn">Oda Servisi</div><div class="hs">e-Misafir · Oda <span id="rn">101</span></div></div>
+  <div class="hb" id="rb">101</div>
 </div>
-
 <div id="tabs">
-  <button class="tab active" onclick="switchTab('menu',this)"><span class="tab-icon">🍽</span>Menü</button>
-  <button class="tab" id="tab-chat" onclick="switchTab('chat',this)"><span class="tab-icon">💬</span>Resepsiyon<span class="tab-dot" id="chat-dot"></span></button>
-  <button class="tab" onclick="switchTab('clean',this)"><span class="tab-icon">✨</span>Temizlik</button>
+  <button class="tab on" onclick="goTab('m',this)"><span class="ti">🍽</span>Menü</button>
+  <button class="tab" id="tab-c" onclick="goTab('c',this)"><span class="ti">💬</span>Resepsiyon<span class="tdot" id="cdot"></span></button>
+  <button class="tab" onclick="goTab('k',this)"><span class="ti">✨</span>Temizlik</button>
 </div>
 
 <!-- MENÜ -->
-<div id="menu-screen" class="screen active">
-  <div id="cat-tabs"><button class="cat-btn active" onclick="filterCat('tümü',this)">🍽 Tümü</button></div>
-  <div id="time-bar">🕐 <span id="cur-time">--:--</span> — <span id="menu-status">Yükleniyor...</span></div>
-  <div id="menu-list"></div>
+<div id="m-scr" class="scr on">
+  <div id="cbar"><button class="cb on" onclick="fcat('tümü',this)">🍽 Tümü</button></div>
+  <div id="tbar">🕐 <span id="ctime">--:--</span> — <span id="mst">Yükleniyor...</span></div>
+  <div id="mlist"></div>
 </div>
-<div id="cart-bar">
-  <div><div class="cb-count" id="cb-count">0 ürün</div><div class="cb-total" id="cb-total">₺0</div></div>
-  <button id="checkout-btn" onclick="showCheckout()">Sepeti Onayla →</button>
+<div id="cart">
+  <div><div class="cc" id="ccount">0 ürün</div><div class="ct" id="ctotal">₺0</div></div>
+  <button id="cbtn" onclick="showCO()">Sepeti Onayla →</button>
 </div>
-
-<div id="co-modal"><div id="co-box">
-  <div class="co-title">Sipariş Özeti</div>
-  <div class="co-sub">Onaylamadan önce kontrol edin</div>
-  <div id="co-rows"></div>
-  <div class="co-total"><span class="co-total-label">Toplam</span><span class="co-total-amt" id="co-total-amt">₺0</span></div>
-  <div class="co-note">📋 <strong>Ödeme:</strong> Tutar oda hesabınıza yansıtılacak, check-out'ta tahsil edilecektir.</div>
-  <div class="co-btns">
-    <button class="co-cancel" onclick="document.getElementById('co-modal').classList.remove('show')">İptal</button>
-    <button class="co-confirm" id="co-confirm-btn" onclick="confirmOrder()">✓ Siparişi Ver</button>
+<div id="com"><div id="cob">
+  <div class="cot">Sipariş Özeti</div><div class="cos">Onaylamadan önce kontrol edin</div>
+  <div id="corows"></div>
+  <div class="cotl"><span class="cotll">Toplam</span><span class="cota" id="coamt">₺0</span></div>
+  <div class="conote">📋 <strong>Ödeme:</strong> Tutar oda hesabınıza yansıtılacak, check-out'ta tahsil edilecektir.</div>
+  <div class="cobt">
+    <button class="cocan" onclick="id('com').classList.remove('on')">İptal</button>
+    <button class="cocon" id="cobtn" onclick="doOrder()">✓ Siparişi Ver</button>
   </div>
 </div></div>
-
-<div id="ok-modal"><div id="ok-box">
-  <div class="ok-icon">✅</div>
-  <div class="ok-title">Siparişiniz Alındı!</div>
-  <div class="ok-sub">En kısa sürede odanıza servis yapılacaktır.<br/><br/>No: <strong id="ok-no"></strong></div>
-  <button class="ok-btn" onclick="document.getElementById('ok-modal').classList.remove('show')">Tamam</button>
+<div id="okm"><div id="okb">
+  <div class="oki">✅</div><div class="okt">Siparişiniz Alındı!</div>
+  <div class="oks">En kısa sürede odanıza servis yapılacaktır.<br/><br/>No: <strong id="okno"></strong></div>
+  <button class="okb" onclick="id('okm').classList.remove('on')">Tamam</button>
 </div></div>
 
 <!-- CHAT -->
-<div id="chat-screen" class="screen">
-  <div id="reply-banner" onclick="goToChat()">📩 Resepsiyondan yanıt geldi — görmek için tıklayın</div>
-  <div id="chat-status"><span class="sdot"></span>Resepsiyon çevrimiçi</div>
-  <div id="chat-msgs"></div>
-  <div id="chat-bottom">
-    <div id="quick-row">
-      <button class="chip" onclick="quickSend('Merhaba, yardıma ihtiyacım var.')">👋 Merhaba</button>
-      <button class="chip" onclick="quickSend('Odamı temizler misiniz?')">✨ Temizlik</button>
-      <button class="chip" onclick="quickSend('Temiz havlu getirir misiniz?')">🛁 Havlu</button>
-      <button class="chip" onclick="quickSend('Taksi çağırabilir misiniz?')">🚕 Taksi</button>
-      <button class="chip" onclick="quickSend('Check-out saati ne zaman?')">🔑 Çıkış</button>
-      <button class="chip" onclick="quickSend('WiFi şifresi nedir?')">📶 WiFi</button>
-    </div>
-    <div id="chat-input">
-      <textarea id="chat-inp" placeholder="Mesajınızı yazın..." rows="1"
-        oninput="autoResize(this)"
-        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
-      <button id="chat-send" onclick="sendChat()">➤</button>
-    </div>
+<div id="chat-scr" class="scr">
+  <div id="rbanner" onclick="goChat()">📩 Resepsiyondan yanıt geldi — tıklayın</div>
+  <div id="cstat"><span class="sdot"></span>Resepsiyon çevrimiçi</div>
+  <div id="cmsgs"></div>
+  <div id="qrow">
+    <button class="chip" onclick="qs('Merhaba, yardıma ihtiyacım var.')">👋 Merhaba</button>
+    <button class="chip" onclick="qs('Odamı temizler misiniz?')">✨ Temizlik</button>
+    <button class="chip" onclick="qs('Temiz havlu getirir misiniz?')">🛁 Havlu</button>
+    <button class="chip" onclick="qs('Taksi çağırabilir misiniz?')">🚕 Taksi</button>
+    <button class="chip" onclick="qs('Check-out saati ne zaman?')">🔑 Çıkış</button>
+    <button class="chip" onclick="qs('WiFi şifresi nedir?')">📶 WiFi</button>
+  </div>
+  <div id="cinp-wrap">
+    <textarea id="cinp" placeholder="Mesajınızı yazın..." rows="1"
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea>
+    <button id="csnd" onclick="send()">➤</button>
   </div>
 </div>
 
 <!-- TEMİZLİK -->
-<div id="clean-screen" class="screen">
-  <div class="clean-note">⏰ Talebiniz resepsiyona anında iletilecektir.</div>
-  <button class="clean-opt" onclick="selClean(this,'Tam Temizlik')"><span class="coi">✨</span><div><div class="con">Tam Temizlik</div><div class="cod">Oda eksiksiz temizlensin</div></div><span class="coc"></span></button>
-  <button class="clean-opt" onclick="selClean(this,'Havlu Değişimi')"><span class="coi">🛁</span><div><div class="con">Havlu Değişimi</div><div class="cod">Sadece havlular değiştirilsin</div></div><span class="coc"></span></button>
-  <button class="clean-opt" onclick="selClean(this,'Çarşaf Değişimi')"><span class="coi">🛏</span><div><div class="con">Çarşaf Değişimi</div><div class="cod">Yatak takımları yenilensin</div></div><span class="coc"></span></button>
-  <button class="clean-opt" onclick="selClean(this,'Çöp Toplama')"><span class="coi">🗑</span><div><div class="con">Çöp Toplama</div><div class="cod">Çöpler alınsın</div></div><span class="coc"></span></button>
-  <button class="clean-opt" onclick="selClean(this,'Ekstra Havlu')"><span class="coi">🧴</span><div><div class="con">Ekstra Havlu / Malzeme</div><div class="cod">Şampuan, sabun, havlu ekle</div></div><span class="coc"></span></button>
-  <button class="clean-opt" onclick="selClean(this,'Rahatsız Etme')"><span class="coi">🔕</span><div><div class="con">Rahatsız Etme</div><div class="cod">Bugün temizlik istemiyorum</div></div><span class="coc"></span></button>
-  <button id="clean-btn" disabled onclick="sendClean()">Talebi Gönder</button>
+<div id="cln-scr" class="scr">
+  <div class="clnote">⏰ Talebiniz resepsiyona anında iletilecektir.</div>
+  <button class="clopt" onclick="selCl(this,'Tam Temizlik')"><span class="clo">✨</span><div><div class="cln">Tam Temizlik</div><div class="cld">Oda eksiksiz temizlensin</div></div><span class="clc"></span></button>
+  <button class="clopt" onclick="selCl(this,'Havlu Değişimi')"><span class="clo">🛁</span><div><div class="cln">Havlu Değişimi</div><div class="cld">Sadece havlular değiştirilsin</div></div><span class="clc"></span></button>
+  <button class="clopt" onclick="selCl(this,'Çarşaf Değişimi')"><span class="clo">🛏</span><div><div class="cln">Çarşaf Değişimi</div><div class="cld">Yatak takımları yenilensin</div></div><span class="clc"></span></button>
+  <button class="clopt" onclick="selCl(this,'Çöp Toplama')"><span class="clo">🗑</span><div><div class="cln">Çöp Toplama</div><div class="cld">Çöpler alınsın</div></div><span class="clc"></span></button>
+  <button class="clopt" onclick="selCl(this,'Ekstra Havlu')"><span class="clo">🧴</span><div><div class="cln">Ekstra Havlu / Malzeme</div><div class="cld">Şampuan, sabun, havlu ekle</div></div><span class="clc"></span></button>
+  <button class="clopt" onclick="selCl(this,'Rahatsız Etme')"><span class="clo">🔕</span><div><div class="cln">Rahatsız Etme</div><div class="cld">Bugün temizlik istemiyorum</div></div><span class="clc"></span></button>
+  <button id="clbtn" disabled onclick="sendCl()">Talebi Gönder</button>
 </div>
 
-<div id="toast"></div>
-</div><!-- #app -->
+<div id="tst"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, get, set, push, onChildAdded, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, get, set, push, remove, onValue, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-const fc = {
+const FC = {
   apiKey:"AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",
   authDomain:"emisafir-56796.firebaseapp.com",
   databaseURL:"https://emisafir-56796-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId:"emisafir-56796",
-  storageBucket:"emisafir-56796.firebasestorage.app",
-  messagingSenderId:"1044463772299",
-  appId:"1:1044463772299:web:4f1496b541a433fe766a8e"
+  projectId:"emisafir-56796",storageBucket:"emisafir-56796.firebasestorage.app",
+  messagingSenderId:"1044463772299",appId:"1:1044463772299:web:4f1496b541a433fe766a8e"
 };
-const app = initializeApp(fc);
-const db = getDatabase(app);
+const db = getDatabase(initializeApp(FC));
 
-const params = new URLSearchParams(location.search);
-const room = params.get('room') || '101';
-const hotel = params.get('hotel') || 'demo';
-document.getElementById('rname').textContent = room;
-document.getElementById('rbadge').textContent = room;
+const P = new URLSearchParams(location.search);
+const room = P.get('room')||'101', hotel = P.get('hotel')||'demo';
+document.getElementById('rn').textContent = room;
+document.getElementById('rb').textContent = room;
 
-// ── YARDIMCILAR ──
-function fmtNow(){
-  const n=new Date();
-  return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+window.id = s => document.getElementById(s);
+
+function now(){ const n=new Date(); return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'); }
+function nowMin(){ const n=new Date(); return n.getHours()*60+n.getMinutes(); }
+function toMin(t){ if(!t) return 0; const[h,m]=t.split(':').map(Number); return h*60+m; }
+function avail(s,e){
+  if(!s||!e) return true;
+  const n=nowMin(), sm=toMin(s), em=toMin(e);
+  return sm<=em ? n>=sm&&n<=em : n>=sm||n<=em;
 }
-function getNowMin(){const n=new Date();return n.getHours()*60+n.getMinutes();}
-function toMin(t){if(!t)return 0;const[h,m]=t.split(':').map(Number);return h*60+m;}
-function isAvail(s,e){
-  if(!s||!e)return true;
-  const n=getNowMin(),sm=toMin(s),em=toMin(e);
-  if(sm<=em)return n>=sm&&n<=em;
-  return n>=sm||n<=em; // gece geçişi: örn 23:00-06:00
-}
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.style.display='block';
-  setTimeout(()=>t.style.display='none',3000);
-}
-window.autoResize=function(el){
-  el.style.height='auto';
-  el.style.height=Math.min(el.scrollHeight,90)+'px';
-};
+function toast(m){ const t=id('tst'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',3000); }
 
-// ── KLAVYE FIX (iOS Safari) ──
-// Sayfa scroll yerine sadece input kaydırma
-document.getElementById('chat-inp').addEventListener('focus',()=>{
-  setTimeout(()=>{
-    document.getElementById('chat-msgs').scrollTop=99999;
-  },300);
-});
-
-// ── GÜNLÜK SIFIRLAMA ──
-async function checkReset(){
-  const now=new Date();
-  const key=`${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
-  const rRef=ref(db,`hotels/${hotel}/rooms/${room}/lastReset`);
-  const snap=await get(rRef);
-  if(now.getHours()>=11&&snap.val()!==key){
-    await remove(ref(db,`hotels/${hotel}/rooms/${room}/messages`));
-    await set(rRef,key);
-  }
-}
-
-// ── TAB ──
-let currentTab='menu';
-window.switchTab=function(name,btn){
-  currentTab=name;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(name+'-screen').classList.add('active');
-  if(name==='menu')updateCartBar();
-  else document.getElementById('cart-bar').className='';
-  if(name==='chat'){
-    document.getElementById('chat-dot').classList.remove('show');
-    document.getElementById('reply-banner').classList.remove('show');
-    setTimeout(()=>{
-      const el=document.getElementById('chat-msgs');
-      el.scrollTop=el.scrollHeight;
-    },50);
+// ── TABS ──
+let curtab='m';
+window.goTab = function(t,btn){
+  curtab=t;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.scr').forEach(x=>x.classList.remove('on'));
+  btn.classList.add('on');
+  id(t+'-scr').classList.add('on');
+  if(t==='m') updCart();
+  else id('cart').className='';
+  if(t==='c'){
+    id('cdot').classList.remove('show');
+    id('rbanner').classList.remove('on');
+    setTimeout(()=>{ id('cmsgs').scrollTop=99999; },50);
   }
 };
-window.goToChat=function(){
-  document.getElementById('reply-banner').classList.remove('show');
-  switchTab('chat',document.getElementById('tab-chat'));
-};
+window.goChat=function(){ id('rbanner').classList.remove('on'); goTab('c',id('tab-c')); };
 
 // ── MENÜ ──
-const cart={};let menuItems=[];let activeCat='tümü';
-const catOrder=['Yumurta Çeşitleri','Peynir Çeşitleri','Şarküteri','Ekmek Çeşitleri','Kahvaltı Ekleri','Sıcak Kahvaltılıklar','Sağlıklı Seçenekler','Türk Mezeleri','Uluslararası Başlangıçlar','Salatalar','Çorbalar','Kırmızı Et','Tavuk Yemekleri','Deniz Ürünleri','Vejetaryen & Vegan','Burger Çeşitleri','Pizza Çeşitleri','Makarna Çeşitleri','Atıştırmalıklar','Tatlılar','Gazlı İçecekler','Meyve Suları','Kahve','Çay','Diğer İçecekler'];
-const catEmojis={'Yumurta Çeşitleri':'🥚','Peynir Çeşitleri':'🧀','Şarküteri':'🥓','Ekmek Çeşitleri':'🍞','Kahvaltı Ekleri':'🍯','Sıcak Kahvaltılıklar':'🥞','Sağlıklı Seçenekler':'🌱','Türk Mezeleri':'🫙','Uluslararası Başlangıçlar':'🌍','Salatalar':'🥗','Çorbalar':'🍲','Kırmızı Et':'🥩','Tavuk Yemekleri':'🍗','Deniz Ürünleri':'🐟','Vejetaryen & Vegan':'🥦','Burger Çeşitleri':'🍔','Pizza Çeşitleri':'🍕','Makarna Çeşitleri':'🍝','Atıştırmalıklar':'🥪','Tatlılar':'🍰','Gazlı İçecekler':'🥤','Meyve Suları':'🍊','Kahve':'☕','Çay':'🍵','Diğer İçecekler':'🧃'};
+const cart={}, catOrder=['Yumurta Çeşitleri','Peynir Çeşitleri','Şarküteri','Ekmek Çeşitleri','Kahvaltı Ekleri','Sıcak Kahvaltılıklar','Sağlıklı Seçenekler','Türk Mezeleri','Uluslararası Başlangıçlar','Salatalar','Çorbalar','Kırmızı Et','Tavuk Yemekleri','Deniz Ürünleri','Vejetaryen & Vegan','Burger Çeşitleri','Pizza Çeşitleri','Makarna Çeşitleri','Atıştırmalıklar','Tatlılar','Gazlı İçecekler','Meyve Suları','Kahve','Çay','Diğer İçecekler'];
+const catIco={'Yumurta Çeşitleri':'🥚','Peynir Çeşitleri':'🧀','Şarküteri':'🥓','Ekmek Çeşitleri':'🍞','Kahvaltı Ekleri':'🍯','Sıcak Kahvaltılıklar':'🥞','Sağlıklı Seçenekler':'🌱','Türk Mezeleri':'🫙','Uluslararası Başlangıçlar':'🌍','Salatalar':'🥗','Çorbalar':'🍲','Kırmızı Et':'🥩','Tavuk Yemekleri':'🍗','Deniz Ürünleri':'🐟','Vejetaryen & Vegan':'🥦','Burger Çeşitleri':'🍔','Pizza Çeşitleri':'🍕','Makarna Çeşitleri':'🍝','Atıştırmalıklar':'🥪','Tatlılar':'🍰','Gazlı İçecekler':'🥤','Meyve Suları':'🍊','Kahve':'☕','Çay':'🍵','Diğer İçecekler':'🧃'};
+let items=[], actCat='tümü';
 
-async function loadMenu(){
-  document.getElementById('cur-time').textContent=fmtNow();
-  const snap=await get(ref(db,`hotels/${hotel}/menu`));
-  const body=document.getElementById('menu-list');
+// onValue ile menüyü dinle — get() yerine bu mobile'da daha güvenilir
+onValue(ref(db,`hotels/${hotel}/menu`), snap=>{
+  id('ctime').textContent=now();
   if(!snap.exists()){
-    body.innerHTML='<div style="text-align:center;padding:40px;color:#9a8f80"><div style="font-size:2rem;margin-bottom:8px">🍽</div><div style="font-size:.8rem">Menü hazırlanıyor.</div></div>';
-    document.getElementById('menu-status').textContent='Menü yükleniyor';
+    id('mlist').innerHTML='<div style="text-align:center;padding:40px;color:#9a8f80"><div style="font-size:2rem">🍽</div><div style="font-size:.8rem;margin-top:8px">Menü hazırlanıyor.</div></div>';
+    id('mst').textContent='Menü yükleniyor';
     return;
   }
-  menuItems=Object.entries(snap.val()).map(([id,v])=>({id,...v}));
-  const existingCats=[...new Set(menuItems.map(i=>i.category||'Diğer'))];
-  const allCats=[...catOrder.filter(c=>existingCats.includes(c)),...existingCats.filter(c=>!catOrder.includes(c))];
-
-  // Kategori sekmelerini oluştur — sadece o an müsait olanlar
-  const catTabsEl=document.getElementById('cat-tabs');
-  catTabsEl.innerHTML='<button class="cat-btn active" onclick="filterCat(\'tümü\',this)">🍽 Tümü</button>';
-  allCats.forEach(cat=>{
-    if(!menuItems.some(i=>i.category===cat&&isAvail(i.startTime,i.endTime)))return;
-    const btn=document.createElement('button');
-    btn.className='cat-btn';
-    btn.innerHTML=`${catEmojis[cat]||'🍽'} ${cat}`;
-    btn.onclick=function(){filterCat(cat,this);};
-    catTabsEl.appendChild(btn);
-  });
-
-  const avail=menuItems.filter(i=>isAvail(i.startTime,i.endTime));
-  document.getElementById('menu-status').textContent=
-    avail.length>0?`${avail.length} ürün mevcut`:'Şu an aktif ürün yok';
+  items=Object.entries(snap.val()).map(([k,v])=>({id:k,...v}));
+  buildCatBar();
   renderMenu();
+  const av=items.filter(i=>avail(i.startTime,i.endTime));
+  id('mst').textContent=av.length>0?av.length+' ürün mevcut':'Şu an aktif ürün yok';
+},{onlyOnce:true}); // sadece bir kez yükle
+
+function buildCatBar(){
+  const bar=id('cbar');
+  bar.innerHTML='<button class="cb on" onclick="fcat(\'tümü\',this)">🍽 Tümü</button>';
+  const existing=[...new Set(items.map(i=>i.category||'Diğer'))];
+  const ordered=[...catOrder.filter(c=>existing.includes(c)),...existing.filter(c=>!catOrder.includes(c))];
+  ordered.forEach(cat=>{
+    if(!items.some(i=>i.category===cat&&avail(i.startTime,i.endTime))) return;
+    const b=document.createElement('button');
+    b.className='cb'; b.innerHTML=`${catIco[cat]||'🍽'} ${cat}`;
+    b.onclick=function(){ fcat(cat,this); };
+    bar.appendChild(b);
+  });
 }
+
+window.fcat=function(cat,btn){
+  actCat=cat;
+  document.querySelectorAll('.cb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderMenu();
+  id('mlist').scrollTop=0;
+};
 
 function renderMenu(){
-  const body=document.getElementById('menu-list');body.innerHTML='';
-  let filtered=menuItems.filter(i=>isAvail(i.startTime,i.endTime));
-  if(activeCat!=='tümü')filtered=filtered.filter(i=>(i.category||'Diğer')===activeCat);
-  if(!filtered.length){
-    body.innerHTML='<div style="text-align:center;padding:28px;color:#9a8f80;font-size:.8rem">Bu saatte sipariş verilebilir ürün yok</div>';
-    return;
-  }
+  const body=id('mlist'); body.innerHTML='';
+  let list=items.filter(i=>avail(i.startTime,i.endTime));
+  if(actCat!=='tümü') list=list.filter(i=>(i.category||'Diğer')===actCat);
+  if(!list.length){ body.innerHTML='<div style="text-align:center;padding:28px;color:#9a8f80;font-size:.78rem">Bu saatte sipariş verilebilir ürün yok</div>'; return; }
   const cats={};
-  filtered.forEach(i=>{const c=i.category||'Diğer';if(!cats[c])cats[c]=[];cats[c].push(i);});
-  const ordered=[...catOrder.filter(c=>cats[c]),...Object.keys(cats).filter(c=>!catOrder.includes(c))];
-  ordered.forEach(cat=>{
-    if(!cats[cat])return;
-    if(activeCat==='tümü'){
-      const sep=document.createElement('div');sep.className='cat-sep';sep.textContent=cat;body.appendChild(sep);
-    }
-    cats[cat].forEach(item=>renderCard(item,body));
+  list.forEach(i=>{ const c=i.category||'Diğer'; if(!cats[c])cats[c]=[]; cats[c].push(i); });
+  const ord=[...catOrder.filter(c=>cats[c]),...Object.keys(cats).filter(c=>!catOrder.includes(c))];
+  ord.forEach(cat=>{
+    if(!cats[cat]) return;
+    if(actCat==='tümü'){ const s=document.createElement('div'); s.className='csep'; s.textContent=cat; body.appendChild(s); }
+    cats[cat].forEach(item=>{ body.appendChild(mkCard(item)); });
   });
 }
 
-window.filterCat=function(cat,btn){
-  activeCat=cat;
-  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderMenu();
-  document.getElementById('menu-list').scrollTop=0;
-};
-
-function renderCard(item,container){
-  const div=document.createElement('div');div.className='menu-card';
-  const esc=s=>(s||'').replace(/'/g,"\\'").replace(/`/g,'\\`');
-  div.innerHTML=`<div class="mc-emoji">${item.emoji||'🍽'}</div>
-    <div class="mc-info">
-      <div class="mc-name">${item.name}</div>
-      ${item.description?`<div class="mc-desc">${item.description}</div>`:''}
-      <span class="mc-price">₺${item.price}</span>
+function esc(s){ return (s||'').replace(/'/g,"\\'"); }
+function mkCard(item){
+  const d=document.createElement('div'); d.className='mc';
+  d.innerHTML=`<div class="me">${item.emoji||'🍽'}</div>
+    <div class="mi">
+      <div class="mn">${item.name}</div>
+      ${item.description?`<div class="md">${item.description}</div>`:''}
+      <span class="mp">₺${item.price}</span>
     </div>
-    <div class="mc-ctrl" id="ctrl-${item.id}">
-      <button class="mc-add" onclick="addCart('${item.id}','${esc(item.name)}',${item.price},'${item.emoji||'🍽'}')">+</button>
+    <div class="mct" id="ctrl-${item.id}">
+      <button class="madd" onclick="addC('${item.id}','${esc(item.name)}',${item.price},'${item.emoji||'🍽'}')">+</button>
     </div>`;
-  container.appendChild(div);
+  return d;
 }
 
-window.addCart=function(id,name,price,emoji){
-  if(!cart[id])cart[id]={name,price,emoji,qty:0};
-  cart[id].qty++;updateCtrl(id);updateCartBar();
-};
-window.removeCart=function(id){
-  if(!cart[id])return;cart[id].qty--;
-  if(cart[id].qty<=0)delete cart[id];
-  updateCtrl(id);updateCartBar();
-};
-function updateCtrl(id){
-  const ctrl=document.getElementById('ctrl-'+id);if(!ctrl)return;
-  const item=cart[id];const mi=menuItems.find(i=>i.id===id);if(!mi)return;
-  const esc=s=>(s||'').replace(/'/g,"\\'");
-  if(!item||item.qty===0){
-    ctrl.innerHTML=`<button class="mc-add" onclick="addCart('${id}','${esc(mi.name)}',${mi.price},'${mi.emoji||'🍽'}')">+</button>`;
+window.addC=function(id_,n,p,e){ if(!cart[id_])cart[id_]={n,p,e,q:0}; cart[id_].q++; updCtrl(id_); updCart(); };
+window.rmC=function(id_){ if(!cart[id_])return; cart[id_].q--; if(cart[id_].q<=0)delete cart[id_]; updCtrl(id_); updCart(); };
+
+function updCtrl(id_){
+  const ctrl=document.getElementById('ctrl-'+id_); if(!ctrl)return;
+  const c=cart[id_], mi=items.find(i=>i.id===id_); if(!mi)return;
+  if(!c||c.q===0){
+    ctrl.innerHTML=`<button class="madd" onclick="addC('${id_}','${esc(mi.name)}',${mi.p||mi.price},'${mi.emoji||'🍽'}')">+</button>`;
   } else {
-    ctrl.innerHTML=`<div class="mc-qty"><button onclick="removeCart('${id}')">−</button><span>${item.qty}</span><button onclick="addCart('${id}','${esc(item.name)}',${item.price},'${item.emoji}')">+</button></div>`;
+    ctrl.innerHTML=`<div class="mqt"><button onclick="rmC('${id_}')">−</button><span>${c.q}</span><button onclick="addC('${id_}','${esc(c.n)}',${c.p},'${c.e}')">+</button></div>`;
   }
 }
-function updateCartBar(){
-  const items=Object.values(cart);
-  const count=items.reduce((s,i)=>s+i.qty,0);
-  const total=items.reduce((s,i)=>s+i.price*i.qty,0);
-  document.getElementById('cb-count').textContent=count+' ürün';
-  document.getElementById('cb-total').textContent='₺'+total;
-  document.getElementById('cart-bar').className=count>0&&currentTab==='menu'?'show':'';
+
+function updCart(){
+  const vs=Object.values(cart);
+  const cnt=vs.reduce((s,i)=>s+i.q,0), tot=vs.reduce((s,i)=>s+i.p*i.q,0);
+  id('ccount').textContent=cnt+' ürün'; id('ctotal').textContent='₺'+tot;
+  id('cart').className=cnt>0&&curtab==='m'?'on':'';
 }
-window.showCheckout=function(){
-  const items=Object.values(cart);const total=items.reduce((s,i)=>s+i.price*i.qty,0);
-  document.getElementById('co-rows').innerHTML=items.map(i=>`
-    <div class="co-row">
-      <div><div class="co-row-name">${i.emoji} ${i.name}</div><div class="co-row-qty">x${i.qty}</div></div>
-      <div class="co-row-price">₺${i.price*i.qty}</div>
-    </div>`).join('');
-  document.getElementById('co-total-amt').textContent='₺'+total;
-  document.getElementById('co-modal').classList.add('show');
+
+window.showCO=function(){
+  const vs=Object.values(cart), tot=vs.reduce((s,i)=>s+i.p*i.q,0);
+  id('corows').innerHTML=vs.map(i=>`<div class="cor"><div><div class="con">${i.e} ${i.n}</div><div class="coq">x${i.q}</div></div><div class="cop">₺${i.p*i.q}</div></div>`).join('');
+  id('coamt').textContent='₺'+tot;
+  id('com').classList.add('on');
 };
-window.confirmOrder=async function(){
-  const btn=document.getElementById('co-confirm-btn');
-  btn.textContent='Gönderiliyor...';btn.disabled=true;
+
+window.doOrder=async function(){
+  const btn=id('cobtn'); btn.textContent='Gönderiliyor...'; btn.disabled=true;
   try{
-    const items=Object.values(cart).map(i=>({name:i.name,emoji:i.emoji,price:i.price,qty:i.qty,subtotal:i.price*i.qty}));
-    const total=items.reduce((s,i)=>s+i.subtotal,0);
-    const orderNo='ORD-'+Date.now().toString(36).toUpperCase();
+    const vs=Object.values(cart).map(i=>({name:i.n,emoji:i.e,price:i.p,qty:i.q,subtotal:i.p*i.q}));
+    const tot=vs.reduce((s,i)=>s+i.subtotal,0);
+    const no='ORD-'+Date.now().toString(36).toUpperCase();
     await push(ref(db,`hotels/${hotel}/orders`),{
-      orderNo,room,hotel,items,total,status:'pending',
-      date:new Date().toLocaleDateString('tr-TR'),time:fmtNow(),ts:serverTimestamp()
+      orderNo:no,room,hotel,items:vs,total:tot,status:'pending',
+      date:new Date().toLocaleDateString('tr-TR'),time:now(),ts:serverTimestamp()
     });
-    document.getElementById('co-modal').classList.remove('show');
-    document.getElementById('ok-no').textContent=orderNo;
-    document.getElementById('ok-modal').classList.add('show');
+    id('com').classList.remove('on');
+    id('okno').textContent=no;
+    id('okm').classList.add('on');
     Object.keys(cart).forEach(k=>delete cart[k]);
-    menuItems.forEach(mi=>{
-      const ctrl=document.getElementById('ctrl-'+mi.id);
-      if(ctrl&&isAvail(mi.startTime,mi.endTime)){
-        const esc=s=>(s||'').replace(/'/g,"\\'");
-        ctrl.innerHTML=`<button class="mc-add" onclick="addCart('${mi.id}','${esc(mi.name)}',${mi.price},'${mi.emoji||'🍽'}')">+</button>`;
-      }
-    });
-    updateCartBar();
-  }catch(e){console.error(e);showToast('Hata! Tekrar deneyin.');}
-  finally{btn.textContent='✓ Siparişi Ver';btn.disabled=false;}
+    items.forEach(mi=>{ const c=document.getElementById('ctrl-'+mi.id); if(c&&avail(mi.startTime,mi.endTime)) c.innerHTML=`<button class="madd" onclick="addC('${mi.id}','${esc(mi.name)}',${mi.price},'${mi.emoji||'🍽'}')">+</button>`; });
+    updCart();
+  }catch(e){ console.error(e); toast('Hata! Tekrar deneyin.'); }
+  finally{ btn.textContent='✓ Siparişi Ver'; btn.disabled=false; }
 };
 
 // ── CHAT ──
-// Tüm görülen mesaj keylerini tut — duplicate önler
-const seenMsgs=new Set();
-let chatReady=false;
+// onValue ile tüm mesajları dinle — duplicate önlemek için Map kullan
+const msgMap = new Map(); // key → dom element
+let chatInited = false;
 
-async function loadMessages(){
-  const snap=await get(ref(db,`hotels/${hotel}/rooms/${room}/messages`));
-  const el=document.getElementById('chat-msgs');
-  el.innerHTML='';
-  if(!snap.exists()||snap.size===0){
-    addMsgEl(el,{text:`Merhaba! 👋 Oda ${room}'e hoş geldiniz.\nSize nasıl yardımcı olabilirim?`,from:'reception',ts:Date.now(),key:'__welcome__'});
-    seenMsgs.add('__welcome__');
-  } else {
-    snap.forEach(c=>{
-      seenMsgs.add(c.key);
-      addMsgEl(el,{key:c.key,...c.val()});
-    });
-    el.scrollTop=el.scrollHeight;
-  }
-  // chatReady'yi ÖNCE true yap, SONRA listener'ı başlat
-  chatReady=true;
-  startChatListener();
-}
-
-function startChatListener(){
-  // onChildAdded mevcut mesajları da tetikler — seenMsgs ile filtrele
-  onChildAdded(ref(db,`hotels/${hotel}/rooms/${room}/messages`),(snap)=>{
-    if(seenMsgs.has(snap.key))return;
-    seenMsgs.add(snap.key);
-    const d=snap.val();
-    if(d.from==='reception'){
-      const el=document.getElementById('chat-msgs');
-      addMsgEl(el,{key:snap.key,...d});
-      el.scrollTop=el.scrollHeight;
-      if(currentTab!=='chat'){
-        document.getElementById('chat-dot').classList.add('show');
-        document.getElementById('reply-banner').classList.add('show');
-        setTimeout(()=>document.getElementById('reply-banner').classList.remove('show'),8000);
-      }
-      showToast('📩 Resepsiyondan yanıt geldi!');
-      if(Notification.permission==='granted'){
-        new Notification('Resepsiyondan Yanıt',{body:d.text.slice(0,80)});
-      }
+function initChat(){
+  // Günlük sıfırlama
+  const n=new Date();
+  const key=`${n.getFullYear()}-${n.getMonth()+1}-${n.getDate()}`;
+  get(ref(db,`hotels/${hotel}/rooms/${room}/lastReset`)).then(s=>{
+    if(n.getHours()>=11 && s.val()!==key){
+      remove(ref(db,`hotels/${hotel}/rooms/${room}/messages`));
+      set(ref(db,`hotels/${hotel}/rooms/${room}/lastReset`),key);
     }
+  });
+
+  // Hoşgeldin mesajı
+  addBubble('__welcome__',`Merhaba! 👋 Oda ${room}'e hoş geldiniz.\nSize nasıl yardımcı olabilirim?`,'bot');
+
+  // onValue ile mesajları dinle — her değişimde komple güncelle
+  onValue(ref(db,`hotels/${hotel}/rooms/${room}/messages`), snap=>{
+    const el=id('cmsgs');
+    // Sadece yeni mesajları ekle, eskiler zaten var
+    if(!snap.exists()) return;
+    snap.forEach(child=>{
+      if(msgMap.has(child.key)) return; // zaten var
+      const d=child.val();
+      const domEl=addBubble(child.key, d.text, d.from==='guest'?'user':'bot');
+      if(d.from==='reception' && chatInited){
+        // Telefonda bildirim
+        if(curtab!=='c'){
+          id('cdot').classList.add('show');
+          id('rbanner').classList.add('on');
+          setTimeout(()=>id('rbanner').classList.remove('on'),8000);
+        }
+        toast('📩 Resepsiyondan yanıt geldi!');
+        if(Notification.permission==='granted') new Notification('Resepsiyondan Yanıt',{body:d.text.slice(0,80)});
+      }
+    });
+    chatInited=true;
+    el.scrollTop=99999;
   });
 }
 
-function addMsgEl(container,m){
-  const isUser=m.from==='guest';
-  const div=document.createElement('div');
-  div.className='msg'+(isUser?' user':'');
-  if(m.key)div.dataset.key=m.key;
-  const t=fmtNow();
-  if(!isUser){
-    div.innerHTML=`<div class="msg-ava">R</div><div><div class="bubble">${(m.text||'').replace(/\n/g,'<br>')}</div><div class="mtime">${t}</div></div>`;
+function addBubble(key, text, side){
+  // Zaten varsa ekleme
+  if(msgMap.has(key)) return msgMap.get(key);
+  const el=id('cmsgs');
+  const d=document.createElement('div');
+  d.className='msg'+(side==='user'?' u':'');
+  d.dataset.key=key;
+  const t=now();
+  if(side!=='user'){
+    d.innerHTML=`<div class="mava">R</div><div><div class="bbl">${(text||'').replace(/\n/g,'<br>')}</div><div class="mt">${t}</div></div>`;
   } else {
-    div.innerHTML=`<div><div class="bubble">${(m.text||'').replace(/\n/g,'<br>')}</div><div class="mtime">${t}</div></div>`;
+    d.innerHTML=`<div><div class="bbl">${(text||'').replace(/\n/g,'<br>')}</div><div class="mt">${t}</div></div>`;
   }
-  container.appendChild(div);
+  el.appendChild(d);
+  el.scrollTop=99999;
+  msgMap.set(key, d);
+  return d;
 }
 
-async function doSend(text){
-  const tempKey='tmp-'+Date.now()+Math.random();
-  seenMsgs.add(tempKey);
-  const el=document.getElementById('chat-msgs');
-  addMsgEl(el,{key:tempKey,text,from:'guest',ts:Date.now()});
-  el.scrollTop=el.scrollHeight;
+async function sendMsg(text){
+  // Optimistic: geçici key ile hemen göster
+  const tmpKey='tmp-'+Date.now();
+  addBubble(tmpKey, text, 'user');
   try{
     const r=await push(ref(db,`hotels/${hotel}/rooms/${room}/messages`),{text,from:'guest',ts:serverTimestamp()});
+    // Geçici elementi gerçek key ile güncelle
     if(r.key){
-      seenMsgs.add(r.key);
-      const te=el.querySelector(`[data-key="${tempKey}"]`);
-      if(te)te.dataset.key=r.key;
+      const el=msgMap.get(tmpKey);
+      if(el){ el.dataset.key=r.key; msgMap.delete(tmpKey); msgMap.set(r.key,el); }
     }
-  }catch(e){console.error(e);showToast('Mesaj gönderilemedi.');}
+  }catch(e){ console.error(e); toast('Mesaj gönderilemedi.'); }
 }
 
-window.sendChat=async function(){
-  const inp=document.getElementById('chat-inp');
-  const text=inp.value.trim();if(!text)return;
-  inp.value='';inp.style.height='38px';
-  await doSend(text);
+window.send=async function(){
+  const inp=id('cinp'); const t=inp.value.trim(); if(!t) return;
+  inp.value=''; inp.style.height='36px';
+  await sendMsg(t);
 };
-window.quickSend=function(text){doSend(text);};
+window.qs=function(t){ sendMsg(t); };
 
 // ── TEMİZLİK ──
-let cleanChoice=null;
-window.selClean=function(btn,val){
-  document.querySelectorAll('.clean-opt').forEach(o=>{o.classList.remove('selected');o.querySelector('.coc').textContent='';});
-  btn.classList.add('selected');btn.querySelector('.coc').textContent='✓';
-  cleanChoice=val;document.getElementById('clean-btn').disabled=false;
+let clChoice=null;
+window.selCl=function(btn,val){
+  document.querySelectorAll('.clopt').forEach(o=>{o.classList.remove('on');o.querySelector('.clc').textContent='';});
+  btn.classList.add('on'); btn.querySelector('.clc').textContent='✓';
+  clChoice=val; id('clbtn').disabled=false;
 };
-window.sendClean=async function(){
-  if(!cleanChoice)return;
-  const btn=document.getElementById('clean-btn');
-  btn.textContent='Gönderiliyor...';btn.disabled=true;
+window.sendCl=async function(){
+  if(!clChoice) return;
+  const btn=id('clbtn'); btn.textContent='Gönderiliyor...'; btn.disabled=true;
   try{
-    await push(ref(db,`hotels/${hotel}/rooms/${room}/messages`),{
-      text:'🧹 Temizlik talebi: '+cleanChoice,from:'guest',ts:serverTimestamp()
-    });
-    btn.textContent='✓ Talebiniz İletildi!';btn.classList.add('sent');
-    document.querySelectorAll('.clean-opt').forEach(o=>{o.classList.remove('selected');o.querySelector('.coc').textContent='';});
-    cleanChoice=null;
-    setTimeout(()=>{btn.textContent='Talebi Gönder';btn.classList.remove('sent');btn.disabled=true;},3000);
-  }catch(e){
-    console.error(e);btn.textContent='Talebi Gönder';btn.disabled=false;showToast('Hata! Tekrar deneyin.');
-  }
+    await push(ref(db,`hotels/${hotel}/rooms/${room}/messages`),{text:'🧹 Temizlik talebi: '+clChoice,from:'guest',ts:serverTimestamp()});
+    btn.textContent='✓ İletildi!'; btn.classList.add('sent');
+    document.querySelectorAll('.clopt').forEach(o=>{o.classList.remove('on');o.querySelector('.clc').textContent='';});
+    clChoice=null;
+    setTimeout(()=>{ btn.textContent='Talebi Gönder'; btn.classList.remove('sent'); btn.disabled=true; },3000);
+  }catch(e){ console.error(e); btn.textContent='Talebi Gönder'; btn.disabled=false; toast('Hata!'); }
 };
 
 // ── BAŞLAT ──
-async function init(){
-  if(Notification.permission==='default')Notification.requestPermission();
-  await checkReset();
-  await loadMessages(); // listener burada başlıyor, chatReady=true olduktan sonra
-  await loadMenu();
-  document.getElementById('cur-time').textContent=fmtNow();
-  setInterval(()=>document.getElementById('cur-time').textContent=fmtNow(),60000);
-}
-init();
+if(Notification.permission==='default') Notification.requestPermission();
+initChat();
+id('ctime').textContent=now();
+setInterval(()=>id('ctime').textContent=now(),60000);
 </script>
 </body>
 </html>
