@@ -14,8 +14,7 @@
     .ptabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
     .ptab{background:#fff;border:2px solid #e8e3db;border-radius:10px;padding:10px 18px;font-size:.8rem;font-weight:600;cursor:pointer;color:#9a8f80;font-family:sans-serif;transition:all .2s}
     .ptab.active{background:#1a1a2e;color:#c9a84c;border-color:#1a1a2e}
-    .pscreen{display:none}
-    .pscreen.active{display:block}
+    .pscreen{display:none}.pscreen.active{display:block}
     .card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
     .card h2{font-size:.95rem;color:#1a1a2e;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #e8e3db}
     .form-row{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}
@@ -23,12 +22,13 @@
     .form-group label{font-size:.7rem;color:#9a8f80;font-weight:600;letter-spacing:.5px}
     .form-group input,.form-group select,.form-group textarea{background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:8px;padding:9px 12px;font-size:.83rem;color:#1a1a2e;outline:none;font-family:sans-serif}
     .form-group textarea{resize:vertical;min-height:80px}
-    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#c9a84c}
+    .form-group input:focus,.form-group select:focus{border-color:#c9a84c}
     .btn-primary{background:#1a1a2e;color:#c9a84c;border:none;border-radius:8px;padding:10px 20px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:sans-serif}
     .btn-outline{background:transparent;color:#1a1a2e;border:2px solid #1a1a2e;border-radius:8px;padding:8px 16px;font-weight:600;font-size:.78rem;cursor:pointer;font-family:sans-serif}
     .btn-gold{background:#c9a84c;color:#1a1a2e;border:none;border-radius:8px;padding:8px 14px;font-weight:700;font-size:.75rem;cursor:pointer;font-family:sans-serif}
     .btn-danger{background:transparent;color:#ef4444;border:1.5px solid #ef4444;border-radius:8px;padding:6px 12px;font-size:.72rem;cursor:pointer;font-family:sans-serif}
     .btn-sm{padding:6px 12px;font-size:.72rem}
+    .btn-orange{background:#f59e0b;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-weight:700;font-size:.75rem;cursor:pointer;font-family:sans-serif}
 
     /* MENÜ */
     .lib-cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
@@ -37,13 +37,9 @@
     .lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;max-height:260px;overflow-y:auto;padding:4px}
     .lib-item{background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:10px;padding:12px;cursor:pointer;transition:all .2s}
     .lib-item:hover,.lib-item.selected{border-color:#c9a84c;background:#fffdf7}
-    .lib-emoji{font-size:1.4rem}
-    .lib-name{font-size:.75rem;font-weight:600;color:#1a1a2e;margin-top:4px}
-    .lib-desc-small{font-size:.62rem;color:#9a8f80}
-
+    .lib-emoji{font-size:1.4rem}.lib-name{font-size:.75rem;font-weight:600;color:#1a1a2e;margin-top:4px}.lib-desc-small{font-size:.62rem;color:#9a8f80}
     .menu-item-row{background:#f7f4ef;border-radius:8px;padding:12px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
-    .mir-emoji{font-size:1.4rem;flex-shrink:0}
-    .mir-info{flex:1}
+    .mir-emoji{font-size:1.4rem;flex-shrink:0}.mir-info{flex:1}
     .mir-name{font-size:.85rem;font-weight:600;color:#1a1a2e}
     .mir-meta{font-size:.7rem;color:#9a8f80;margin-top:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
     .mir-time{font-size:.65rem;background:#1a1a2e;color:#c9a84c;padding:2px 7px;border-radius:10px}
@@ -56,24 +52,19 @@
     .hotel-id{font-size:.68rem;color:#9a8f80;margin-top:2px}
     .hotel-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 
-    /* QR */
-    #qr-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center}
-    #qr-modal.show{display:flex}
-    #qr-box{background:#fff;border-radius:16px;padding:28px;max-width:340px;width:90%;text-align:center}
-    #qr-box h3{font-size:1rem;color:#1a1a2e;margin-bottom:4px}
-    #qr-box p{font-size:.75rem;color:#9a8f80;margin-bottom:16px}
-    #qr-img{width:190px;height:190px;border:6px solid #fff;box-shadow:0 4px 16px rgba(0,0,0,.12);margin:0 auto 14px}
-    #qr-url{font-size:.62rem;color:#9a8f80;word-break:break-all;background:#f7f4ef;padding:8px;border-radius:6px;margin-bottom:14px}
-    .qr-btns{display:flex;gap:8px;justify-content:center}
+    /* PROGRESS */
+    #progress-bar{display:none;background:#f7f4ef;border-radius:10px;padding:14px;margin-bottom:12px}
+    .prog-label{font-size:.78rem;color:#1a1a2e;margin-bottom:6px}
+    .prog-track{background:#e8e3db;border-radius:100px;height:6px;overflow:hidden}
+    .prog-fill{background:#c9a84c;height:100%;width:0%;transition:width .2s;border-radius:100px}
 
     #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#c9a84c;padding:10px 20px;border-radius:20px;font-size:.8rem;font-weight:600;display:none;z-index:9999;white-space:nowrap}
   </style>
 </head>
 <body>
-
 <div id="header">
   <div class="logo">e-<span>Misafir</span> <span style="color:#c9a84c;font-size:.68rem;letter-spacing:1px;font-weight:400">YÖNETİM</span></div>
-  <div style="color:rgba(255,255,255,.4);font-size:.72rem">v2.1</div>
+  <div style="color:rgba(255,255,255,.4);font-size:.72rem">v3.0</div>
 </div>
 
 <div id="main">
@@ -85,6 +76,10 @@
 
   <!-- OTELLER -->
   <div id="oteller-screen" class="pscreen active">
+    <div id="progress-bar">
+      <div class="prog-label" id="prog-label">Menü yükleniyor...</div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+    </div>
     <div class="card">
       <h2>Kayıtlı Oteller</h2>
       <div id="hotel-list"><div style="color:#9a8f80;font-size:.85rem">Yükleniyor...</div></div>
@@ -105,81 +100,59 @@
       </div>
     </div>
 
-    <!-- Kütüphaneden ekle -->
     <div class="card">
       <h2>📚 Kütüphaneden Ekle</h2>
       <div class="lib-cats" id="lib-cats"></div>
       <div class="lib-grid" id="lib-grid"></div>
       <div style="margin-top:12px;padding-top:12px;border-top:1px solid #e8e3db">
-        <div style="font-size:.75rem;color:#9a8f80;margin-bottom:8px">Saat aralığı ve fiyat (opsiyonel — boş bırakırsanız varsayılan kullanılır):</div>
+        <div style="font-size:.75rem;color:#9a8f80;margin-bottom:8px">Saat ve fiyat (boş = varsayılan):</div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <input type="time" id="lib-start" style="background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:8px;padding:7px 10px;font-size:.82rem;outline:none"/>
-          <span style="color:#9a8f80;font-size:.8rem">—</span>
+          <span style="color:#9a8f80">—</span>
           <input type="time" id="lib-end" style="background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:8px;padding:7px 10px;font-size:.82rem;outline:none"/>
-          <input type="number" id="lib-price" placeholder="Fiyat (boş=varsayılan)" style="background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:8px;padding:7px 10px;font-size:.82rem;outline:none;width:180px"/>
+          <input type="number" id="lib-price" placeholder="Fiyat" style="background:#f7f4ef;border:1.5px solid #e8e3db;border-radius:8px;padding:7px 10px;font-size:.82rem;outline:none;width:100px"/>
           <button class="btn-primary btn-sm" onclick="addFromLib()">+ Ekle</button>
         </div>
       </div>
     </div>
 
-    <!-- Manuel ekle -->
     <div class="card">
       <h2>✏️ Manuel Ürün Ekle</h2>
       <div class="form-row">
-        <div class="form-group" style="max-width:80px">
-          <label>EMOJİ</label>
-          <input type="text" id="m-emoji" placeholder="🍽" maxlength="2"/>
-        </div>
-        <div class="form-group">
-          <label>ÜRÜN ADI</label>
-          <input type="text" id="m-name" placeholder="Özel Salata"/>
-        </div>
-        <div class="form-group" style="max-width:120px">
-          <label>FİYAT ₺</label>
-          <input type="number" id="m-price" placeholder="250"/>
-        </div>
+        <div class="form-group" style="max-width:80px"><label>EMOJİ</label><input type="text" id="m-emoji" placeholder="🍽" maxlength="2"/></div>
+        <div class="form-group"><label>ÜRÜN ADI</label><input type="text" id="m-name" placeholder="Özel Salata"/></div>
+        <div class="form-group" style="max-width:120px"><label>FİYAT ₺</label><input type="number" id="m-price" placeholder="250"/></div>
       </div>
       <div class="form-row">
         <div class="form-group">
           <label>KATEGORİ</label>
           <select id="m-cat">
-            <option>Kahvaltı</option>
-            <option>Izgara & Et</option>
-            <option>Deniz Ürünleri</option>
-            <option>Makarna & Börek</option>
-            <option>Salata & Meze</option>
-            <option>Dünya Mutfağı</option>
-            <option>Tatlı</option>
-            <option>İçecek</option>
-            <option>Minibar</option>
+            <option>Yumurta Çeşitleri</option><option>Peynir Çeşitleri</option><option>Şarküteri</option>
+            <option>Ekmek Çeşitleri</option><option>Kahvaltı Ekleri</option><option>Sıcak Kahvaltılıklar</option>
+            <option>Sağlıklı Seçenekler</option><option>Türk Mezeleri</option><option>Uluslararası Başlangıçlar</option>
+            <option>Salatalar</option><option>Çorbalar</option><option>Kırmızı Et</option>
+            <option>Tavuk Yemekleri</option><option>Deniz Ürünleri</option><option>Vejetaryen & Vegan</option>
+            <option>Burger Çeşitleri</option><option>Pizza Çeşitleri</option><option>Makarna Çeşitleri</option>
+            <option>Atıştırmalıklar</option><option>Tatlılar</option><option>Gazlı İçecekler</option>
+            <option>Meyve Suları</option><option>Kahve</option><option>Çay</option><option>Diğer İçecekler</option>
             <option>Özel</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>KISA AÇIKLAMA</label>
-          <input type="text" id="m-desc" placeholder="Mevsim sebzeli, zeytinyağlı"/>
-        </div>
+        <div class="form-group"><label>AÇIKLAMA</label><input type="text" id="m-desc" placeholder="Kısa açıklama"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>BAŞLANGIÇ SAATİ</label><input type="time" id="m-start" value="00:00"/></div>
+        <div class="form-group"><label>BİTİŞ SAATİ</label><input type="time" id="m-end" value="23:59"/></div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>MÜSAİT BAŞLANGIÇ</label>
-          <input type="time" id="m-start" value="00:00"/>
-        </div>
-        <div class="form-group">
-          <label>MÜSAİT BİTİŞ</label>
-          <input type="time" id="m-end" value="23:59"/>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>🔒 REÇETE / MUTFAK STANDARDI (misafir görmez)</label>
-          <textarea id="m-recipe" placeholder="• Malzeme: 200gr&#10;• Pişirme: 180°C, 15 dk&#10;• Sunum: ısıtılmış tabak"></textarea>
+          <label>🔒 REÇETE (misafir görmez)</label>
+          <textarea id="m-recipe" placeholder="• Malzeme, pişirme, sunum..."></textarea>
         </div>
       </div>
       <button class="btn-primary" onclick="addManualItem()">+ Menüye Ekle</button>
     </div>
 
-    <!-- Mevcut menü -->
     <div class="card">
       <h2>📋 Mevcut Menü <span id="menu-hotel-name" style="color:#9a8f80;font-weight:400;font-size:.8rem"></span></h2>
       <div id="menu-list"><div style="color:#9a8f80;font-size:.82rem">Önce otel seçin</div></div>
@@ -191,43 +164,17 @@
     <div class="card">
       <h2>Yeni Otel Ekle</h2>
       <p style="font-size:.78rem;color:#9a8f80;margin-bottom:16px;background:#f7f4ef;padding:10px;border-radius:8px">
-        ℹ️ Otel eklendiğinde <strong>standart menü otomatik yüklenir</strong>. Daha sonra Menü Yönetimi'nden düzenleyebilirsiniz.
+        ℹ️ Otel eklendiğinde <strong>200+ ürünlük tam menü otomatik yüklenir</strong> (doğru saatlerle). Menü Yönetimi'nden sonradan düzenleyebilirsiniz.
       </p>
       <div class="form-row">
-        <div class="form-group">
-          <label>OTEL ADI</label>
-          <input type="text" id="h-name" placeholder="Grand Hotel İstanbul"/>
-        </div>
-        <div class="form-group">
-          <label>SİSTEM ID (küçük harf, boşluksuz)</label>
-          <input type="text" id="h-id" placeholder="grandhotel" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')"/>
-        </div>
+        <div class="form-group"><label>OTEL ADI</label><input type="text" id="h-name" placeholder="Grand Hotel İstanbul"/></div>
+        <div class="form-group"><label>SİSTEM ID (küçük harf)</label><input type="text" id="h-id" placeholder="grandhotel" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')"/></div>
       </div>
       <div class="form-row">
-        <div class="form-group">
-          <label>ŞEHİR</label>
-          <input type="text" id="h-city" placeholder="İstanbul"/>
-        </div>
-        <div class="form-group">
-          <label>ODA NUMARALARI (virgülle ayırın — boşsa 101–150 otomatik)</label>
-          <input type="text" id="h-rooms" placeholder="101,102,103,201,202"/>
-        </div>
+        <div class="form-group"><label>ŞEHİR</label><input type="text" id="h-city" placeholder="İstanbul"/></div>
+        <div class="form-group"><label>ODA NUMARALARI (virgülle — boşsa 101-150)</label><input type="text" id="h-rooms" placeholder="101,102,103,201,202"/></div>
       </div>
-      <button class="btn-primary" onclick="addHotel()">Oteli Kaydet & Menü Yükle →</button>
-    </div>
-  </div>
-</div>
-
-<!-- QR MODAL -->
-<div id="qr-modal">
-  <div id="qr-box">
-    <h3 id="qr-title">QR Kodu</h3>
-    <p id="qr-sub">Misafir bu kodu okutarak sisteme bağlanır</p>
-    <img id="qr-img" src="" alt="QR"/>
-    <div id="qr-url"></div>
-    <div class="qr-btns">
-      <button class="btn-primary" onclick="window.print()">🖨 Yazdır</button>
-      <button class="btn-outline" onclick="closeQR()">Kapat</button>
+      <button class="btn-primary" onclick="addHotel()" id="add-hotel-btn">Oteli Kaydet →</button>
     </div>
   </div>
 </div>
@@ -238,278 +185,263 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, push, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",
-  authDomain: "emisafir-56796.firebaseapp.com",
-  databaseURL: "https://emisafir-56796-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "emisafir-56796",
-  storageBucket: "emisafir-56796.firebasestorage.app",
-  messagingSenderId: "1044463772299",
-  appId: "1:1044463772299:web:4f1496b541a433fe766a8e"
+const fc = {
+  apiKey:"AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",authDomain:"emisafir-56796.firebaseapp.com",
+  databaseURL:"https://emisafir-56796-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"emisafir-56796",storageBucket:"emisafir-56796.firebasestorage.app",
+  messagingSenderId:"1044463772299",appId:"1:1044463772299:web:4f1496b541a433fe766a8e"
 };
-
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(fc);
 const db = getDatabase(app);
 const BASE = location.origin;
 
-// ── STANDART MENÜ ──
-const STANDART_MENU = [
-  // KAHVALTI
-  {emoji:'🍳',name:'Serpme Kahvaltı',description:'Peynir, zeytin, bal, kaymak, simit ve çay',price:380,category:'Kahvaltı',startTime:'07:00',endTime:'11:00'},
-  {emoji:'🥚',name:'Omlet',description:'Seçiminize göre malzemeli omlet',price:180,category:'Kahvaltı',startTime:'07:00',endTime:'11:00'},
-  {emoji:'🥘',name:'Menemen',description:'Domates, biber, yumurta',price:150,category:'Kahvaltı',startTime:'07:00',endTime:'11:00'},
-  {emoji:'🥐',name:'Kruvasan & Reçel',description:'Tereyağlı kruvasan, ev reçeli',price:120,category:'Kahvaltı',startTime:'07:00',endTime:'11:00'},
-  // IZGARA & ET
-  {emoji:'🥩',name:'Dana Antrikot',description:'Özel sos, patates graten ile — 300gr',price:580,category:'Izgara & Et',startTime:'11:00',endTime:'23:00'},
-  {emoji:'🍖',name:'Kuzu Pirzola',description:'4 adet pirzola, roka salatası ile',price:520,category:'Izgara & Et',startTime:'11:00',endTime:'23:00'},
-  {emoji:'🍗',name:'Izgara Tavuk',description:'Marine edilmiş göğüs, pilav ile',price:280,category:'Izgara & Et',startTime:'11:00',endTime:'23:00'},
-  {emoji:'🥓',name:'Köfte Tabağı',description:'El yapımı köfte, domates sosu, pilav',price:240,category:'Izgara & Et',startTime:'11:00',endTime:'23:00'},
-  // DENİZ
-  {emoji:'🐟',name:'Izgara Levrek',description:'Mevsim sebzesi ve pilav ile',price:420,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
-  {emoji:'🦐',name:'Karides Sote',description:'Sarımsaklı tereyağı, makarna ile',price:360,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
-  {emoji:'🐠',name:'Izgara Çipura',description:'Fırın patates, limon ile',price:380,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
-  // SALATA
-  {emoji:'🥗',name:'Çoban Salatası',description:'Domates, salatalık, maydanoz, zeytinyağı',price:120,category:'Salata & Meze',startTime:'00:00',endTime:'23:59'},
-  {emoji:'🫙',name:'Humus',description:'Zeytinyağı, kırmızı biber, tahin',price:100,category:'Salata & Meze',startTime:'00:00',endTime:'23:59'},
-  {emoji:'🥙',name:'Haydari',description:'Süzme yoğurt, sarımsak, nane',price:90,category:'Salata & Meze',startTime:'00:00',endTime:'23:59'},
-  // DÜNYA
-  {emoji:'🍕',name:'Pizza Margherita',description:'Domates sosu, mozzarella, fesleğen',price:280,category:'Dünya Mutfağı',startTime:'11:00',endTime:'23:00'},
-  {emoji:'🍔',name:'Gurme Burger',description:'Dana köfte, çedar, kavurma soğan, patates',price:260,category:'Dünya Mutfağı',startTime:'11:00',endTime:'23:00'},
-  {emoji:'🍝',name:'Spaghetti Bolognese',description:'Dana kıyma, domates sosu, parmesan',price:220,category:'Dünya Mutfağı',startTime:'11:00',endTime:'23:00'},
-  // TATLI
-  {emoji:'🍮',name:'Künefe',description:'Antep fıstıklı, kaymak ile sıcak servis',price:160,category:'Tatlı',startTime:'11:00',endTime:'23:59'},
-  {emoji:'🍯',name:'Baklava Tabağı',description:'Fıstıklı baklava, 4 dilim',price:140,category:'Tatlı',startTime:'11:00',endTime:'23:59'},
-  {emoji:'🍨',name:'Dondurma Tabağı',description:'3 top, mevsim meyvesi ile',price:130,category:'Tatlı',startTime:'11:00',endTime:'23:59'},
-  // İÇECEK
-  {emoji:'🍵',name:'Türk Çayı',description:'Demlik çay, şeker ile servis edilir',price:40,category:'İçecek',startTime:'00:00',endTime:'23:59'},
-  {emoji:'☕',name:'Türk Kahvesi',description:'Az, orta veya çok şekerli',price:60,category:'İçecek',startTime:'00:00',endTime:'23:59'},
-  {emoji:'🥤',name:'Taze Meyve Suyu',description:'Portakal, nar veya havuç seçiminize göre',price:120,category:'İçecek',startTime:'07:00',endTime:'23:00'},
-  {emoji:'🧃',name:'Su (500ml)',description:'Soğuk servis',price:30,category:'İçecek',startTime:'00:00',endTime:'23:59'},
-  // MİNİBAR
-  {emoji:'🥤',name:'Kola / Fanta / Sprite',description:'330ml soğuk kutu',price:50,category:'Minibar',startTime:'00:00',endTime:'23:59'},
-  {emoji:'🍫',name:'Çikolata',description:'100gr tablet',price:80,category:'Minibar',startTime:'00:00',endTime:'23:59'},
-  {emoji:'🍟',name:'Cips',description:'60gr çeşit paket',price:60,category:'Minibar',startTime:'00:00',endTime:'23:59'},
+// ══════════════════════════════════════
+// TAM MENÜ — Doğru saatlerle
+// ══════════════════════════════════════
+const TAM_MENU = [
+  // KAHVALTI (07:00-11:30)
+  {emoji:'🍳',name:'Sahanda yumurta tereyağında',description:'Tereyağında pişirilmiş',price:120,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍳',name:'Sahanda yumurta zeytinyağında',description:'Zeytinyağında pişirilmiş',price:110,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌶️',name:'Sucuklu yumurta',description:'Sucuk ile pişirilmiş',price:140,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥩',name:'Pastırmalı yumurta',description:'Pastırma ile pişirilmiş',price:150,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥘',name:'Klasik menemen',description:'Domates ve biber ile',price:130,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Kaşar peynirli menemen',description:'Kaşar peyniri ile',price:140,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌶️',name:'Sucuklu menemen',description:'Sucuklu menemen',price:145,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍄',name:'Mantarlı menemen',description:'Mantarlı menemen',price:140,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍳',name:'Sade omlet',description:'Sade omlet',price:110,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Peynirli omlet',description:'Kaşar veya beyaz peynirli',price:130,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥦',name:'Sebzeli omlet',description:'Kabak, biber, havuç ile',price:135,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍳',name:'Karışık omlet',description:'Karışık malzemeli',price:145,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍳',name:'Poşe yumurta',description:'Poşe yumurta',price:120,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥑',name:'Avokadolu poşe yumurta',description:'Avokado ile servis edilen',price:170,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥚',name:'Haşlanmış yumurta',description:'Az / orta / çok pişmiş',price:80,category:'Yumurta Çeşitleri',startTime:'07:00',endTime:'11:30'},
+
+  {emoji:'🧀',name:'Beyaz peynir',description:'Tam yağlı beyaz peynir',price:60,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Kaşar peyniri',description:'Taze kaşar peyniri',price:65,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Tulum peyniri',description:'Erzincan / İzmir tulum',price:75,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Lor peyniri',description:'Taze lor peyniri',price:60,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Labne peyniri',description:'Labne peyniri',price:65,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧀',name:'Hellim ızgara',description:'Hellim peyniri ızgara edilmiş',price:80,category:'Peynir Çeşitleri',startTime:'07:00',endTime:'11:30'},
+
+  {emoji:'🥩',name:'Hindi füme',description:'Hindi füme dilimleri',price:70,category:'Şarküteri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥩',name:'Dana jambon',description:'Dana jambon dilimleri',price:75,category:'Şarküteri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌭',name:'Salam / Sosis',description:'Salam veya sosis tabağı',price:65,category:'Şarküteri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥩',name:'Pastırma',description:'Pastırma dilimleri',price:80,category:'Şarküteri',startTime:'07:00',endTime:'11:30'},
+
+  {emoji:'🥨',name:'Simit',description:'Susamlı simit',price:35,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍞',name:'Beyaz ekmek',description:'Beyaz ekmek dilimleri',price:30,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍞',name:'Tam buğday ekmek',description:'Tam buğday ekmek',price:35,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍞',name:'Ekşi mayalı ekmek',description:'Ekşi mayalı ekmek',price:40,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Açma',description:'Sade / peynirli / zeytinli',price:35,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Poğaça',description:'Peynirli / patatesli / zeytinli',price:40,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥐',name:'Kruvasan',description:'Sade / çikolatalı / bademli',price:55,category:'Ekmek Çeşitleri',startTime:'07:00',endTime:'11:30'},
+
+  {emoji:'🍯',name:'Bal',description:'Süzme veya petek bal',price:55,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥛',name:'Kaymak',description:'Taze kaymak',price:60,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍓',name:'Reçel çeşitleri',description:'Çilek, vişne, kayısı, incir',price:45,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌿',name:'Tahin & Pekmez',description:'Tahin ve üzüm pekmezi',price:45,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌰',name:'Fındık kreması',description:'Fındık kreması',price:55,category:'Kahvaltı Ekleri',startTime:'07:00',endTime:'11:30'},
+
+  {emoji:'🥞',name:'Pancake',description:'Çikolata sosu / bal / meyveli',price:130,category:'Sıcak Kahvaltılıklar',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🧇',name:'Waffle',description:'Çikolata ve meyve ile',price:140,category:'Sıcak Kahvaltılıklar',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🍞',name:'French toast',description:'Tarçın ve şeker ile',price:120,category:'Sıcak Kahvaltılıklar',startTime:'07:00',endTime:'11:30'},
+
+  {emoji:'🍓',name:'Yoğurt & taze meyve',description:'Taze meyve ile yoğurt',price:100,category:'Sağlıklı Seçenekler',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥣',name:'Granola',description:'Yoğurt ve meyve ile',price:120,category:'Sağlıklı Seçenekler',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🥣',name:'Yulaf ezmesi',description:'Süt ile hazırlanmış',price:100,category:'Sağlıklı Seçenekler',startTime:'07:00',endTime:'11:30'},
+  {emoji:'🌱',name:'Chia pudingi',description:'Chia tohumu pudingi',price:130,category:'Sağlıklı Seçenekler',startTime:'07:00',endTime:'11:30'},
+
+  // BAŞLANGIÇLAR (11:00-23:00)
+  {emoji:'🫘',name:'Mercimek köftesi',description:'Mercimek köftesi',price:120,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍃',name:'Yaprak sarma',description:'Zeytinyağlı yaprak sarma',price:130,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥛',name:'Haydari',description:'Yoğurt ve sarımsak ile',price:100,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥒',name:'Cacık',description:'Yoğurt, salatalık, nane',price:90,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌶️',name:'Acılı ezme',description:'Domates, biber, baharat',price:100,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🫘',name:'Humus',description:'Nohut, tahin, limon ile',price:110,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍆',name:'Babagannuş',description:'Köz patlıcan ile',price:120,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🫑',name:'Şakşuka',description:'Kızartılmış sebzeler ile',price:120,category:'Türk Mezeleri',startTime:'11:00',endTime:'23:00'},
+
+  {emoji:'🍅',name:'Bruschetta',description:'Domates/fesleğen veya mozzarella',price:125,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦐',name:'Karides tempura',description:'Kızartılmış karides',price:180,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦑',name:'Kalamar tava',description:'Kalamar tava',price:160,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍗',name:'Tavuk nugget',description:'Çıtır kaplamalı tavuk nugget',price:150,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌮',name:'Quesadilla',description:'Tavuk / et / peynir ile',price:165,category:'Uluslararası Başlangıçlar',startTime:'11:00',endTime:'23:00'},
+
+  {emoji:'🥗',name:'Sezar salata',description:'Tavuk veya karides ile',price:165,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🫒',name:'Akdeniz salatası',description:'Zeytin ve peynir ile',price:150,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🐟',name:'Ton balıklı salata',description:'Ton balıklı salata',price:155,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥑',name:'Avokadolu salata',description:'Avokadolu salata',price:160,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍅',name:'Çoban salata',description:'Domates, salatalık, biber',price:120,category:'Salatalar',startTime:'11:00',endTime:'23:00'},
+
+  // ÇORBALAR (11:00-23:00)
+  {emoji:'🍲',name:'Mercimek çorbası',description:'Mercimek çorbası',price:100,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍲',name:'Ezogelin çorbası',description:'Ezogelin çorbası',price:100,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍲',name:'Yayla çorbası',description:'Yayla çorbası',price:105,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍅',name:'Domates çorbası',description:'Domates çorbası',price:100,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍄',name:'Kremalı mantar çorbası',description:'Kremalı mantar çorbası',price:120,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦐',name:'Deniz mahsulleri çorbası',description:'Deniz mahsulleri çorbası',price:160,category:'Çorbalar',startTime:'11:00',endTime:'23:00'},
+
+  // ANA YEMEKLER (11:00-23:00)
+  {emoji:'🥩',name:'Izgara dana bonfile',description:'Patates püresi ile — 300gr',price:580,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥩',name:'Izgara dana antrikot',description:'Sebze ile servis edilen',price:560,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍖',name:'Kuzu pirzola',description:'Izgara kuzu pirzola',price:520,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌶️',name:'Adana kebap',description:'Acılı hazırlanmış',price:280,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌿',name:'Urfa kebap',description:'Acısız hazırlanmış',price:270,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥙',name:'İskender kebap',description:'Tereyağı ve yoğurt ile',price:310,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥩',name:'Saç kavurma',description:'Dana eti ile hazırlanmış',price:300,category:'Kırmızı Et',startTime:'11:00',endTime:'23:00'},
+
+  {emoji:'🍗',name:'Izgara tavuk göğsü',description:'Izgara tavuk göğsü',price:240,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍢',name:'Tavuk şiş',description:'Tavuk şiş',price:250,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍗',name:'Tavuk kanat',description:'Acılı veya barbekü soslu',price:220,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍗',name:'Tavuk schnitzel',description:'Çıtır kaplama ile',price:260,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍛',name:'Köri soslu tavuk',description:'Köri soslu tavuk',price:250,category:'Tavuk Yemekleri',startTime:'11:00',endTime:'23:00'},
+
+  {emoji:'🐟',name:'Izgara levrek',description:'Mevsim sebzesi ile',price:380,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🐠',name:'Izgara çipura',description:'Fırın patates ile',price:360,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🐟',name:'Izgara somon',description:'Izgara somon',price:400,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦐',name:'Karides güveç',description:'Karides güveç',price:360,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦑',name:'Kalamar tava',description:'Kalamar tava',price:300,category:'Deniz Ürünleri',startTime:'11:00',endTime:'23:00'},
+
+  {emoji:'🥘',name:'Sebze güveç',description:'Karışık sebze güveç',price:200,category:'Vejetaryen & Vegan',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍚',name:'Mantarlı risotto',description:'Mantarlı risotto',price:220,category:'Vejetaryen & Vegan',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🧆',name:'Falafel',description:'Kızartılmış falafel',price:190,category:'Vejetaryen & Vegan',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥦',name:'Izgara sebze tabağı',description:'Izgara sebze tabağı',price:180,category:'Vejetaryen & Vegan',startTime:'11:00',endTime:'23:00'},
+
+  // BURGER (11:00-23:00)
+  {emoji:'🍔',name:'Klasik hamburger',description:'Dana köfte ile',price:240,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍔',name:'Cheeseburger',description:'Cheddar peyniri ile',price:260,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍔',name:'Barbekü burger',description:'Barbekü soslu hamburger',price:265,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🥑',name:'Avokadolu burger',description:'Avokadolu hamburger',price:275,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍔',name:'Tavuk burger',description:'Izgara veya çıtır tavuk',price:233,category:'Burger Çeşitleri',startTime:'11:00',endTime:'23:00'},
+
+  // PİZZA (11:00-23:00)
+  {emoji:'🍕',name:'Pizza Margherita',description:'Domates sos, mozzarella',price:260,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Karışık pizza',description:'Et ve sebze ile',price:290,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Dört peynirli pizza',description:'Dört peynirli pizza',price:285,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Tavuklu pizza',description:'Tavuklu pizza',price:265,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Sucuklu pizza',description:'Sucuklu pizza',price:270,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍕',name:'Sebzeli pizza',description:'Sebzeli pizza',price:250,category:'Pizza Çeşitleri',startTime:'11:00',endTime:'23:00'},
+
+  // MAKARNA (11:00-23:00)
+  {emoji:'🍝',name:'Spaghetti bolognese',description:'Kıymalı sos ile',price:220,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍝',name:'Penne alfredo',description:'Krema ve peynir ile',price:210,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌶️',name:'Arabiata',description:'Acılı domates sos ile',price:200,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🌿',name:'Pesto makarna',description:'Fesleğen sos ile',price:210,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🦐',name:'Deniz mahsulleri makarna',description:'Deniz mahsulleri makarna',price:260,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+  {emoji:'🍝',name:'Lazanya',description:'Kat kat makarna ve kıyma',price:230,category:'Makarna Çeşitleri',startTime:'11:00',endTime:'23:00'},
+
+  // ATIŞTIRMALIKLAR (10:00-23:59)
+  {emoji:'🥪',name:'Club sandwich',description:'Tavuk, bacon, sebze ile',price:200,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🌯',name:'Tavuk wrap',description:'Izgara tavuk, sebze',price:180,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🥪',name:'Kaşarlı tost',description:'Kaşarlı tost',price:100,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🥪',name:'Karışık tost',description:'Karışık tost',price:120,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🫓',name:'Gözleme',description:'Peynirli / patatesli / kıymalı',price:125,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🍟',name:'Patates kızartması',description:'Patates kızartması',price:90,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+  {emoji:'🌭',name:'Sosis tabağı',description:'Sosis tabağı',price:120,category:'Atıştırmalıklar',startTime:'10:00',endTime:'23:59'},
+
+  // TATLILAR (11:00-23:59)
+  {emoji:'🎂',name:'Çikolatalı sufle',description:'Sıcak servis',price:160,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍰',name:'Cheesecake',description:'Çilek / frambuaz / çikolata sos',price:152,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'☕',name:'Tiramisu',description:'Kahve aromalı tiramisu',price:145,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍮',name:'Kazandibi',description:'Kazandibi',price:120,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍮',name:'Sütlaç',description:'Fırınlanmış sütlaç',price:120,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍮',name:'Künefe',description:'Sıcak servis, fıstıklı',price:160,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍯',name:'Baklava',description:'Fıstıklı baklava',price:140,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🍨',name:'Dondurma',description:'Vanilyalı / çikolatalı / çilekli',price:100,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+  {emoji:'🎂',name:'Profiterol',description:'Çikolata soslu profiterol',price:145,category:'Tatlılar',startTime:'11:00',endTime:'23:59'},
+
+  // GAZ İÇECEKLER — HER ZAMAN (00:00-23:59)
+  {emoji:'🥤',name:'Coca Cola',description:'330ml soğuk',price:60,category:'Gazlı İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥤',name:'Coca Cola Zero',description:'Şekersiz 330ml',price:60,category:'Gazlı İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥤',name:'Fanta',description:'Portakal aromalı 330ml',price:60,category:'Gazlı İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥤',name:'Sprite',description:'Limon aromalı 330ml',price:60,category:'Gazlı İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🫧',name:'Soda',description:'Limonlu / elmalı soda',price:50,category:'Gazlı İçecekler',startTime:'00:00',endTime:'23:59'},
+
+  // MEYVE SULARI (07:00-23:00)
+  {emoji:'🍊',name:'Portakal suyu',description:'Portakal suyu',price:90,category:'Meyve Suları',startTime:'07:00',endTime:'23:00'},
+  {emoji:'🍎',name:'Elma suyu',description:'Elma suyu',price:85,category:'Meyve Suları',startTime:'07:00',endTime:'23:00'},
+  {emoji:'🍒',name:'Vişne suyu',description:'Vişne suyu',price:90,category:'Meyve Suları',startTime:'07:00',endTime:'23:00'},
+  {emoji:'🍎',name:'Nar suyu',description:'Nar suyu',price:100,category:'Meyve Suları',startTime:'07:00',endTime:'23:00'},
+
+  // KAHVE — HER ZAMAN (00:00-23:59)
+  {emoji:'☕',name:'Türk kahvesi',description:'Sade / orta / şekerli',price:55,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Espresso',description:'Espresso',price:60,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Americano',description:'Americano',price:70,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Latte',description:'Latte',price:80,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Cappuccino',description:'Cappuccino',price:80,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Mocha',description:'Mocha',price:90,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+  {emoji:'☕',name:'Filtre kahve',description:'Filtre kahve',price:65,category:'Kahve',startTime:'00:00',endTime:'23:59'},
+
+  // ÇAY — HER ZAMAN (00:00-23:59)
+  {emoji:'🍵',name:'Türk çayı',description:'Demlik siyah çay',price:40,category:'Çay',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🍵',name:'Yeşil çay',description:'Yeşil çay',price:50,category:'Çay',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🌸',name:'Ihlamur',description:'Ihlamur çayı',price:50,category:'Çay',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🌿',name:'Adaçayı',description:'Adaçayı',price:50,category:'Çay',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🍋',name:'Nane limon',description:'Nane limon çayı',price:55,category:'Çay',startTime:'00:00',endTime:'23:59'},
+
+  // DİĞER İÇECEKLER — HER ZAMAN (00:00-23:59)
+  {emoji:'🥛',name:'Ayran',description:'Soğuk ayran',price:45,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥛',name:'Süt',description:'Soğuk veya sıcak',price:50,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🧃',name:'Su (500ml)',description:'Soğuk servis',price:25,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🥤',name:'Milkshake',description:'Çikolata / vanilya / çilek',price:120,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🍓',name:'Smoothie',description:'Çilek muz / mango',price:130,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
+  {emoji:'🍋',name:'Limonata',description:'Limonata / naneli limonata',price:80,category:'Diğer İçecekler',startTime:'00:00',endTime:'23:59'},
 ];
 
-async function loadStandardMenu(hotelId) {
-  for (const item of STANDART_MENU) {
-    await push(ref(db, `hotels/${hotelId}/menu`), {...item, active:true});
+// Menü yükleme fonksiyonu — progress bar ile
+async function loadFullMenu(hotelId, onProgress){
+  for(let i=0;i<TAM_MENU.length;i++){
+    await push(ref(db,`hotels/${hotelId}/menu`),{...TAM_MENU[i],active:true});
+    if(onProgress) onProgress(i+1, TAM_MENU.length);
   }
 }
 
-// ── KÜTÜPHANE ──
-const LIBRARY = {
-  'Kahvaltı': [
-    {emoji:'🍳',name:'Serpme Kahvaltı',description:'Peynir, zeytin, bal, kaymak',price:380,startTime:'07:00',endTime:'11:00'},
-    {emoji:'🥚',name:'Omlet',description:'Malzemeli omlet',price:180,startTime:'07:00',endTime:'11:00'},
-    {emoji:'🥘',name:'Menemen',description:'Domates, biber, yumurta',price:150,startTime:'07:00',endTime:'11:00'},
-    {emoji:'🥞',name:'Pankek',description:'Akçaağaç şurubu ile',price:160,startTime:'07:00',endTime:'11:00'},
-    {emoji:'🫓',name:'Avokadolu Tost',description:'Tam buğday ekmek, avokado',price:140,startTime:'07:00',endTime:'11:00'},
-  ],
-  'Izgara & Et': [
-    {emoji:'🥩',name:'Dana Antrikot',description:'300gr, patates graten ile',price:580,startTime:'11:00',endTime:'23:00'},
-    {emoji:'🍖',name:'Kuzu Pirzola',description:'4 adet, roka salatası',price:520,startTime:'11:00',endTime:'23:00'},
-    {emoji:'🍗',name:'Izgara Tavuk',description:'Marine göğüs, pilav ile',price:280,startTime:'11:00',endTime:'23:00'},
-    {emoji:'🥓',name:'Köfte',description:'El yapımı, domates sosu',price:240,startTime:'11:00',endTime:'23:00'},
-    {emoji:'🫀',name:'Ciğer Tava',description:'Soğan, biber ile',price:200,startTime:'11:00',endTime:'22:00'},
-  ],
-  'Deniz Ürünleri': [
-    {emoji:'🐟',name:'Izgara Levrek',description:'Mevsim sebzesi, pilav',price:420,startTime:'11:00',endTime:'23:00'},
-    {emoji:'🦐',name:'Karides Sote',description:'Sarımsaklı tereyağı',price:360,startTime:'11:00',endTime:'23:00'},
-    {emoji:'🐠',name:'Izgara Çipura',description:'Fırın patates, limon',price:380,startTime:'11:00',endTime:'23:00'},
-    {emoji:'🦑',name:'Kalamar Tava',description:'Tartar sos ile',price:280,startTime:'11:00',endTime:'22:00'},
-  ],
-  'Salata & Meze': [
-    {emoji:'🥗',name:'Çoban Salatası',description:'Domates, salatalık, maydanoz',price:120,startTime:'00:00',endTime:'23:59'},
-    {emoji:'🫙',name:'Humus',description:'Zeytinyağı, kırmızı biber',price:100,startTime:'00:00',endTime:'23:59'},
-    {emoji:'🥙',name:'Haydari',description:'Süzme yoğurt, sarımsak',price:90,startTime:'00:00',endTime:'23:59'},
-    {emoji:'🧆',name:'Falafel',description:'Tahin sos, lavaş ile',price:140,startTime:'11:00',endTime:'22:00'},
-  ],
-  'Dünya Mutfağı': [
-    {emoji:'🍕',name:'Pizza Margherita',description:'Domates, mozzarella',price:280,startTime:'11:00',endTime:'23:00'},
-    {emoji:'🍔',name:'Gurme Burger',description:'Dana, çedar, patates',price:260,startTime:'11:00',endTime:'23:00'},
-    {emoji:'🍝',name:'Spaghetti Bolognese',description:'Dana kıyma, domates',price:220,startTime:'11:00',endTime:'23:00'},
-    {emoji:'🌮',name:'Tavuk Wrap',description:'Izgara tavuk, sebze',price:180,startTime:'11:00',endTime:'22:00'},
-    {emoji:'🍜',name:'Ramen',description:'Tavuk suyu, yumurta',price:200,startTime:'11:00',endTime:'23:00'},
-  ],
-  'Tatlı': [
-    {emoji:'🍮',name:'Künefe',description:'Fıstıklı, kaymak ile',price:160,startTime:'11:00',endTime:'23:59'},
-    {emoji:'🍯',name:'Baklava',description:'Fıstıklı, 4 dilim',price:140,startTime:'11:00',endTime:'23:59'},
-    {emoji:'🍨',name:'Dondurma',description:'3 top, mevsim meyvesi',price:130,startTime:'11:00',endTime:'23:59'},
-    {emoji:'🎂',name:'Cheesecake',description:'Orman meyveli sos',price:150,startTime:'11:00',endTime:'23:59'},
-    {emoji:'🍰',name:'Sufle',description:'Çikolatalı, dondurma ile',price:170,startTime:'12:00',endTime:'23:00'},
-  ],
-  'İçecek': [
-    {emoji:'🍵',name:'Türk Çayı',description:'Demlik çay',price:40,startTime:'00:00',endTime:'23:59'},
-    {emoji:'☕',name:'Türk Kahvesi',description:'Az/orta/çok şekerli',price:60,startTime:'00:00',endTime:'23:59'},
-    {emoji:'🥤',name:'Taze Meyve Suyu',description:'Portakal, nar, havuç',price:120,startTime:'07:00',endTime:'23:00'},
-    {emoji:'🧃',name:'Su (500ml)',description:'Soğuk servis',price:30,startTime:'00:00',endTime:'23:59'},
-    {emoji:'🍹',name:'Mocktail',description:'Alkolsüz kokteyl',price:150,startTime:'12:00',endTime:'23:00'},
-  ],
-  'Minibar': [
-    {emoji:'🥤',name:'Kola / Fanta / Sprite',description:'330ml kutu',price:50,startTime:'00:00',endTime:'23:59'},
-    {emoji:'🍫',name:'Çikolata',description:'100gr tablet',price:80,startTime:'00:00',endTime:'23:59'},
-    {emoji:'🍟',name:'Cips',description:'60gr paket',price:60,startTime:'00:00',endTime:'23:59'},
-    {emoji:'🧴',name:'Su 330ml',description:'Soğuk',price:20,startTime:'00:00',endTime:'23:59'},
-  ],
-};
-
-let selectedLibItem = null;
-
-function initLibrary() {
-  const catEl = document.getElementById('lib-cats');
-  catEl.innerHTML = '';
-  Object.keys(LIBRARY).forEach((cat, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'lib-cat' + (i===0?' active':'');
-    btn.textContent = cat;
-    btn.onclick = () => {
-      document.querySelectorAll('.lib-cat').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      renderLibGrid(cat);
-    };
-    catEl.appendChild(btn);
-  });
-  renderLibGrid(Object.keys(LIBRARY)[0]);
+function showProgress(label){
+  document.getElementById('progress-bar').style.display='block';
+  document.getElementById('prog-label').textContent=label;
+  document.getElementById('prog-fill').style.width='0%';
 }
-
-function renderLibGrid(cat) {
-  const grid = document.getElementById('lib-grid');
-  grid.innerHTML = '';
-  selectedLibItem = null;
-  LIBRARY[cat].forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'lib-item';
-    div.onclick = () => {
-      document.querySelectorAll('.lib-item').forEach(d=>d.classList.remove('selected'));
-      div.classList.add('selected');
-      selectedLibItem = {...item, category: cat};
-      if (item.startTime) document.getElementById('lib-start').value = item.startTime;
-      if (item.endTime) document.getElementById('lib-end').value = item.endTime;
-      document.getElementById('lib-price').value = item.price;
-    };
-    div.innerHTML = `<div class="lib-emoji">${item.emoji}</div>
-      <div class="lib-name">${item.name}</div>
-      <div class="lib-desc-small">${item.description}</div>`;
-    grid.appendChild(div);
-  });
+function updateProgress(done, total){
+  document.getElementById('prog-fill').style.width=(done/total*100)+'%';
+  document.getElementById('prog-label').textContent=`Menü yükleniyor... ${done}/${total}`;
 }
-
-window.addFromLib = async function() {
-  const hotelId = document.getElementById('menu-hotel-sel').value;
-  if (!hotelId) { toast('Önce otel seçin'); return; }
-  if (!selectedLibItem) { toast('Kütüphaneden bir ürün seçin'); return; }
-  const price = parseInt(document.getElementById('lib-price').value) || selectedLibItem.price;
-  const start = document.getElementById('lib-start').value || selectedLibItem.startTime;
-  const end = document.getElementById('lib-end').value || selectedLibItem.endTime;
-  await push(ref(db, `hotels/${hotelId}/menu`), {...selectedLibItem, price, startTime:start, endTime:end, active:true});
-  toast('✓ ' + selectedLibItem.name + ' eklendi!');
-  loadHotelMenu();
-}
-
-window.addManualItem = async function() {
-  const hotelId = document.getElementById('menu-hotel-sel').value;
-  if (!hotelId) { toast('Önce otel seçin'); return; }
-  const name = document.getElementById('m-name').value.trim();
-  const price = parseInt(document.getElementById('m-price').value);
-  if (!name || !price) { toast('Ad ve fiyat zorunlu'); return; }
-  await push(ref(db, `hotels/${hotelId}/menu`), {
-    emoji: document.getElementById('m-emoji').value || '🍽',
-    name, price,
-    category: document.getElementById('m-cat').value,
-    description: document.getElementById('m-desc').value,
-    startTime: document.getElementById('m-start').value || '00:00',
-    endTime: document.getElementById('m-end').value || '23:59',
-    recipe: document.getElementById('m-recipe').value,
-    active: true
-  });
-  toast('✓ ' + name + ' eklendi!');
-  ['m-emoji','m-name','m-price','m-desc','m-recipe'].forEach(id=>document.getElementById(id).value='');
-  loadHotelMenu();
-}
-
-window.loadHotelMenu = async function() {
-  const hotelId = document.getElementById('menu-hotel-sel').value;
-  if (!hotelId) return;
-  document.getElementById('menu-hotel-name').textContent = '— ' + hotelId;
-  const snap = await get(ref(db, `hotels/${hotelId}/menu`));
-  const el = document.getElementById('menu-list');
-  if (!snap.exists()) { el.innerHTML = '<div style="color:#9a8f80;font-size:.82rem">Henüz ürün yok</div>'; return; }
-
-  const items = Object.entries(snap.val()).map(([id,v])=>({id,...v}));
-  const cats = {};
-  items.forEach(i=>{ const c=i.category||'Diğer'; if(!cats[c])cats[c]=[]; cats[c].push(i); });
-
-  el.innerHTML = '';
-  Object.entries(cats).forEach(([cat, catItems]) => {
-    const sep = document.createElement('div');
-    sep.style.cssText = 'font-size:.62rem;color:#9a8f80;letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid #e8e3db';
-    sep.textContent = cat;
-    el.appendChild(sep);
-
-    catItems.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'menu-item-row';
-      div.innerHTML = `
-        <div class="mir-emoji">${item.emoji||'🍽'}</div>
-        <div class="mir-info">
-          <div class="mir-name">${item.name} — ₺${item.price}</div>
-          <div class="mir-meta">
-            ${item.description||''}
-            ${item.startTime&&item.endTime?`<span class="mir-time">⏰ ${item.startTime}–${item.endTime}</span>`:''}
-            ${item.recipe?`<span style="font-size:.65rem;color:#c9a84c">📋 Reçete</span>`:''}
-          </div>
-        </div>
-        <div class="mir-actions">
-          <button class="btn-danger btn-sm" onclick="deleteItem('${hotelId}','${item.id}')">Sil</button>
-        </div>`;
-      el.appendChild(div);
-    });
-  });
-}
-
-window.deleteItem = async function(hotelId, itemId) {
-  if (!confirm('Bu ürün silinsin mi?')) return;
-  await remove(ref(db, `hotels/${hotelId}/menu/${itemId}`));
-  toast('Ürün silindi');
-  loadHotelMenu();
+function hideProgress(){
+  document.getElementById('progress-bar').style.display='none';
 }
 
 // ── OTEL İŞLEMLERİ ──
-async function loadHotels() {
-  const snap = await get(ref(db, 'hotels'));
+async function loadHotels(){
+  const snap = await get(ref(db,'hotels'));
   const list = document.getElementById('hotel-list');
   const sel = document.getElementById('menu-hotel-sel');
-  sel.innerHTML = '<option value="">-- Seçin --</option>';
+  sel.innerHTML='<option value="">-- Seçin --</option>';
 
-  if (!snap.exists()) {
-    list.innerHTML = '<div style="color:#9a8f80;font-size:.85rem">Henüz otel eklenmedi.</div>';
-    return;
-  }
+  if(!snap.exists()){list.innerHTML='<div style="color:#9a8f80;font-size:.85rem">Henüz otel eklenmedi.</div>';return;}
+  list.innerHTML='';
 
-  list.innerHTML = '';
-  Object.entries(snap.val()).forEach(([hid, hdata]) => {
-    if (!hdata.info) return;
-    const info = hdata.info;
-    const rooms = Object.keys(info.rooms||{});
+  Object.entries(snap.val()).forEach(([hid,hdata])=>{
+    if(!hdata.info)return;
+    const info=hdata.info;
+    const rooms=Object.keys(info.rooms||{});
+    const menuCount=Object.keys(hdata.menu||{}).length;
 
-    const opt = document.createElement('option');
-    opt.value = hid; opt.textContent = info.name;
+    const opt=document.createElement('option');
+    opt.value=hid;opt.textContent=info.name;
     sel.appendChild(opt);
 
-    const div = document.createElement('div');
-    div.className = 'hotel-card';
-    div.innerHTML = `
+    const div=document.createElement('div');div.className='hotel-card';
+    div.innerHTML=`
       <div class="hotel-top">
         <div>
           <div class="hotel-name">${info.name}</div>
-          <div class="hotel-id">ID: ${hid} · ${info.city||''} · ${rooms.length} oda</div>
+          <div class="hotel-id">ID: ${hid} · ${info.city||''} · ${rooms.length} oda · ${menuCount} menü ürünü</div>
         </div>
         <button class="btn-danger btn-sm" onclick="deleteHotel('${hid}','${info.name}')">Sil</button>
       </div>
       <div class="hotel-actions">
-        <button class="btn-gold" onclick="showAllQR('${hid}','${info.name}')">📱 Tüm QR'lar</button>
-        <button class="btn-outline btn-sm" onclick="switchP('menu',document.querySelectorAll('.ptab')[1]);setTimeout(()=>{document.getElementById('menu-hotel-sel').value='${hid}';loadHotelMenu();},100)">🍽 Menüyü Düzenle</button>
+        <button class="btn-gold" onclick="showAllQR('${hid}','${info.name}')">📱 QR Kodlar</button>
+        <button class="btn-orange" onclick="resetMenu('${hid}','${info.name}')">🔄 Menüyü Sıfırla</button>
+        <button class="btn-outline btn-sm" onclick="switchP('menu',document.querySelectorAll('.ptab')[1]);setTimeout(()=>{document.getElementById('menu-hotel-sel').value='${hid}';loadHotelMenu();},100)">🍽 Menü Düzenle</button>
         <a href="/resepsiyon.html?hotel=${hid}" target="_blank"><button class="btn-outline btn-sm">🖥 Resepsiyon</button></a>
         <a href="/mutfak.html?hotel=${hid}" target="_blank"><button class="btn-outline btn-sm">👨‍🍳 Mutfak</button></a>
       </div>`;
@@ -517,80 +449,204 @@ async function loadHotels() {
   });
 }
 
-window.addHotel = async function() {
-  const name = document.getElementById('h-name').value.trim();
-  const id = document.getElementById('h-id').value.trim();
-  const city = document.getElementById('h-city').value.trim();
-  const customRooms = document.getElementById('h-rooms').value.trim();
-  if (!name || !id) { toast('Ad ve ID zorunlu!'); return; }
+window.resetMenu = async function(hid, name){
+  if(!confirm(`"${name}" otelinin menüsü silinip yeniden yüklensin mi?\n(${TAM_MENU.length} ürün yüklenecek)`))return;
+  showProgress('Mevcut menü siliniyor...');
+  await remove(ref(db,`hotels/${hid}/menu`));
+  document.getElementById('prog-label').textContent='Yeni menü yükleniyor...';
+  await loadFullMenu(hid,(done,total)=>updateProgress(done,total));
+  hideProgress();
+  toast(`✓ "${name}" menüsü güncellendi! ${TAM_MENU.length} ürün yüklendi.`);
+  loadHotels();
+};
 
-  let rooms = [];
-  if (customRooms) rooms = customRooms.split(',').map(r=>r.trim()).filter(Boolean);
-  else for (let i=101; i<=150; i++) rooms.push(String(i));
+window.addHotel = async function(){
+  const name=document.getElementById('h-name').value.trim();
+  const id=document.getElementById('h-id').value.trim();
+  const city=document.getElementById('h-city').value.trim();
+  const customRooms=document.getElementById('h-rooms').value.trim();
+  if(!name||!id){toast('Ad ve ID zorunlu!');return;}
 
-  await set(ref(db, `hotels/${id}/info`), {
-    name, id, city,
-    rooms: Object.fromEntries(rooms.map(r=>[r,{active:true}])),
-    createdAt: Date.now()
+  const btn=document.getElementById('add-hotel-btn');
+  btn.textContent='Kaydediliyor...';btn.disabled=true;
+
+  let rooms=[];
+  if(customRooms)rooms=customRooms.split(',').map(r=>r.trim()).filter(Boolean);
+  else for(let i=101;i<=150;i++)rooms.push(String(i));
+
+  await set(ref(db,`hotels/${id}/info`),{
+    name,id,city,
+    rooms:Object.fromEntries(rooms.map(r=>[r,{active:true}])),
+    createdAt:Date.now()
   });
 
-  // Standart menüyü otomatik yükle
-  await loadStandardMenu(id);
+  showProgress(`"${name}" için menü yükleniyor...`);
+  await loadFullMenu(id,(done,total)=>updateProgress(done,total));
+  hideProgress();
 
-  toast('✓ ' + name + ' eklendi! Standart menü yüklendi.');
+  toast(`✓ "${name}" eklendi! ${TAM_MENU.length} ürün yüklendi.`);
   ['h-name','h-id','h-city','h-rooms'].forEach(i=>document.getElementById(i).value='');
-  switchP('oteller', document.querySelector('.ptab'));
+  btn.textContent='Oteli Kaydet →';btn.disabled=false;
+  switchP('oteller',document.querySelector('.ptab'));
   loadHotels();
-}
+};
 
-window.deleteHotel = async function(hid, name) {
-  if (!confirm(name + ' silinsin mi? Tüm veriler silinir!')) return;
-  await remove(ref(db, `hotels/${hid}`));
-  toast(name + ' silindi');
+window.deleteHotel = async function(hid,name){
+  if(!confirm(name+' silinsin mi? Tüm veriler silinir!'))return;
+  await remove(ref(db,`hotels/${hid}`));
+  toast(name+' silindi');
   loadHotels();
-}
+};
 
-window.showAllQR = function(hid, hotelName) {
-  get(ref(db, `hotels/${hid}/info/rooms`)).then(snap => {
-    if (!snap.exists()) return;
-    const rooms = Object.keys(snap.val());
-    const w = window.open('','_blank');
-    let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${hotelName} QR</title>
+window.showAllQR = function(hid,hotelName){
+  get(ref(db,`hotels/${hid}/info/rooms`)).then(snap=>{
+    if(!snap.exists())return;
+    const rooms=Object.keys(snap.val());
+    const w=window.open('','_blank');
+    if(!w){toast('Popup engellendi! Tarayıcı ayarlarından izin verin.');return;}
+    let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${hotelName} QR</title>
     <style>body{font-family:sans-serif;padding:20px;background:#f7f4ef}h1{color:#1a1a2e;margin-bottom:20px;font-size:1.1rem}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
     .qr-card{background:#fff;border-radius:10px;padding:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-    h3{font-size:.85rem;color:#1a1a2e;margin-bottom:8px}img{width:150px;height:150px}
-    p{font-size:.55rem;color:#9a8f80;margin-top:6px;word-break:break-all}
-    .btn{background:#1a1a2e;color:#c9a84c;border:none;padding:10px 20px;border-radius:8px;font-size:.85rem;cursor:pointer;margin-bottom:20px}
+    h3{font-size:.85rem;color:#1a1a2e;margin-bottom:8px}img{width:148px;height:148px}
+    p{font-size:.52rem;color:#9a8f80;margin-top:6px;word-break:break-all}
+    .btn{background:#1a1a2e;color:#c9a84c;border:none;padding:10px 20px;border-radius:8px;font-size:.85rem;cursor:pointer;margin-bottom:20px;display:inline-block}
     @media print{.btn{display:none}.grid{grid-template-columns:repeat(3,1fr)}}</style>
     </head><body>
-    <h1>${hotelName} — Oda QR Kodları</h1>
+    <h1>${hotelName} — Oda QR Kodları (${rooms.length} oda)</h1>
     <button class="btn" onclick="window.print()">🖨 Hepsini Yazdır</button>
     <div class="grid">`;
-    rooms.forEach(r => {
-      const url = `${BASE}/misafir.html?hotel=${hid}&room=${r}`;
-      const qr = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}&color=1a1a2e&bgcolor=ffffff&margin=8`;
-      html += `<div class="qr-card"><h3>Oda ${r}</h3><img src="${qr}"/><p>${url}</p></div>`;
+    rooms.forEach(r=>{
+      const url=`${BASE}/misafir.html?hotel=${hid}&room=${r}`;
+      const qr=`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}&color=1a1a2e&bgcolor=ffffff&margin=8`;
+      html+=`<div class="qr-card"><h3>Oda ${r}</h3><img src="${qr}" loading="lazy"/><p>${url}</p></div>`;
     });
-    html += '</div></body></html>';
-    w.document.write(html); w.document.close();
+    html+='</div></body></html>';
+    w.document.write(html);w.document.close();
+  });
+};
+
+// ── MENÜ YÖNETİMİ ──
+const LIBRARY={
+  'Kahvaltı':[
+    {emoji:'🍳',name:'Serpme Kahvaltı',description:'Peynir, zeytin, bal, kaymak',price:380,startTime:'07:00',endTime:'11:30'},
+    {emoji:'🥚',name:'Omlet',description:'Malzemeli omlet',price:180,startTime:'07:00',endTime:'11:30'},
+    {emoji:'🥘',name:'Menemen',description:'Domates, biber, yumurta',price:150,startTime:'07:00',endTime:'11:30'},
+  ],
+  'Et & Tavuk':[
+    {emoji:'🥩',name:'Dana Antrikot',description:'Patates graten ile',price:580,startTime:'11:00',endTime:'23:00'},
+    {emoji:'🍗',name:'Izgara Tavuk',description:'Marine göğüs, pilav ile',price:280,startTime:'11:00',endTime:'23:00'},
+    {emoji:'🌶️',name:'Adana Kebap',description:'Acılı hazırlanmış',price:280,startTime:'11:00',endTime:'23:00'},
+  ],
+  'Deniz':[
+    {emoji:'🐟',name:'Izgara Levrek',description:'Mevsim sebzesi ile',price:380,startTime:'11:00',endTime:'23:00'},
+    {emoji:'🦐',name:'Karides Sote',description:'Sarımsaklı tereyağı',price:360,startTime:'11:00',endTime:'23:00'},
+  ],
+  'İçecek':[
+    {emoji:'🍵',name:'Türk Çayı',description:'Demlik çay',price:40,startTime:'00:00',endTime:'23:59'},
+    {emoji:'☕',name:'Türk Kahvesi',description:'Az/orta/çok şekerli',price:55,startTime:'00:00',endTime:'23:59'},
+    {emoji:'🧃',name:'Su 500ml',description:'Soğuk servis',price:25,startTime:'00:00',endTime:'23:59'},
+  ],
+};
+
+let selectedLib=null;
+function initLibrary(){
+  const catEl=document.getElementById('lib-cats');catEl.innerHTML='';
+  Object.keys(LIBRARY).forEach((cat,i)=>{
+    const btn=document.createElement('button');
+    btn.className='lib-cat'+(i===0?' active':'');
+    btn.textContent=cat;
+    btn.onclick=()=>{document.querySelectorAll('.lib-cat').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderLibGrid(cat);};
+    catEl.appendChild(btn);
+  });
+  renderLibGrid(Object.keys(LIBRARY)[0]);
+}
+function renderLibGrid(cat){
+  const grid=document.getElementById('lib-grid');grid.innerHTML='';selectedLib=null;
+  LIBRARY[cat].forEach(item=>{
+    const div=document.createElement('div');div.className='lib-item';
+    div.onclick=()=>{
+      document.querySelectorAll('.lib-item').forEach(d=>d.classList.remove('selected'));
+      div.classList.add('selected');selectedLib={...item,category:cat};
+      if(item.startTime)document.getElementById('lib-start').value=item.startTime;
+      if(item.endTime)document.getElementById('lib-end').value=item.endTime;
+      document.getElementById('lib-price').value=item.price;
+    };
+    div.innerHTML=`<div class="lib-emoji">${item.emoji}</div><div class="lib-name">${item.name}</div><div class="lib-desc-small">${item.description}</div>`;
+    grid.appendChild(div);
   });
 }
+window.addFromLib=async function(){
+  const hid=document.getElementById('menu-hotel-sel').value;
+  if(!hid){toast('Önce otel seçin');return;}
+  if(!selectedLib){toast('Kütüphaneden ürün seçin');return;}
+  const price=parseInt(document.getElementById('lib-price').value)||selectedLib.price;
+  const start=document.getElementById('lib-start').value||selectedLib.startTime;
+  const end=document.getElementById('lib-end').value||selectedLib.endTime;
+  await push(ref(db,`hotels/${hid}/menu`),{...selectedLib,price,startTime:start,endTime:end,active:true});
+  toast('✓ '+selectedLib.name+' eklendi!');loadHotelMenu();
+};
+window.addManualItem=async function(){
+  const hid=document.getElementById('menu-hotel-sel').value;
+  if(!hid){toast('Önce otel seçin');return;}
+  const name=document.getElementById('m-name').value.trim();
+  const price=parseInt(document.getElementById('m-price').value);
+  if(!name||!price){toast('Ad ve fiyat zorunlu');return;}
+  await push(ref(db,`hotels/${hid}/menu`),{
+    emoji:document.getElementById('m-emoji').value||'🍽',name,price,
+    category:document.getElementById('m-cat').value,
+    description:document.getElementById('m-desc').value,
+    startTime:document.getElementById('m-start').value||'00:00',
+    endTime:document.getElementById('m-end').value||'23:59',
+    recipe:document.getElementById('m-recipe').value,active:true
+  });
+  toast('✓ '+name+' eklendi!');
+  ['m-emoji','m-name','m-price','m-desc','m-recipe'].forEach(id=>document.getElementById(id).value='');
+  loadHotelMenu();
+};
+window.loadHotelMenu=async function(){
+  const hid=document.getElementById('menu-hotel-sel').value;if(!hid)return;
+  document.getElementById('menu-hotel-name').textContent='— '+hid;
+  const snap=await get(ref(db,`hotels/${hid}/menu`));
+  const el=document.getElementById('menu-list');
+  if(!snap.exists()){el.innerHTML='<div style="color:#9a8f80;font-size:.82rem">Henüz ürün yok</div>';return;}
+  const items=Object.entries(snap.val()).map(([id,v])=>({id,...v}));
+  const cats={};items.forEach(i=>{const c=i.category||'Diğer';if(!cats[c])cats[c]=[];cats[c].push(i);});
+  el.innerHTML='';
+  Object.entries(cats).forEach(([cat,catItems])=>{
+    const sep=document.createElement('div');
+    sep.style.cssText='font-size:.62rem;color:#9a8f80;letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid #e8e3db';
+    sep.textContent=cat;el.appendChild(sep);
+    catItems.forEach(item=>{
+      const div=document.createElement('div');div.className='menu-item-row';
+      div.innerHTML=`<div class="mir-emoji">${item.emoji||'🍽'}</div>
+        <div class="mir-info">
+          <div class="mir-name">${item.name} — ₺${item.price}</div>
+          <div class="mir-meta">${item.description||''}${item.startTime&&item.endTime?`<span class="mir-time">⏰ ${item.startTime}–${item.endTime}</span>`:''}</div>
+        </div>
+        <div class="mir-actions"><button class="btn-danger btn-sm" onclick="deleteItem('${hid}','${item.id}')">Sil</button></div>`;
+      el.appendChild(div);
+    });
+  });
+};
+window.deleteItem=async function(hid,itemId){
+  if(!confirm('Bu ürün silinsin mi?'))return;
+  await remove(ref(db,`hotels/${hid}/menu/${itemId}`));
+  toast('Ürün silindi');loadHotelMenu();
+};
 
-window.closeQR = function() { document.getElementById('qr-modal').classList.remove('show'); }
-
-window.switchP = function(name, btn) {
+window.switchP=function(name,btn){
   document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.pscreen').forEach(s=>s.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+  if(btn)btn.classList.add('active');
   document.getElementById(name+'-screen').classList.add('active');
-  if (name==='oteller') loadHotels();
-}
+  if(name==='oteller')loadHotels();
+};
 
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.style.display = 'block';
-  setTimeout(()=>t.style.display='none', 3000);
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  setTimeout(()=>t.style.display='none',4000);
 }
 
 initLibrary();
