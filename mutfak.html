@@ -132,6 +132,25 @@ body {
 .card-room { font-size: 1rem; font-weight: 800; color: var(--gold2); }
 .card-time { font-size: .72rem; color: var(--mid); }
 .card-no { font-size: .65rem; color: var(--light); margin-top: 2px; }
+.order-card.new {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px rgba(248,113,113,.25);
+  animation: pulse-new 1.5s ease-in-out 4;
+  cursor: pointer;
+}
+@keyframes pulse-new {
+  0%,100% { box-shadow: 0 0 0 2px rgba(248,113,113,.2); }
+  50%      { box-shadow: 0 0 0 6px rgba(248,113,113,.45); }
+}
+.new-badge {
+  background: var(--red);
+  color: #fff;
+  font-size: .6rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 8px;
+  letter-spacing: .5px;
+}
 .timer-badge {
   background: rgba(251,146,60,.15);
   border: 1px solid rgba(251,146,60,.4);
@@ -374,16 +393,37 @@ function switchTab(t) {
 }
 
 /* ── ORDERS ── */
-var orders = {}; // key → data
-var timers = {}; // key → startTime
+var orders = {};        // key → data
+var timers = {};        // key → startTime
+var newOrders = {};     // key → true (yeni, görülmemiş)
+var knownStatuses = {}; // key → son bilinen status
 
-db.ref('hotels/'+HOTEL+'/orders').on('child_added', function(snap){ handleOrder(snap); });
-db.ref('hotels/'+HOTEL+'/orders').on('child_changed', function(snap){ handleOrder(snap); });
-
-function handleOrder(snap) {
-  orders[snap.key] = snap.val();
+db.ref('hotels/'+HOTEL+'/orders').on('child_added', function(snap) {
+  var key = snap.key;
+  var v = snap.val();
+  knownStatuses[key] = v.status;
+  orders[key] = v;
+  // Mutfağa yeni gelen (confirmed) siparişi işaretle
+  if (v.status === 'confirmed' && v.isNew !== false) {
+    newOrders[key] = true;
+  }
   rebuildGrids();
-}
+});
+
+db.ref('hotels/'+HOTEL+'/orders').on('child_changed', function(snap) {
+  var key = snap.key;
+  var v = snap.val();
+  var prev = knownStatuses[key];
+  knownStatuses[key] = v.status;
+  orders[key] = v;
+  // Resepsiyondan onaylanıp mutfağa yeni düştüyse işaretle
+  if (v.status === 'confirmed' && prev !== 'confirmed' && v.isNew !== false) {
+    newOrders[key] = true;
+  }
+  // Firebase'de isNew false yapıldıysa temizle
+  if (v.isNew === false) delete newOrders[key];
+  rebuildGrids();
+});
 
 function rebuildGrids() {
   var waiting = [], preparing = [], done = [];
@@ -424,9 +464,20 @@ function fillGrid(gridId, list, type) {
   list.forEach(function(o){ grid.appendChild(buildCard(o.k, o.v, type)); });
 }
 
+function clearNew(key, card) {
+  if (!newOrders[key]) return;
+  delete newOrders[key];
+  card.classList.remove('new');
+  card.onclick = null;
+  db.ref('hotels/'+HOTEL+'/orders/'+key+'/isNew').set(false);
+}
+
 function buildCard(key, v, type) {
   var card = document.createElement('div');
-  card.className = 'order-card';
+  card.className = 'order-card' + (newOrders[key] ? ' new' : '');
+  if (newOrders[key]) {
+    card.onclick = function() { clearNew(key, card); };
+  }
 
   var elapsed = '';
   if (v.ts) {
@@ -451,7 +502,9 @@ function buildCard(key, v, type) {
   card.innerHTML =
     '<div class="card-top">' +
       '<div>' +
-        '<div class="card-room">Oda '+esc(v.room||'?')+'</div>' +
+        '<div class="card-room">Oda '+esc(v.room||'?')+
+          (newOrders[key] ? ' <span class="new-badge">YENİ</span>' : '') +
+        '</div>' +
         '<div class="card-no">'+esc(v.orderNo||key.slice(-6))+'</div>' +
       '</div>' +
       '<div>' +
@@ -467,7 +520,12 @@ function buildCard(key, v, type) {
 }
 
 function updOrder(key, status) {
-  db.ref('hotels/'+HOTEL+'/orders/'+key+'/status').set(status).catch(console.error);
+  delete newOrders[key]; // YENİ badge'ini anında kaldır
+  db.ref('hotels/'+HOTEL+'/orders/'+key).update({ status: status, isNew: false })
+    .catch(function(e) {
+      console.error('Sipariş güncellenemedi:', e);
+      alert('❌ Sipariş durumu güncellenemedi.\nHata: ' + (e.message || e.code) + '\n\nFirebase kurallarınızı kontrol edin.');
+    });
 }
 
 // Refresh timers every minute

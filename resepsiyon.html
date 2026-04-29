@@ -362,6 +362,8 @@ body {
   </div>
 </div>
 
+<div id="toast"></div>
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
@@ -527,20 +529,41 @@ function sendReply() {
   if (!text) return;
   inp.value = ''; inp.style.height = '36px';
 
-  var key = 'tmp-' + Date.now();
-  seenMsgs[activeRoom][key] = true;
-  appendChatMsg({ text: text, sender: 'reception', time: Date.now() }, key);
+  // Firebase key'ini senkron al → child_added tetiklenmeden önce seenMsgs'e işaretle
+  var newRef = db.ref('hotels/'+HOTEL+'/rooms/'+activeRoom+'/messages').push();
+  seenMsgs[activeRoom][newRef.key] = true;
+  appendChatMsg({ text: text, sender: 'reception', time: Date.now() }, 'tmp-' + newRef.key);
 
-  db.ref('hotels/'+HOTEL+'/rooms/'+activeRoom+'/messages').push({
-    text: text, sender: 'reception', time: TS
-  }).then(function(ref){
-    if (ref.key) seenMsgs[activeRoom][ref.key] = true;
-  }).catch(function(e){ console.error(e); });
+  newRef.set({ text: text, sender: 'reception', time: TS }).catch(function(e) {
+    console.error(e);
+    showToast('❌ Mesaj gönderilemedi.');
+  });
 }
 
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+}
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1c1917;
+  color: #fff;
+  padding: 9px 18px;
+  border-radius: 20px;
+  font-size: .73rem;
+  font-weight: 600;
+  display: none;
+  z-index: 999;
+  box-shadow: 0 4px 16px rgba(0,0,0,.3);
+  max-width: 90vw;
+  white-space: normal;
+  text-align: center;
+  border-left: 3px solid #dc2626;
 }
 
 /* ── ORDERS ── */
@@ -633,12 +656,24 @@ function renderOrder(key, v) {
 }
 
 function updOrder(key, status) {
-  db.ref('hotels/'+HOTEL+'/orders/'+key+'/status').set(status).catch(function(e){ console.error(e); });
+  db.ref('hotels/'+HOTEL+'/orders/'+key+'/status').set(status).catch(function(e){
+    console.error('Sipariş güncellenemedi:', e);
+    showToast('❌ Sipariş durumu güncellenemedi. Firebase kurallarını kontrol edin.');
+  });
 }
 
 /* ── UTILS ── */
 function pad(n){ return String(n).padStart(2,'0'); }
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+var toastTimer;
+function showToast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { el.style.display = 'none'; }, 4000);
+}
 
 // notification permission
 if (Notification.permission === 'default') Notification.requestPermission();

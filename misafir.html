@@ -605,6 +605,23 @@ body {
   z-index: 999;
   white-space: nowrap;
   box-shadow: 0 4px 16px rgba(0,0,0,.3);
+  max-width: 90vw;
+  white-space: normal;
+  text-align: center;
+}
+
+/* ── FALLBACK BANNER ── */
+.fallback-banner {
+  background: #fff8e6;
+  border: 1px solid #fbbf24;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  font-size: .67rem;
+  color: #92400e;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 </style>
 </head>
@@ -752,6 +769,14 @@ firebase.initializeApp({
 var db = firebase.database();
 var TS = firebase.database.ServerValue.TIMESTAMP;
 
+var DEMO_MENU = [
+  {id:'k1', name:'Kahvaltı Tabağı', emoji:'🍳', price:280, category:'Kahvaltı'},
+  {id:'k2', name:'Türk Kahvesi',    emoji:'☕', price:60,  category:'İçecekler'},
+  {id:'k3', name:'Çay',             emoji:'🍵', price:40,  category:'İçecekler'},
+  {id:'k4', name:'Tost',            emoji:'🥪', price:120, category:'Atıştırmalıklar'},
+  {id:'k5', name:'Su 0.5L',         emoji:'💧', price:30,  category:'İçecekler'}
+];
+
 /* ── PARAMS ── */
 var params = new URLSearchParams(location.search);
 var HOTEL = params.get('hotel') || 'demo';
@@ -833,13 +858,35 @@ var CAT_ORDER = [
   'İçecekler','Gazlı İçecekler','Meyve Suları','Kahve','Çay','Diğer İçecekler'
 ];
 
+function useFallbackMenu() {
+  menuItems = DEMO_MENU;
+  buildCatBar();
+  renderMenu();
+  var avail = menuItems.filter(function(i){ return isAvail(i.startTime, i.endTime); });
+  document.getElementById('menu-stat').textContent = avail.length + ' ürün (örnek menü)';
+  var list = document.getElementById('menu-list');
+  var banner = document.createElement('div');
+  banner.className = 'fallback-banner';
+  banner.textContent = '⚠️ Menü şu an yüklenemedi. Örnek menü gösteriliyor — lütfen resepsiyonu arayın.';
+  list.insertBefore(banner, list.firstChild);
+}
+
 rHotel.child('menu').once('value', function(snap) {
   menuItems = [];
+  if (!snap.exists()) {
+    useFallbackMenu();
+    return;
+  }
   snap.forEach(function(c) {
     var v = c.val();
     if (v.active === false) return;
     menuItems.push(Object.assign({ id: c.key }, v));
   });
+
+  if (menuItems.length === 0) {
+    useFallbackMenu();
+    return;
+  }
 
   rHotel.child('info/name').once('value', function(s) {
     if (s.val()) document.getElementById('hotel-name').textContent = s.val();
@@ -850,6 +897,10 @@ rHotel.child('menu').once('value', function(snap) {
 
   var avail = menuItems.filter(function(i){ return isAvail(i.startTime, i.endTime); });
   document.getElementById('menu-stat').textContent = avail.length + ' ürün mevcut';
+}, function(error) {
+  console.error('Menü yükleme hatası:', error.code, error.message);
+  useFallbackMenu();
+  showToast('⚠️ Menü yüklenemedi. Örnek menü gösteriliyor.');
 });
 
 function buildCatBar() {
@@ -950,7 +1001,14 @@ function buildCard(item) {
       '<div class="mi-price">₺' + item.price + '</div>' +
     '</div>' +
     '<div class="mi-ctrl" id="ctrl-' + item.id + '"></div>';
-  refreshCtrl(item);
+  // Kart DOM'a eklenmeden önce querySelector kullan (getElementById DOM'da arar, bulamaz)
+  var ctrlWrap = div.querySelector('[id="ctrl-' + item.id + '"]');
+  var addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.className = 'add-btn';
+  addBtn.textContent = '+';
+  addBtn.onclick = function() { addToCart(item); };
+  ctrlWrap.appendChild(addBtn);
   return div;
 }
 
@@ -1068,8 +1126,8 @@ function placeOrder() {
     btn.disabled = false;
     btn.textContent = '✓ Siparişi Ver';
   }).catch(function(e) {
-    console.error(e);
-    showToast('Hata oluştu, tekrar deneyin.');
+    console.error('Sipariş gönderilemedi:', e.code, e.message);
+    showToast('❌ Sipariş gönderilemedi. Lütfen tekrar deneyin veya resepsiyonu arayın.');
     btn.disabled = false;
     btn.textContent = '✓ Siparişi Ver';
   });
@@ -1094,24 +1152,35 @@ var chatReady = false;
   document.getElementById('msg-list').appendChild(d);
 })();
 
-// Realtime listener
-rMsgs.on('child_added', function(snap) {
-  var key = snap.key;
-  if (seenMsgs[key]) return;
-  seenMsgs[key] = true;
-
-  var v = snap.val();
-  var isSent = (v.sender === 'guest');
-  appendMsg(v.text, isSent, v.time);
-
-  if (!isSent && chatReady) {
-    if (currentTab !== 'chat') {
-      document.getElementById('chat-badge').classList.add('show');
-      showToast('📩 Resepsiyondan yanıt geldi!');
-    }
+// Günlük temizlik: yeni gün veya yeni misafir → eski mesajları sil
+var today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+rHotel.child('rooms/' + ROOM + '/lastReset').once('value', function(snap) {
+  if (snap.val() !== today) {
+    rMsgs.remove();
+    rHotel.child('rooms/' + ROOM + '/lastReset').set(today);
   }
-  chatReady = true;
+  startMsgsListener();
 });
+
+function startMsgsListener() {
+  rMsgs.on('child_added', function(snap) {
+    var key = snap.key;
+    if (seenMsgs[key]) return;
+    seenMsgs[key] = true;
+
+    var v = snap.val();
+    var isSent = (v.sender === 'guest');
+    appendMsg(v.text, isSent, v.time);
+
+    if (!isSent && chatReady) {
+      if (currentTab !== 'chat') {
+        document.getElementById('chat-badge').classList.add('show');
+        showToast('📩 Resepsiyondan yanıt geldi!');
+      }
+    }
+    chatReady = true;
+  });
+}
 
 function appendMsg(text, isSent, ts) {
   var list = document.getElementById('msg-list');
@@ -1160,12 +1229,11 @@ function sendMsg() {
 function sendQuick(text) { doSend(text); }
 
 function doSend(text) {
-  // Optimistic UI
-  appendMsg(text, true, Date.now());
-  // Push to Firebase
-  rMsgs.push({ text: text, sender: 'guest', time: TS }).then(function(ref) {
-    if (ref.key) seenMsgs[ref.key] = true; // mark so listener doesn't duplicate
-  }).catch(function(e) {
+  // Firebase key'ini senkron olarak al, child_added'dan önce işaretle
+  var newRef = rMsgs.push();
+  seenMsgs[newRef.key] = true;
+  appendMsg(text, true, Date.now()); // Optimistic UI
+  newRef.set({ text: text, sender: 'guest', time: TS }).catch(function(e) {
     console.error(e);
     showToast('Mesaj gönderilemedi.');
   });
