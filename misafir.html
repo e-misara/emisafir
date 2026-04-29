@@ -1,456 +1,1227 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta name="theme-color" content="#1a1a2e"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>e-Misafir</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:#faf7f2}
-body{font-family:sans-serif;display:flex;flex-direction:column;max-width:480px;margin:0 auto}
-#hdr{background:#1a1a2e;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
-.hico{width:36px;height:36px;background:rgba(201,168,76,.15);border:1.5px solid #c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
-.hn{color:#fff;font-size:.86rem;font-weight:600}.hs{color:#c9a84c;font-size:.58rem;margin-top:1px}
-.hb{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.35);border-radius:20px;padding:3px 10px;font-size:.62rem;color:#c9a84c;margin-left:auto}
-#tabs{display:flex;background:#fff;border-bottom:1px solid #e8e3db;flex-shrink:0}
-.tab{flex:1;padding:9px 4px 7px;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.58rem;color:#9a8f80;cursor:pointer;border-bottom:2px solid transparent;font-family:sans-serif;position:relative}
-.ti{font-size:.9rem}.tab.on{color:#1a1a2e;border-bottom-color:#c9a84c;font-weight:600}
-.tdot{position:absolute;top:6px;right:calc(50% - 14px);width:7px;height:7px;background:#ef4444;border-radius:50%;display:none}
-.tdot.show{display:block}
-.scr{display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0}
-.scr.on{display:flex}
+/* ── RESET & TOKENS ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #faf8f5;
+  --bg2: #f2ede6;
+  --card: #fff;
+  --border: #e4ddd3;
+  --gold: #b8913f;
+  --gold2: #d4a853;
+  --dark: #1c1917;
+  --mid: #78716c;
+  --light: #a8a29e;
+  --green: #16a34a;
+  --red: #dc2626;
+  --radius: 12px;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
 
-/* MENÜ */
-#cbar{display:flex;overflow-x:auto;scrollbar-width:none;gap:5px;padding:7px 11px;background:#fff;border-bottom:1px solid #e8e3db;flex-shrink:0}
-#cbar::-webkit-scrollbar{display:none}
-.cb{background:#f5f5f5;border:1.5px solid #e8e3db;border-radius:20px;padding:4px 11px;font-size:.66rem;white-space:nowrap;cursor:pointer;font-family:sans-serif;color:#666;flex-shrink:0}
-.cb.on{background:#1a1a2e;color:#c9a84c;border-color:#1a1a2e}
-#tbar{background:#f0ebe1;padding:5px 11px;font-size:.63rem;color:#6b5e4e;display:flex;align-items:center;gap:4px;flex-shrink:0}
-#mlist{flex:1;overflow-y:auto;padding:9px 11px;-webkit-overflow-scrolling:touch}
-.csep{font-size:.57rem;color:#9a8f80;letter-spacing:1.5px;text-transform:uppercase;margin:12px 0 5px;padding-bottom:4px;border-bottom:1px solid #e8dfd4}
-.csep:first-child{margin-top:0}
-.mc{background:#fff;border-radius:9px;padding:10px;margin-bottom:6px;display:flex;align-items:flex-start;gap:9px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.me{font-size:1.5rem;flex-shrink:0;line-height:1;margin-top:1px}
-.mi{flex:1;min-width:0}
-.mn{font-size:.82rem;font-weight:600;color:#1a1a2e}
-.md{font-size:.65rem;color:#9a8f80;margin-top:1px;line-height:1.3}
-.mp{font-size:.83rem;color:#c9a84c;font-weight:700;margin-top:3px;display:block}
-.mct{flex-shrink:0}
-.madd{width:30px;height:30px;border-radius:50%;background:#1a1a2e;border:none;color:#c9a84c;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.mqt{display:flex;align-items:center;gap:3px;background:#f0ebe1;border-radius:14px;padding:3px 7px}
-.mqt button{background:none;border:none;font-size:1rem;cursor:pointer;color:#1a1a2e;width:22px;text-align:center;min-height:28px;line-height:1;padding:0}
-.mqt span{font-size:.8rem;font-weight:600;min-width:12px;text-align:center}
-#cart{display:none;background:#1a1a2e;padding:9px 14px;flex-direction:row;align-items:center;justify-content:space-between;flex-shrink:0}
-#cart.on{display:flex}
-.cc{color:rgba(255,255,255,.55);font-size:.65rem}.ct{color:#c9a84c;font-size:.93rem;font-weight:700}
-#cbtn{background:#c9a84c;color:#1a1a2e;border:none;border-radius:7px;padding:8px 13px;font-weight:700;font-size:.76rem;cursor:pointer;font-family:sans-serif}
+/* ── LAYOUT ── */
+html { height: 100dvh; overflow: hidden; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--dark);
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-width: 480px;
+  margin: 0 auto;
+}
 
-/* CHECKOUT */
-#com{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;align-items:flex-end;justify-content:center}
-#com.on{display:flex}
-#cob{background:#fff;border-radius:18px 18px 0 0;padding:18px 15px 28px;width:100%;max-width:480px;max-height:78vh;overflow-y:auto}
-.cot{font-size:.9rem;font-weight:700;color:#1a1a2e;margin-bottom:2px}
-.cos{font-size:.67rem;color:#9a8f80;margin-bottom:11px}
-.cor{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0ebe1;font-size:.78rem}
-.con{color:#1a1a2e}.coq{font-size:.65rem;color:#9a8f80}.cop{font-weight:600;color:#1a1a2e}
-.cotl{display:flex;justify-content:space-between;align-items:center;margin-top:11px;padding-top:9px;border-top:2px solid #1a1a2e}
-.cotll{font-size:.78rem;font-weight:600}.cota{font-size:1.15rem;font-weight:700;color:#c9a84c}
-.conote{background:#f7f4ef;border-radius:8px;padding:9px;margin:11px 0;font-size:.7rem;color:#6b5e4e;line-height:1.5}
-.cobt{display:flex;gap:7px}
-.cocan{flex:1;background:transparent;border:1.5px solid #e8dfd4;border-radius:9px;padding:11px;font-size:.78rem;cursor:pointer;font-family:sans-serif;color:#9a8f80}
-.cocon{flex:2;background:#1a1a2e;border:none;border-radius:9px;padding:11px;font-size:.8rem;font-weight:700;color:#c9a84c;cursor:pointer;font-family:sans-serif}
-#okm{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center}
-#okm.on{display:flex}
-#okb{background:#fff;border-radius:16px;padding:24px 18px;text-align:center;max-width:280px;width:90%}
-.oki{font-size:2.3rem;margin-bottom:7px}.okt{font-size:.92rem;font-weight:700;color:#1a1a2e;margin-bottom:5px}
-.oks{font-size:.72rem;color:#9a8f80;line-height:1.5;margin-bottom:13px}
-.okb{background:#1a1a2e;color:#c9a84c;border:none;border-radius:9px;padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:sans-serif}
+/* ── HEADER ── */
+#header {
+  background: var(--dark);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.h-icon { font-size: 1.4rem; }
+.h-info { flex: 1; }
+.h-name { color: #fff; font-size: .9rem; font-weight: 700; }
+.h-sub { color: var(--gold2); font-size: .7rem; margin-top: 1px; }
+.h-room {
+  background: rgba(184,145,63,.15);
+  border: 1px solid rgba(184,145,63,.4);
+  border-radius: 20px;
+  padding: 4px 12px;
+  color: var(--gold2);
+  font-size: .72rem;
+  font-weight: 600;
+}
 
-/* CHAT */
-#chat-scr{overflow:hidden}
-#rbanner{display:none;background:#1a1a2e;color:#c9a84c;padding:7px 13px;font-size:.72rem;font-weight:600;align-items:center;gap:5px;cursor:pointer;flex-shrink:0}
-#rbanner.on{display:flex}
-#cstat{background:#f0fdf4;border-bottom:1px solid #bbf7d0;padding:5px 13px;font-size:.65rem;color:#15803d;display:flex;align-items:center;gap:4px;flex-shrink:0}
-.sdot{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-#cmsgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:6px;background:#f7f4ef;-webkit-overflow-scrolling:touch}
-.msg{display:flex;gap:6px;align-items:flex-end}
-.msg.u{flex-direction:row-reverse}
-.mava{width:24px;height:24px;border-radius:50%;background:#1a1a2e;border:1.5px solid #c9a84c;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#c9a84c;flex-shrink:0}
-.bbl{max-width:78%;padding:7px 10px;border-radius:13px 13px 13px 3px;background:#fff;color:#1a1a2e;font-size:.78rem;line-height:1.4;border:1px solid rgba(26,26,46,.07)}
-.msg.u .bbl{background:#1a1a2e;color:#fff;border-radius:13px 13px 3px 13px;border-color:transparent}
-.mt{font-size:.55rem;color:#9a8f80;margin-top:1px}
-.msg.u .mt{text-align:right}
-#qrow{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:6px 11px;background:#fff;border-top:1px solid #e8e3db;flex-shrink:0}
-#qrow::-webkit-scrollbar{display:none}
-.chip{background:#f0ebe1;border:1px solid #e8dfd4;border-radius:14px;padding:5px 10px;font-size:.65rem;color:#1a1a2e;cursor:pointer;white-space:nowrap;font-family:sans-serif;min-height:30px;display:flex;align-items:center;flex-shrink:0}
-#cinp-wrap{background:#fff;border-top:1px solid #e8e3db;padding:7px 11px;display:flex;gap:6px;align-items:flex-end;flex-shrink:0;padding-bottom:max(7px,env(safe-area-inset-bottom))}
-#cinp{flex:1;background:#f0ebe1;border:1.5px solid rgba(26,26,46,.1);border-radius:17px;padding:7px 11px;font-size:16px;color:#1a1a2e;outline:none;resize:none;min-height:36px;max-height:80px;line-height:1.4;font-family:sans-serif;-webkit-appearance:none}
-#csnd{width:36px;height:36px;border-radius:50%;background:#1a1a2e;border:none;color:#c9a84c;font-size:.85rem;cursor:pointer;flex-shrink:0;min-width:36px}
+/* ── TABS ── */
+#tabs {
+  display: flex;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.tab {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 10px 4px 8px;
+  font-family: var(--font);
+  font-size: .65rem;
+  color: var(--light);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .2s;
+}
+.tab .t-icon { font-size: 1.1rem; line-height: 1; }
+.tab.active { color: var(--dark); border-bottom-color: var(--gold); font-weight: 600; }
+.tab .badge {
+  position: absolute;
+  top: 6px;
+  right: 50%;
+  transform: translateX(8px);
+  width: 8px; height: 8px;
+  background: var(--red);
+  border-radius: 50%;
+  display: none;
+}
+.tab .badge.show { display: block; }
 
-/* TEMİZLİK */
-#cln-scr{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px}
-.clnote{background:#f7f4ef;border-radius:8px;padding:9px;margin-bottom:11px;font-size:.7rem;color:#6b5e4e;line-height:1.5}
-.clopt{width:100%;background:#fff;border:2px solid #e8e3db;border-radius:9px;padding:12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;cursor:pointer;text-align:left;font-family:sans-serif;min-height:54px}
-.clopt.on{border-color:#c9a84c;background:#fffdf7}
-.clo{font-size:1.3rem;flex-shrink:0}.cln{font-size:.8rem;font-weight:600;color:#1a1a2e}.cld{font-size:.65rem;color:#9a8f80;margin-top:1px}
-.clc{margin-left:auto;color:#c9a84c;font-weight:700;font-size:.95rem;min-width:16px}
-#clbtn{width:100%;background:#1a1a2e;color:#c9a84c;border:none;border-radius:9px;padding:13px;font-size:.83rem;font-weight:700;cursor:pointer;font-family:sans-serif;margin-top:3px;min-height:46px;transition:background .3s}
-#clbtn:disabled{opacity:.35;cursor:not-allowed}
-#clbtn.sent{background:#22c55e;color:#fff}
-#tst{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#c9a84c;padding:8px 16px;border-radius:16px;font-size:.72rem;font-weight:600;display:none;z-index:200;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+/* ── SCREENS ── */
+.screen {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+.screen.active { display: flex; }
+
+/* ════════════════════════
+   MENÜ SCREEN
+════════════════════════ */
+#s-menu {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+#s-menu.active { display: flex; }
+
+#cat-bar {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+#cat-bar::-webkit-scrollbar { display: none; }
+.cat-btn {
+  flex-shrink: 0;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: .68rem;
+  font-family: var(--font);
+  color: var(--mid);
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: all .15s;
+}
+.cat-btn.active {
+  background: var(--dark);
+  border-color: var(--dark);
+  color: var(--gold2);
+}
+
+#time-bar {
+  padding: 5px 14px;
+  font-size: .65rem;
+  color: var(--mid);
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+#menu-list {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px 12px;
+}
+
+.cat-label {
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--light);
+  padding: 10px 0 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+.cat-label:first-child { padding-top: 2px; }
+
+.menu-item {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 10px 10px 10px 12px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--border);
+}
+.mi-emoji { font-size: 1.6rem; flex-shrink: 0; line-height: 1; }
+.mi-info { flex: 1; min-width: 0; }
+.mi-name { font-size: .82rem; font-weight: 600; color: var(--dark); line-height: 1.3; }
+.mi-desc { font-size: .65rem; color: var(--light); margin-top: 2px; line-height: 1.3; }
+.mi-price { font-size: .8rem; font-weight: 700; color: var(--gold); margin-top: 3px; }
+.mi-ctrl { flex-shrink: 0; }
+
+.add-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--dark);
+  border: none;
+  color: var(--gold2);
+  font-size: 1.4rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.qty-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--bg2);
+  border-radius: 20px;
+  padding: 2px;
+}
+.qty-ctrl button {
+  width: 30px; height: 30px;
+  border: none;
+  background: none;
+  font-size: 1.1rem;
+  color: var(--dark);
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.qty-ctrl span { font-size: .82rem; font-weight: 700; min-width: 18px; text-align: center; }
+
+#cart-bar {
+  background: var(--dark);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+#cart-bar.hidden { display: none; }
+.cart-info { color: rgba(255,255,255,.6); font-size: .7rem; }
+.cart-total { color: var(--gold2); font-size: 1rem; font-weight: 700; }
+#cart-btn {
+  background: var(--gold);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: .8rem;
+  font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── MODALS ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 100;
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal-sheet {
+  background: var(--card);
+  border-radius: 20px 20px 0 0;
+  padding: 20px 16px max(24px, env(safe-area-inset-bottom));
+  width: 100%;
+  max-width: 480px;
+  max-height: 80dvh;
+  overflow-y: auto;
+}
+.modal-title { font-size: .95rem; font-weight: 700; margin-bottom: 4px; }
+.modal-sub { font-size: .68rem; color: var(--light); margin-bottom: 14px; }
+
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--bg2);
+}
+.or-name { font-size: .8rem; font-weight: 500; }
+.or-qty { font-size: .65rem; color: var(--light); }
+.or-price { font-size: .82rem; font-weight: 700; }
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 2px solid var(--dark);
+}
+.ot-label { font-size: .8rem; font-weight: 600; }
+.ot-val { font-size: 1.1rem; font-weight: 800; color: var(--gold); }
+
+.order-note {
+  background: var(--bg2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: .68rem;
+  color: var(--mid);
+  line-height: 1.5;
+  margin: 12px 0;
+}
+
+.modal-btns { display: flex; gap: 8px; margin-top: 4px; }
+.btn-cancel {
+  flex: 1;
+  border: 1.5px solid var(--border);
+  background: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: .78rem;
+  font-family: var(--font);
+  color: var(--mid);
+  cursor: pointer;
+}
+.btn-confirm {
+  flex: 2;
+  border: none;
+  background: var(--dark);
+  color: var(--gold2);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: .8rem;
+  font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-confirm:disabled { opacity: .4; }
+
+/* success modal */
+.modal-center { align-items: center; }
+.modal-card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 28px 20px;
+  text-align: center;
+  max-width: 300px;
+  width: 90%;
+}
+.success-icon { font-size: 2.8rem; margin-bottom: 10px; }
+.success-title { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+.success-sub { font-size: .72rem; color: var(--mid); line-height: 1.5; margin-bottom: 16px; }
+.btn-ok {
+  background: var(--dark);
+  color: var(--gold2);
+  border: none;
+  border-radius: 10px;
+  padding: 11px 24px;
+  font-size: .82rem;
+  font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+}
+
+/* ════════════════════════
+   CHAT SCREEN
+════════════════════════ */
+#s-chat {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+#s-chat.active { display: flex; }
+
+#chat-status {
+  background: #f0fdf4;
+  border-bottom: 1px solid #bbf7d0;
+  padding: 6px 14px;
+  font-size: .66rem;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.status-dot {
+  width: 7px; height: 7px;
+  background: #4ade80;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+#msg-list {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg);
+}
+
+.msg-row { display: flex; gap: 8px; align-items: flex-end; }
+.msg-row.sent { flex-direction: row-reverse; }
+.msg-avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--dark);
+  border: 1.5px solid var(--gold);
+  font-size: .65rem;
+  color: var(--gold2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.msg-body { max-width: 75%; }
+.msg-bubble {
+  padding: 8px 12px;
+  border-radius: 16px 16px 16px 4px;
+  background: var(--card);
+  color: var(--dark);
+  font-size: .8rem;
+  line-height: 1.45;
+  border: 1px solid var(--border);
+  word-break: break-word;
+}
+.sent .msg-bubble {
+  background: var(--dark);
+  color: #fff;
+  border-color: transparent;
+  border-radius: 16px 16px 4px 16px;
+}
+.msg-time { font-size: .57rem; color: var(--light); margin-top: 3px; }
+.sent .msg-time { text-align: right; }
+
+#quick-chips {
+  display: flex;
+  gap: 5px;
+  padding: 6px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+#quick-chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 5px 10px;
+  font-size: .65rem;
+  font-family: var(--font);
+  color: var(--dark);
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#chat-input-wrap {
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  padding: 8px 12px;
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+#chat-input {
+  flex: 1;
+  background: var(--bg2);
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  padding: 8px 12px;
+  font-size: 16px;
+  font-family: var(--font);
+  color: var(--dark);
+  outline: none;
+  resize: none;
+  min-height: 38px;
+  max-height: 90px;
+  line-height: 1.4;
+  -webkit-appearance: none;
+}
+#chat-send {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--dark);
+  border: none;
+  color: var(--gold2);
+  font-size: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ════════════════════════
+   TEMİZLİK SCREEN
+════════════════════════ */
+#s-clean {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+#s-clean.active { display: flex; }
+
+#clean-content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px;
+}
+.clean-note {
+  background: var(--bg2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: .68rem;
+  color: var(--mid);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.clean-opt {
+  width: 100%;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font);
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color .15s, background .15s;
+}
+.clean-opt.selected { border-color: var(--gold); background: #fffbf0; }
+.co-icon { font-size: 1.4rem; flex-shrink: 0; }
+.co-info { flex: 1; }
+.co-name { font-size: .82rem; font-weight: 600; color: var(--dark); }
+.co-desc { font-size: .65rem; color: var(--light); margin-top: 2px; }
+.co-check { color: var(--gold); font-size: 1rem; font-weight: 700; min-width: 16px; }
+
+#clean-footer {
+  padding: 10px 12px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+#clean-btn {
+  width: 100%;
+  background: var(--dark);
+  color: var(--gold2);
+  border: none;
+  border-radius: var(--radius);
+  padding: 14px;
+  font-size: .85rem;
+  font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .2s;
+}
+#clean-btn:disabled { opacity: .3; cursor: default; }
+#clean-btn.done { background: var(--green); color: #fff; }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--dark);
+  color: var(--gold2);
+  padding: 9px 18px;
+  border-radius: 20px;
+  font-size: .73rem;
+  font-weight: 600;
+  display: none;
+  z-index: 999;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,.3);
+}
 </style>
 </head>
 <body>
-<div id="hdr">
-  <div class="hico">🛎</div>
-  <div><div class="hn">Oda Servisi</div><div class="hs">e-Misafir · Oda <span id="rn">101</span></div></div>
-  <div class="hb" id="rb">101</div>
+
+<!-- HEADER -->
+<div id="header">
+  <div class="h-icon">🛎</div>
+  <div class="h-info">
+    <div class="h-name" id="hotel-name">Otel</div>
+    <div class="h-sub">e-Misafir · Dijital Servis</div>
+  </div>
+  <div class="h-room" id="room-badge">—</div>
 </div>
+
+<!-- TABS -->
 <div id="tabs">
-  <button class="tab on" onclick="goTab('m',this)"><span class="ti">🍽</span>Menü</button>
-  <button class="tab" id="tab-c" onclick="goTab('c',this)"><span class="ti">💬</span>Resepsiyon<span class="tdot" id="cdot"></span></button>
-  <button class="tab" onclick="goTab('k',this)"><span class="ti">✨</span>Temizlik</button>
+  <button type="button" class="tab active" onclick="switchTab('menu')">
+    <span class="t-icon">🍽</span>Menü
+  </button>
+  <button type="button" class="tab" id="tab-chat" onclick="switchTab('chat')">
+    <span class="t-icon">💬</span>Resepsiyon
+    <span class="badge" id="chat-badge"></span>
+  </button>
+  <button type="button" class="tab" onclick="switchTab('clean')">
+    <span class="t-icon">✨</span>Temizlik
+  </button>
 </div>
 
-<!-- MENÜ -->
-<div id="m-scr" class="scr on">
-  <div id="cbar"><button class="cb on" onclick="fcat('tümü',this)">🍽 Tümü</button></div>
-  <div id="tbar">🕐 <span id="ctime">--:--</span> — <span id="mst">Yükleniyor...</span></div>
-  <div id="mlist"></div>
-</div>
-<div id="cart">
-  <div><div class="cc" id="ccount">0 ürün</div><div class="ct" id="ctotal">₺0</div></div>
-  <button id="cbtn" onclick="showCO()">Sepeti Onayla →</button>
-</div>
-<div id="com"><div id="cob">
-  <div class="cot">Sipariş Özeti</div><div class="cos">Onaylamadan önce kontrol edin</div>
-  <div id="corows"></div>
-  <div class="cotl"><span class="cotll">Toplam</span><span class="cota" id="coamt">₺0</span></div>
-  <div class="conote">📋 <strong>Ödeme:</strong> Tutar oda hesabınıza yansıtılacak, check-out'ta tahsil edilecektir.</div>
-  <div class="cobt">
-    <button class="cocan" onclick="id('com').classList.remove('on')">İptal</button>
-    <button class="cocon" id="cobtn" onclick="doOrder()">✓ Siparişi Ver</button>
-  </div>
-</div></div>
-<div id="okm"><div id="okb">
-  <div class="oki">✅</div><div class="okt">Siparişiniz Alındı!</div>
-  <div class="oks">En kısa sürede odanıza servis yapılacaktır.<br/><br/>No: <strong id="okno"></strong></div>
-  <button class="okb" onclick="id('okm').classList.remove('on')">Tamam</button>
-</div></div>
-
-<!-- CHAT -->
-<div id="chat-scr" class="scr">
-  <div id="rbanner" onclick="goChat()">📩 Resepsiyondan yanıt geldi — tıklayın</div>
-  <div id="cstat"><span class="sdot"></span>Resepsiyon çevrimiçi</div>
-  <div id="cmsgs"></div>
-  <div id="qrow">
-    <button class="chip" onclick="qs('Merhaba, yardıma ihtiyacım var.')">👋 Merhaba</button>
-    <button class="chip" onclick="qs('Odamı temizler misiniz?')">✨ Temizlik</button>
-    <button class="chip" onclick="qs('Temiz havlu getirir misiniz?')">🛁 Havlu</button>
-    <button class="chip" onclick="qs('Taksi çağırabilir misiniz?')">🚕 Taksi</button>
-    <button class="chip" onclick="qs('Check-out saati ne zaman?')">🔑 Çıkış</button>
-    <button class="chip" onclick="qs('WiFi şifresi nedir?')">📶 WiFi</button>
-  </div>
-  <div id="cinp-wrap">
-    <textarea id="cinp" placeholder="Mesajınızı yazın..." rows="1"
-      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"
-      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea>
-    <button id="csnd" onclick="send()">➤</button>
+<!-- ══ MENÜ SCREEN ══ -->
+<div id="s-menu" class="active">
+  <div id="cat-bar"></div>
+  <div id="time-bar">🕐 <span id="now-time"></span> — <span id="menu-stat">Yükleniyor...</span></div>
+  <div id="menu-list"></div>
+  <div id="cart-bar" class="hidden">
+    <div>
+      <div class="cart-info" id="cart-info">0 ürün</div>
+      <div class="cart-total" id="cart-total">₺0</div>
+    </div>
+    <button type="button" id="cart-btn" onclick="openCheckout()">Siparişi Onayla →</button>
   </div>
 </div>
 
-<!-- TEMİZLİK -->
-<div id="cln-scr" class="scr">
-  <div class="clnote">⏰ Talebiniz resepsiyona anında iletilecektir.</div>
-  <button class="clopt" onclick="selCl(this,'Tam Temizlik')"><span class="clo">✨</span><div><div class="cln">Tam Temizlik</div><div class="cld">Oda eksiksiz temizlensin</div></div><span class="clc"></span></button>
-  <button class="clopt" onclick="selCl(this,'Havlu Değişimi')"><span class="clo">🛁</span><div><div class="cln">Havlu Değişimi</div><div class="cld">Sadece havlular değiştirilsin</div></div><span class="clc"></span></button>
-  <button class="clopt" onclick="selCl(this,'Çarşaf Değişimi')"><span class="clo">🛏</span><div><div class="cln">Çarşaf Değişimi</div><div class="cld">Yatak takımları yenilensin</div></div><span class="clc"></span></button>
-  <button class="clopt" onclick="selCl(this,'Çöp Toplama')"><span class="clo">🗑</span><div><div class="cln">Çöp Toplama</div><div class="cld">Çöpler alınsın</div></div><span class="clc"></span></button>
-  <button class="clopt" onclick="selCl(this,'Ekstra Havlu')"><span class="clo">🧴</span><div><div class="cln">Ekstra Havlu / Malzeme</div><div class="cld">Şampuan, sabun, havlu ekle</div></div><span class="clc"></span></button>
-  <button class="clopt" onclick="selCl(this,'Rahatsız Etme')"><span class="clo">🔕</span><div><div class="cln">Rahatsız Etme</div><div class="cld">Bugün temizlik istemiyorum</div></div><span class="clc"></span></button>
-  <button id="clbtn" disabled onclick="sendCl()">Talebi Gönder</button>
+<!-- Checkout modal -->
+<div class="modal-overlay" id="modal-checkout">
+  <div class="modal-sheet">
+    <div class="modal-title">Sipariş Özeti</div>
+    <div class="modal-sub">Lütfen kontrol edin</div>
+    <div id="checkout-rows"></div>
+    <div class="order-total">
+      <span class="ot-label">Toplam</span>
+      <span class="ot-val" id="checkout-total">₺0</span>
+    </div>
+    <div class="order-note">🏨 Tutar check-out'ta oda hesabınıza yansıtılacaktır.</div>
+    <div class="modal-btns">
+      <button type="button" class="btn-cancel" onclick="closeCheckout()">İptal</button>
+      <button type="button" class="btn-confirm" id="confirm-btn" onclick="placeOrder()">✓ Siparişi Ver</button>
+    </div>
+  </div>
 </div>
 
-<div id="tst"></div>
+<!-- Success modal -->
+<div class="modal-overlay modal-center" id="modal-success">
+  <div class="modal-card">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Siparişiniz Alındı!</div>
+    <div class="success-sub">En kısa sürede odanıza getirileceğiz.<br>Sipariş No: <strong id="order-no-text"></strong></div>
+    <button type="button" class="btn-ok" onclick="closeSuccess()">Tamam</button>
+  </div>
+</div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, get, set, push, remove, onValue, serverTimestamp }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+<!-- ══ CHAT SCREEN ══ -->
+<div id="s-chat">
+  <div id="chat-status"><span class="status-dot"></span>Resepsiyon aktif</div>
+  <div id="msg-list"></div>
+  <div id="quick-chips">
+    <button type="button" class="chip" onclick="sendQuick('Merhaba! Yardım eder misiniz?')">👋 Merhaba</button>
+    <button type="button" class="chip" onclick="sendQuick('Havlu getirebilir misiniz?')">🛁 Havlu</button>
+    <button type="button" class="chip" onclick="sendQuick('Taksi ayarlayabilir misiniz?')">🚕 Taksi</button>
+    <button type="button" class="chip" onclick="sendQuick('Check-out saati ne zaman?')">🔑 Çıkış saati</button>
+    <button type="button" class="chip" onclick="sendQuick('WiFi şifresi nedir?')">📶 WiFi</button>
+    <button type="button" class="chip" onclick="sendQuick('Kahvaltı kaçta?')">🍳 Kahvaltı</button>
+  </div>
+  <div id="chat-input-wrap">
+    <textarea id="chat-input" placeholder="Mesajınızı yazın..." rows="1"
+      oninput="autoResize(this)"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea>
+    <button type="button" id="chat-send" onclick="sendMsg()">➤</button>
+  </div>
+</div>
 
-const FC = {
-  apiKey:"AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",
-  authDomain:"emisafir-56796.firebaseapp.com",
-  databaseURL:"https://emisafir-56796-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId:"emisafir-56796",storageBucket:"emisafir-56796.firebasestorage.app",
-  messagingSenderId:"1044463772299",appId:"1:1044463772299:web:4f1496b541a433fe766a8e"
-};
-const db = getDatabase(initializeApp(FC));
+<!-- ══ TEMİZLİK SCREEN ══ -->
+<div id="s-clean">
+  <div id="clean-content">
+    <div class="clean-note">⏰ Seçiminiz anında resepsiyona iletilecektir.</div>
+    <button type="button" class="clean-opt" onclick="selectClean(this,'Tam Temizlik — Oda eksiksiz temizlensin')">
+      <span class="co-icon">✨</span>
+      <div class="co-info"><div class="co-name">Tam Temizlik</div><div class="co-desc">Oda eksiksiz temizlensin</div></div>
+      <span class="co-check"></span>
+    </button>
+    <button type="button" class="clean-opt" onclick="selectClean(this,'Havlu Değişimi — Sadece havlular değiştirilsin')">
+      <span class="co-icon">🛁</span>
+      <div class="co-info"><div class="co-name">Havlu Değişimi</div><div class="co-desc">Sadece havlular değiştirilsin</div></div>
+      <span class="co-check"></span>
+    </button>
+    <button type="button" class="clean-opt" onclick="selectClean(this,'Çarşaf Değişimi — Yatak takımları yenilensin')">
+      <span class="co-icon">🛏</span>
+      <div class="co-info"><div class="co-name">Çarşaf Değişimi</div><div class="co-desc">Yatak takımları yenilensin</div></div>
+      <span class="co-check"></span>
+    </button>
+    <button type="button" class="clean-opt" onclick="selectClean(this,'Çöp Toplama — Çöpler alınsın')">
+      <span class="co-icon">🗑</span>
+      <div class="co-info"><div class="co-name">Çöp Toplama</div><div class="co-desc">Çöpler alınsın</div></div>
+      <span class="co-check"></span>
+    </button>
+    <button type="button" class="clean-opt" onclick="selectClean(this,'Ekstra Malzeme — Şampuan, sabun, havlu ekle')">
+      <span class="co-icon">🧴</span>
+      <div class="co-info"><div class="co-name">Ekstra Malzeme</div><div class="co-desc">Şampuan, sabun, havlu ekle</div></div>
+      <span class="co-check"></span>
+    </button>
+    <button type="button" class="clean-opt" onclick="selectClean(this,'Rahatsız Etme — Bugün temizlik istemiyorum')">
+      <span class="co-icon">🔕</span>
+      <div class="co-info"><div class="co-name">Rahatsız Etme</div><div class="co-desc">Bugün temizlik istemiyorum</div></div>
+      <span class="co-check"></span>
+    </button>
+  </div>
+  <div id="clean-footer">
+    <button type="button" id="clean-btn" disabled onclick="sendClean()">Talebi Gönder</button>
+  </div>
+</div>
 
-const P = new URLSearchParams(location.search);
-const room = P.get('room')||'101', hotel = P.get('hotel')||'demo';
-document.getElementById('rn').textContent = room;
-document.getElementById('rb').textContent = room;
+<!-- TOAST -->
+<div id="toast"></div>
 
-window.id = s => document.getElementById(s);
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+/* ── FIREBASE ── */
+firebase.initializeApp({
+  apiKey: "AIzaSyAV06sT1lBDNjMIA2EpoTK5uSRn3-mVqz4",
+  authDomain: "emisafir-56796.firebaseapp.com",
+  databaseURL: "https://emisafir-56796-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "emisafir-56796"
+});
+var db = firebase.database();
+var TS = firebase.database.ServerValue.TIMESTAMP;
 
-function now(){ const n=new Date(); return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'); }
-function nowMin(){ const n=new Date(); return n.getHours()*60+n.getMinutes(); }
-function toMin(t){ if(!t) return 0; const[h,m]=t.split(':').map(Number); return h*60+m; }
-function avail(s,e){
-  if(!s||!e) return true;
-  const n=nowMin(), sm=toMin(s), em=toMin(e);
-  return sm<=em ? n>=sm&&n<=em : n>=sm||n<=em;
+/* ── PARAMS ── */
+var params = new URLSearchParams(location.search);
+var HOTEL = params.get('hotel') || 'demo';
+var ROOM  = params.get('room')  || '101';
+document.getElementById('room-badge').textContent = 'Oda ' + ROOM;
+
+/* ── REFS ── */
+var rHotel = db.ref('hotels/' + HOTEL);
+var rMsgs  = db.ref('hotels/' + HOTEL + '/rooms/' + ROOM + '/messages');
+var rOrders= db.ref('hotels/' + HOTEL + '/orders');
+
+/* ── TABS ── */
+var currentTab = 'menu';
+function switchTab(t) {
+  currentTab = t;
+  document.querySelectorAll('.tab').forEach(function(el, i) {
+    el.classList.remove('active');
+  });
+  document.querySelectorAll('.screen, #s-menu, #s-chat, #s-clean').forEach(function(el) {
+    el.classList.remove('active');
+  });
+
+  // highlight correct tab
+  var tabOrder = ['menu','chat','clean'];
+  document.querySelectorAll('.tab')[tabOrder.indexOf(t)].classList.add('active');
+  document.getElementById('s-' + t).classList.add('active');
+
+  if (t === 'menu') { updateCartBar(); }
+  if (t === 'chat') {
+    document.getElementById('chat-badge').classList.remove('show');
+    scrollMsgs();
+  }
+  if (t === 'chat' || t === 'clean') {
+    document.getElementById('cart-bar').classList.add('hidden');
+  }
 }
-function toast(m){ const t=id('tst'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',3000); }
 
-// ── TABS ──
-let curtab='m';
-window.goTab = function(t,btn){
-  curtab=t;
-  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
-  document.querySelectorAll('.scr').forEach(x=>x.classList.remove('on'));
-  btn.classList.add('on');
-  id(t+'-scr').classList.add('on');
-  if(t==='m') updCart();
-  else id('cart').className='';
-  if(t==='c'){
-    id('cdot').classList.remove('show');
-    id('rbanner').classList.remove('on');
-    setTimeout(()=>{ id('cmsgs').scrollTop=99999; },50);
-  }
-};
-window.goChat=function(){ id('rbanner').classList.remove('on'); goTab('c',id('tab-c')); };
+/* ── TOAST ── */
+var toastTimer;
+function showToast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { el.style.display = 'none'; }, 3000);
+}
 
-// ── MENÜ ──
-const cart={}, catOrder=['Yumurta Çeşitleri','Peynir Çeşitleri','Şarküteri','Ekmek Çeşitleri','Kahvaltı Ekleri','Sıcak Kahvaltılıklar','Sağlıklı Seçenekler','Türk Mezeleri','Uluslararası Başlangıçlar','Salatalar','Çorbalar','Kırmızı Et','Tavuk Yemekleri','Deniz Ürünleri','Vejetaryen & Vegan','Burger Çeşitleri','Pizza Çeşitleri','Makarna Çeşitleri','Atıştırmalıklar','Tatlılar','Gazlı İçecekler','Meyve Suları','Kahve','Çay','Diğer İçecekler'];
-const catIco={'Yumurta Çeşitleri':'🥚','Peynir Çeşitleri':'🧀','Şarküteri':'🥓','Ekmek Çeşitleri':'🍞','Kahvaltı Ekleri':'🍯','Sıcak Kahvaltılıklar':'🥞','Sağlıklı Seçenekler':'🌱','Türk Mezeleri':'🫙','Uluslararası Başlangıçlar':'🌍','Salatalar':'🥗','Çorbalar':'🍲','Kırmızı Et':'🥩','Tavuk Yemekleri':'🍗','Deniz Ürünleri':'🐟','Vejetaryen & Vegan':'🥦','Burger Çeşitleri':'🍔','Pizza Çeşitleri':'🍕','Makarna Çeşitleri':'🍝','Atıştırmalıklar':'🥪','Tatlılar':'🍰','Gazlı İçecekler':'🥤','Meyve Suları':'🍊','Kahve':'☕','Çay':'🍵','Diğer İçecekler':'🧃'};
-let items=[], actCat='tümü';
+/* ── TIME ── */
+function nowHHMM() {
+  var d = new Date();
+  return pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+function pad(n) { return String(n).padStart(2,'0'); }
+function toMin(s) { if(!s) return 0; var p=s.split(':'); return +p[0]*60 + +p[1]; }
+function nowMin() { var d=new Date(); return d.getHours()*60+d.getMinutes(); }
+function isAvail(start, end) {
+  if (!start || !end) return true;
+  var n=nowMin(), s=toMin(start), e=toMin(end);
+  if (s <= e) return n >= s && n <= e;
+  return n >= s || n <= e; // gece geçişi
+}
+document.getElementById('now-time').textContent = nowHHMM();
+setInterval(function(){ document.getElementById('now-time').textContent = nowHHMM(); }, 60000);
 
-// onValue ile menüyü dinle — get() yerine bu mobile'da daha güvenilir
-onValue(ref(db,`hotels/${hotel}/menu`), snap=>{
-  id('ctime').textContent=now();
-  if(!snap.exists()){
-    id('mlist').innerHTML='<div style="text-align:center;padding:40px;color:#9a8f80"><div style="font-size:2rem">🍽</div><div style="font-size:.8rem;margin-top:8px">Menü hazırlanıyor.</div></div>';
-    id('mst').textContent='Menü yükleniyor';
-    return;
-  }
-  items=Object.entries(snap.val()).map(([k,v])=>({id:k,...v}));
+/* ════════════
+   MENÜ
+════════════ */
+var cart = {}; // id → {name,price,emoji,qty}
+var menuItems = [];
+var activeCat = 'all';
+
+var CAT_ORDER = [
+  'Kahvaltı','Yumurta Çeşitleri','Peynir Çeşitleri','Şarküteri','Ekmek Çeşitleri',
+  'Kahvaltı Ekleri','Sıcak Kahvaltılıklar','Sağlıklı Seçenekler',
+  'Başlangıçlar','Türk Mezeleri','Uluslararası Başlangıçlar','Salatalar','Çorbalar',
+  'Ana Yemekler','Kırmızı Et','Tavuk Yemekleri','Deniz Ürünleri','Vejetaryen & Vegan',
+  'Burger Çeşitleri','Pizza Çeşitleri','Makarna Çeşitleri',
+  'Atıştırmalıklar','Tatlılar',
+  'İçecekler','Gazlı İçecekler','Meyve Suları','Kahve','Çay','Diğer İçecekler'
+];
+
+rHotel.child('menu').once('value', function(snap) {
+  menuItems = [];
+  snap.forEach(function(c) {
+    var v = c.val();
+    if (v.active === false) return;
+    menuItems.push(Object.assign({ id: c.key }, v));
+  });
+
+  rHotel.child('info/name').once('value', function(s) {
+    if (s.val()) document.getElementById('hotel-name').textContent = s.val();
+  });
+
   buildCatBar();
   renderMenu();
-  const av=items.filter(i=>avail(i.startTime,i.endTime));
-  id('mst').textContent=av.length>0?av.length+' ürün mevcut':'Şu an aktif ürün yok';
-},{onlyOnce:true}); // sadece bir kez yükle
 
-function buildCatBar(){
-  const bar=id('cbar');
-  bar.innerHTML='<button class="cb on" onclick="fcat(\'tümü\',this)">🍽 Tümü</button>';
-  const existing=[...new Set(items.map(i=>i.category||'Diğer'))];
-  const ordered=[...catOrder.filter(c=>existing.includes(c)),...existing.filter(c=>!catOrder.includes(c))];
-  ordered.forEach(cat=>{
-    if(!items.some(i=>i.category===cat&&avail(i.startTime,i.endTime))) return;
-    const b=document.createElement('button');
-    b.className='cb'; b.innerHTML=`${catIco[cat]||'🍽'} ${cat}`;
-    b.onclick=function(){ fcat(cat,this); };
+  var avail = menuItems.filter(function(i){ return isAvail(i.startTime, i.endTime); });
+  document.getElementById('menu-stat').textContent = avail.length + ' ürün mevcut';
+});
+
+function buildCatBar() {
+  var bar = document.getElementById('cat-bar');
+  bar.innerHTML = '';
+
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'cat-btn active';
+  btn.textContent = '🍽 Tümü';
+  btn.onclick = function() { filterCat('all', btn); };
+  bar.appendChild(btn);
+
+  // collect cats that have available items
+  var seen = {};
+  var cats = [];
+  menuItems.forEach(function(i) {
+    if (!isAvail(i.startTime, i.endTime)) return;
+    var c = i.category || 'Diğer';
+    if (!seen[c]) { seen[c] = true; cats.push(c); }
+  });
+
+  // sort by CAT_ORDER
+  cats.sort(function(a,b) {
+    var ai = CAT_ORDER.indexOf(a), bi = CAT_ORDER.indexOf(b);
+    if (ai<0) ai=99; if (bi<0) bi=99;
+    return ai - bi;
+  });
+
+  cats.forEach(function(cat) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'cat-btn';
+    b.textContent = cat;
+    b.onclick = function() { filterCat(cat, b); };
     bar.appendChild(b);
   });
 }
 
-window.fcat=function(cat,btn){
-  actCat=cat;
-  document.querySelectorAll('.cb').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
+function filterCat(cat, btn) {
+  activeCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
   renderMenu();
-  id('mlist').scrollTop=0;
-};
+  document.getElementById('menu-list').scrollTop = 0;
+}
 
-function renderMenu(){
-  const body=id('mlist'); body.innerHTML='';
-  let list=items.filter(i=>avail(i.startTime,i.endTime));
-  if(actCat!=='tümü') list=list.filter(i=>(i.category||'Diğer')===actCat);
-  if(!list.length){ body.innerHTML='<div style="text-align:center;padding:28px;color:#9a8f80;font-size:.78rem">Bu saatte sipariş verilebilir ürün yok</div>'; return; }
-  const cats={};
-  list.forEach(i=>{ const c=i.category||'Diğer'; if(!cats[c])cats[c]=[]; cats[c].push(i); });
-  const ord=[...catOrder.filter(c=>cats[c]),...Object.keys(cats).filter(c=>!catOrder.includes(c))];
-  ord.forEach(cat=>{
-    if(!cats[cat]) return;
-    if(actCat==='tümü'){ const s=document.createElement('div'); s.className='csep'; s.textContent=cat; body.appendChild(s); }
-    cats[cat].forEach(item=>{ body.appendChild(mkCard(item)); });
+function renderMenu() {
+  var list = document.getElementById('menu-list');
+  list.innerHTML = '';
+
+  var items = menuItems.filter(function(i){
+    if (!isAvail(i.startTime, i.endTime)) return false;
+    if (activeCat !== 'all' && (i.category||'Diğer') !== activeCat) return false;
+    return true;
+  });
+
+  if (!items.length) {
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--light);font-size:.8rem">Bu saatte ürün bulunmuyor</div>';
+    return;
+  }
+
+  // group by category
+  var groups = {};
+  items.forEach(function(i) {
+    var c = i.category || 'Diğer';
+    if (!groups[c]) groups[c] = [];
+    groups[c].push(i);
+  });
+
+  var orderedCats = Object.keys(groups).sort(function(a,b){
+    var ai=CAT_ORDER.indexOf(a), bi=CAT_ORDER.indexOf(b);
+    if(ai<0)ai=99; if(bi<0)bi=99; return ai-bi;
+  });
+
+  orderedCats.forEach(function(cat) {
+    if (activeCat === 'all') {
+      var lbl = document.createElement('div');
+      lbl.className = 'cat-label';
+      lbl.textContent = cat;
+      list.appendChild(lbl);
+    }
+    groups[cat].forEach(function(item) {
+      list.appendChild(buildCard(item));
+    });
   });
 }
 
-function esc(s){ return (s||'').replace(/'/g,"\\'"); }
-function mkCard(item){
-  const d=document.createElement('div'); d.className='mc';
-  d.innerHTML=`<div class="me">${item.emoji||'🍽'}</div>
-    <div class="mi">
-      <div class="mn">${item.name}</div>
-      ${item.description?`<div class="md">${item.description}</div>`:''}
-      <span class="mp">₺${item.price}</span>
-    </div>
-    <div class="mct" id="ctrl-${item.id}">
-      <button class="madd" onclick="addC('${item.id}','${esc(item.name)}',${item.price},'${item.emoji||'🍽'}')">+</button>
-    </div>`;
-  return d;
+function buildCard(item) {
+  var div = document.createElement('div');
+  div.className = 'menu-item';
+  div.id = 'card-' + item.id;
+  div.innerHTML =
+    '<div class="mi-emoji">' + (item.emoji||'🍽') + '</div>' +
+    '<div class="mi-info">' +
+      '<div class="mi-name">' + esc(item.name) + '</div>' +
+      (item.description ? '<div class="mi-desc">' + esc(item.description) + '</div>' : '') +
+      '<div class="mi-price">₺' + item.price + '</div>' +
+    '</div>' +
+    '<div class="mi-ctrl" id="ctrl-' + item.id + '"></div>';
+  refreshCtrl(item);
+  return div;
 }
 
-window.addC=function(id_,n,p,e){ if(!cart[id_])cart[id_]={n,p,e,q:0}; cart[id_].q++; updCtrl(id_); updCart(); };
-window.rmC=function(id_){ if(!cart[id_])return; cart[id_].q--; if(cart[id_].q<=0)delete cart[id_]; updCtrl(id_); updCart(); };
-
-function updCtrl(id_){
-  const ctrl=document.getElementById('ctrl-'+id_); if(!ctrl)return;
-  const c=cart[id_], mi=items.find(i=>i.id===id_); if(!mi)return;
-  if(!c||c.q===0){
-    ctrl.innerHTML=`<button class="madd" onclick="addC('${id_}','${esc(mi.name)}',${mi.p||mi.price},'${mi.emoji||'🍽'}')">+</button>`;
+function refreshCtrl(item) {
+  var wrap = document.getElementById('ctrl-' + item.id);
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  var qty = cart[item.id] ? cart[item.id].qty : 0;
+  if (qty === 0) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'add-btn';
+    btn.textContent = '+';
+    btn.onclick = function() { addToCart(item); };
+    wrap.appendChild(btn);
   } else {
-    ctrl.innerHTML=`<div class="mqt"><button onclick="rmC('${id_}')">−</button><span>${c.q}</span><button onclick="addC('${id_}','${esc(c.n)}',${c.p},'${c.e}')">+</button></div>`;
+    var ctrl = document.createElement('div');
+    ctrl.className = 'qty-ctrl';
+    ctrl.innerHTML =
+      '<button type="button" onclick="changeQty(\'' + item.id + '\',-1)">−</button>' +
+      '<span>' + qty + '</span>' +
+      '<button type="button" onclick="changeQty(\'' + item.id + '\',1)">+</button>';
+    wrap.appendChild(ctrl);
   }
 }
 
-function updCart(){
-  const vs=Object.values(cart);
-  const cnt=vs.reduce((s,i)=>s+i.q,0), tot=vs.reduce((s,i)=>s+i.p*i.q,0);
-  id('ccount').textContent=cnt+' ürün'; id('ctotal').textContent='₺'+tot;
-  id('cart').className=cnt>0&&curtab==='m'?'on':'';
-}
-
-window.showCO=function(){
-  const vs=Object.values(cart), tot=vs.reduce((s,i)=>s+i.p*i.q,0);
-  id('corows').innerHTML=vs.map(i=>`<div class="cor"><div><div class="con">${i.e} ${i.n}</div><div class="coq">x${i.q}</div></div><div class="cop">₺${i.p*i.q}</div></div>`).join('');
-  id('coamt').textContent='₺'+tot;
-  id('com').classList.add('on');
-};
-
-window.doOrder=async function(){
-  const btn=id('cobtn'); btn.textContent='Gönderiliyor...'; btn.disabled=true;
-  try{
-    const vs=Object.values(cart).map(i=>({name:i.n,emoji:i.e,price:i.p,qty:i.q,subtotal:i.p*i.q}));
-    const tot=vs.reduce((s,i)=>s+i.subtotal,0);
-    const no='ORD-'+Date.now().toString(36).toUpperCase();
-    await push(ref(db,`hotels/${hotel}/orders`),{
-      orderNo:no,room,hotel,items:vs,total:tot,status:'pending',
-      date:new Date().toLocaleDateString('tr-TR'),time:now(),ts:serverTimestamp()
-    });
-    id('com').classList.remove('on');
-    id('okno').textContent=no;
-    id('okm').classList.add('on');
-    Object.keys(cart).forEach(k=>delete cart[k]);
-    items.forEach(mi=>{ const c=document.getElementById('ctrl-'+mi.id); if(c&&avail(mi.startTime,mi.endTime)) c.innerHTML=`<button class="madd" onclick="addC('${mi.id}','${esc(mi.name)}',${mi.price},'${mi.emoji||'🍽'}')">+</button>`; });
-    updCart();
-  }catch(e){ console.error(e); toast('Hata! Tekrar deneyin.'); }
-  finally{ btn.textContent='✓ Siparişi Ver'; btn.disabled=false; }
-};
-
-// ── CHAT ──
-// onValue ile tüm mesajları dinle — duplicate önlemek için Map kullan
-const msgMap = new Map(); // key → dom element
-let chatInited = false;
-
-function initChat(){
-  // Günlük sıfırlama
-  const n=new Date();
-  const key=`${n.getFullYear()}-${n.getMonth()+1}-${n.getDate()}`;
-  get(ref(db,`hotels/${hotel}/rooms/${room}/lastReset`)).then(s=>{
-    if(n.getHours()>=11 && s.val()!==key){
-      remove(ref(db,`hotels/${hotel}/rooms/${room}/messages`));
-      set(ref(db,`hotels/${hotel}/rooms/${room}/lastReset`),key);
-    }
-  });
-
-  // Hoşgeldin mesajı
-  addBubble('__welcome__',`Merhaba! 👋 Oda ${room}'e hoş geldiniz.\nSize nasıl yardımcı olabilirim?`,'bot');
-
-  // onValue ile mesajları dinle — her değişimde komple güncelle
-  onValue(ref(db,`hotels/${hotel}/rooms/${room}/messages`), snap=>{
-    const el=id('cmsgs');
-    // Sadece yeni mesajları ekle, eskiler zaten var
-    if(!snap.exists()) return;
-    snap.forEach(child=>{
-      if(msgMap.has(child.key)) return; // zaten var
-      const d=child.val();
-      const domEl=addBubble(child.key, d.text, d.from==='guest'?'user':'bot');
-      if(d.from==='reception' && chatInited){
-        // Telefonda bildirim
-        if(curtab!=='c'){
-          id('cdot').classList.add('show');
-          id('rbanner').classList.add('on');
-          setTimeout(()=>id('rbanner').classList.remove('on'),8000);
-        }
-        toast('📩 Resepsiyondan yanıt geldi!');
-        if(Notification.permission==='granted') new Notification('Resepsiyondan Yanıt',{body:d.text.slice(0,80)});
-      }
-    });
-    chatInited=true;
-    el.scrollTop=99999;
-  });
-}
-
-function addBubble(key, text, side){
-  // Zaten varsa ekleme
-  if(msgMap.has(key)) return msgMap.get(key);
-  const el=id('cmsgs');
-  const d=document.createElement('div');
-  d.className='msg'+(side==='user'?' u':'');
-  d.dataset.key=key;
-  const t=now();
-  if(side!=='user'){
-    d.innerHTML=`<div class="mava">R</div><div><div class="bbl">${(text||'').replace(/\n/g,'<br>')}</div><div class="mt">${t}</div></div>`;
-  } else {
-    d.innerHTML=`<div><div class="bbl">${(text||'').replace(/\n/g,'<br>')}</div><div class="mt">${t}</div></div>`;
+function addToCart(item) {
+  if (!cart[item.id]) {
+    cart[item.id] = { name: item.name, price: item.price, emoji: item.emoji||'🍽', qty: 0 };
   }
-  el.appendChild(d);
-  el.scrollTop=99999;
-  msgMap.set(key, d);
-  return d;
+  cart[item.id].qty++;
+  refreshCtrl(item);
+  updateCartBar();
 }
 
-async function sendMsg(text){
-  // Optimistic: geçici key ile hemen göster
-  const tmpKey='tmp-'+Date.now();
-  addBubble(tmpKey, text, 'user');
-  try{
-    const r=await push(ref(db,`hotels/${hotel}/rooms/${room}/messages`),{text,from:'guest',ts:serverTimestamp()});
-    // Geçici elementi gerçek key ile güncelle
-    if(r.key){
-      const el=msgMap.get(tmpKey);
-      if(el){ el.dataset.key=r.key; msgMap.delete(tmpKey); msgMap.set(r.key,el); }
+function changeQty(id, delta) {
+  if (!cart[id]) return;
+  cart[id].qty += delta;
+  if (cart[id].qty <= 0) delete cart[id];
+  var item = menuItems.find(function(i){ return i.id===id; });
+  if (item) refreshCtrl(item);
+  updateCartBar();
+}
+
+function updateCartBar() {
+  var total = 0, count = 0;
+  Object.values(cart).forEach(function(c){ total += c.price*c.qty; count += c.qty; });
+  var bar = document.getElementById('cart-bar');
+  if (count > 0 && currentTab === 'menu') {
+    bar.classList.remove('hidden');
+  } else {
+    bar.classList.add('hidden');
+  }
+  document.getElementById('cart-info').textContent = count + ' ürün';
+  document.getElementById('cart-total').textContent = '₺' + total;
+}
+
+/* Checkout */
+function openCheckout() {
+  var rows = document.getElementById('checkout-rows');
+  rows.innerHTML = '';
+  var total = 0;
+  Object.entries(cart).forEach(function(pair) {
+    var id=pair[0], c=pair[1];
+    var sub = c.price * c.qty;
+    total += sub;
+    var row = document.createElement('div');
+    row.className = 'order-row';
+    row.innerHTML =
+      '<div><div class="or-name">' + c.emoji + ' ' + esc(c.name) + '</div>' +
+      '<div class="or-qty">x' + c.qty + '</div></div>' +
+      '<div class="or-price">₺' + sub + '</div>';
+    rows.appendChild(row);
+  });
+  document.getElementById('checkout-total').textContent = '₺' + total;
+  document.getElementById('modal-checkout').classList.add('open');
+}
+function closeCheckout() {
+  document.getElementById('modal-checkout').classList.remove('open');
+}
+function closeSuccess() {
+  document.getElementById('modal-success').classList.remove('open');
+}
+
+function placeOrder() {
+  var btn = document.getElementById('confirm-btn');
+  btn.disabled = true;
+  btn.textContent = 'Gönderiliyor...';
+
+  var orderItems = [];
+  var total = 0;
+  Object.entries(cart).forEach(function(pair) {
+    var c = pair[1];
+    var sub = c.price * c.qty;
+    total += sub;
+    orderItems.push({ name:c.name, emoji:c.emoji, price:c.price, qty:c.qty, subtotal:sub });
+  });
+
+  var no = 'ORD-' + Date.now().toString(36).toUpperCase();
+  var now = new Date();
+  var timeStr = pad(now.getHours()) + ':' + pad(now.getMinutes());
+
+  rOrders.push({
+    orderNo: no, room: ROOM, hotel: HOTEL,
+    items: orderItems, total: total,
+    status: 'pending',
+    time: timeStr, ts: TS
+  }).then(function() {
+    closeCheckout();
+    document.getElementById('order-no-text').textContent = no;
+    document.getElementById('modal-success').classList.add('open');
+    cart = {};
+    renderMenu();
+    updateCartBar();
+    btn.disabled = false;
+    btn.textContent = '✓ Siparişi Ver';
+  }).catch(function(e) {
+    console.error(e);
+    showToast('Hata oluştu, tekrar deneyin.');
+    btn.disabled = false;
+    btn.textContent = '✓ Siparişi Ver';
+  });
+}
+
+/* ════════════
+   CHAT
+════════════ */
+var seenMsgs = {};
+var chatReady = false;
+
+// Hoşgeldin mesajı (lokal, db'ye yazma)
+(function(){
+  var d = document.createElement('div');
+  d.className = 'msg-row';
+  d.innerHTML =
+    '<div class="msg-avatar">R</div>' +
+    '<div class="msg-body">' +
+      '<div class="msg-bubble">Merhaba! 👋 Oda ' + ROOM + "'e hoş geldiniz. Size nasıl yardımcı olabilirim?</div>" +
+      '<div class="msg-time">' + nowHHMM() + '</div>' +
+    '</div>';
+  document.getElementById('msg-list').appendChild(d);
+})();
+
+// Realtime listener
+rMsgs.on('child_added', function(snap) {
+  var key = snap.key;
+  if (seenMsgs[key]) return;
+  seenMsgs[key] = true;
+
+  var v = snap.val();
+  var isSent = (v.sender === 'guest');
+  appendMsg(v.text, isSent, v.time);
+
+  if (!isSent && chatReady) {
+    if (currentTab !== 'chat') {
+      document.getElementById('chat-badge').classList.add('show');
+      showToast('📩 Resepsiyondan yanıt geldi!');
     }
-  }catch(e){ console.error(e); toast('Mesaj gönderilemedi.'); }
+  }
+  chatReady = true;
+});
+
+function appendMsg(text, isSent, ts) {
+  var list = document.getElementById('msg-list');
+  var d = document.createElement('div');
+  d.className = 'msg-row' + (isSent ? ' sent' : '');
+  var time = ts ? new Date(ts) : new Date();
+  var timeStr = pad(time.getHours()) + ':' + pad(time.getMinutes());
+
+  if (isSent) {
+    d.innerHTML =
+      '<div class="msg-body">' +
+        '<div class="msg-bubble">' + esc(text).replace(/\n/g,'<br>') + '</div>' +
+        '<div class="msg-time">' + timeStr + '</div>' +
+      '</div>';
+  } else {
+    d.innerHTML =
+      '<div class="msg-avatar">R</div>' +
+      '<div class="msg-body">' +
+        '<div class="msg-bubble">' + esc(text).replace(/\n/g,'<br>') + '</div>' +
+        '<div class="msg-time">' + timeStr + '</div>' +
+      '</div>';
+  }
+  list.appendChild(d);
+  scrollMsgs();
 }
 
-window.send=async function(){
-  const inp=id('cinp'); const t=inp.value.trim(); if(!t) return;
-  inp.value=''; inp.style.height='36px';
-  await sendMsg(t);
-};
-window.qs=function(t){ sendMsg(t); };
+function scrollMsgs() {
+  var el = document.getElementById('msg-list');
+  el.scrollTop = el.scrollHeight;
+}
 
-// ── TEMİZLİK ──
-let clChoice=null;
-window.selCl=function(btn,val){
-  document.querySelectorAll('.clopt').forEach(o=>{o.classList.remove('on');o.querySelector('.clc').textContent='';});
-  btn.classList.add('on'); btn.querySelector('.clc').textContent='✓';
-  clChoice=val; id('clbtn').disabled=false;
-};
-window.sendCl=async function(){
-  if(!clChoice) return;
-  const btn=id('clbtn'); btn.textContent='Gönderiliyor...'; btn.disabled=true;
-  try{
-    await push(ref(db,`hotels/${hotel}/rooms/${room}/messages`),{text:'🧹 Temizlik talebi: '+clChoice,from:'guest',ts:serverTimestamp()});
-    btn.textContent='✓ İletildi!'; btn.classList.add('sent');
-    document.querySelectorAll('.clopt').forEach(o=>{o.classList.remove('on');o.querySelector('.clc').textContent='';});
-    clChoice=null;
-    setTimeout(()=>{ btn.textContent='Talebi Gönder'; btn.classList.remove('sent'); btn.disabled=true; },3000);
-  }catch(e){ console.error(e); btn.textContent='Talebi Gönder'; btn.disabled=false; toast('Hata!'); }
-};
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 90) + 'px';
+}
 
-// ── BAŞLAT ──
-if(Notification.permission==='default') Notification.requestPermission();
-initChat();
-id('ctime').textContent=now();
-setInterval(()=>id('ctime').textContent=now(),60000);
+function sendMsg() {
+  var inp = document.getElementById('chat-input');
+  var text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  inp.style.height = '38px';
+  doSend(text);
+}
+
+function sendQuick(text) { doSend(text); }
+
+function doSend(text) {
+  // Optimistic UI
+  appendMsg(text, true, Date.now());
+  // Push to Firebase
+  rMsgs.push({ text: text, sender: 'guest', time: TS }).then(function(ref) {
+    if (ref.key) seenMsgs[ref.key] = true; // mark so listener doesn't duplicate
+  }).catch(function(e) {
+    console.error(e);
+    showToast('Mesaj gönderilemedi.');
+  });
+}
+
+/* ════════════
+   TEMİZLİK
+════════════ */
+var cleanSelected = '';
+
+function selectClean(btn, val) {
+  document.querySelectorAll('.clean-opt').forEach(function(o) {
+    o.classList.remove('selected');
+    o.querySelector('.co-check').textContent = '';
+  });
+  btn.classList.add('selected');
+  btn.querySelector('.co-check').textContent = '✓';
+  cleanSelected = val;
+  document.getElementById('clean-btn').disabled = false;
+}
+
+function sendClean() {
+  if (!cleanSelected) return;
+  var btn = document.getElementById('clean-btn');
+  btn.disabled = true;
+  btn.textContent = 'Gönderiliyor...';
+
+  rMsgs.push({
+    text: '🧹 Temizlik talebi: ' + cleanSelected,
+    sender: 'guest',
+    time: TS
+  }).then(function() {
+    btn.textContent = '✓ Gönderildi!';
+    btn.classList.add('done');
+    document.querySelectorAll('.clean-opt').forEach(function(o) {
+      o.classList.remove('selected');
+      o.querySelector('.co-check').textContent = '';
+    });
+    cleanSelected = '';
+    setTimeout(function() {
+      btn.textContent = 'Talebi Gönder';
+      btn.classList.remove('done');
+      btn.disabled = true;
+    }, 3000);
+  }).catch(function(e) {
+    console.error(e);
+    btn.textContent = 'Talebi Gönder';
+    btn.disabled = false;
+    showToast('Hata! Tekrar deneyin.');
+  });
+}
+
+/* ── UTIL ── */
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 </script>
 </body>
 </html>
