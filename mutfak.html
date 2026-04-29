@@ -571,18 +571,15 @@ function scrollKmsgs() {
   el.scrollTop = el.scrollHeight;
 }
 
-var seenSentKmsgs = {};
 function kSend() {
   var inp = document.getElementById('kinput');
   var text = inp.value.trim();
   if (!text) return;
   inp.value = ''; inp.style.height = '40px';
-  var tmpKey = 'tmp-'+Date.now();
-  seenKmsgs[tmpKey] = true;
-  appendKmsg({ text, sender:'kitchen', time: Date.now() });
-  db.ref('hotels/'+HOTEL+'/kitchen-messages').push({
-    text, sender:'kitchen', time: TS
-  }).then(function(ref){ if(ref.key) seenKmsgs[ref.key]=true; });
+  var newRef = db.ref('hotels/'+HOTEL+'/kitchen-messages').push();
+  seenKmsgs[newRef.key] = true;
+  appendKmsg({ text: text, sender: 'kitchen', time: Date.now() });
+  newRef.set({ text: text, sender: 'kitchen', time: TS });
 }
 
 function autoResize(el) {

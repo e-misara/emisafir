@@ -308,6 +308,27 @@ body {
   justify-content: center;
   -webkit-tap-highlight-color: transparent;
 }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1c1917;
+  color: #fff;
+  padding: 9px 18px;
+  border-radius: 20px;
+  font-size: .73rem;
+  font-weight: 600;
+  display: none;
+  z-index: 999;
+  box-shadow: 0 4px 16px rgba(0,0,0,.3);
+  max-width: 90vw;
+  white-space: normal;
+  text-align: center;
+  border-left: 3px solid #dc2626;
+}
 </style>
 </head>
 <body>
@@ -543,27 +564,6 @@ function sendReply() {
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 80) + 'px';
-}
-
-/* ── TOAST ── */
-#toast {
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1c1917;
-  color: #fff;
-  padding: 9px 18px;
-  border-radius: 20px;
-  font-size: .73rem;
-  font-weight: 600;
-  display: none;
-  z-index: 999;
-  box-shadow: 0 4px 16px rgba(0,0,0,.3);
-  max-width: 90vw;
-  white-space: normal;
-  text-align: center;
-  border-left: 3px solid #dc2626;
 }
 
 /* ── ORDERS ── */
